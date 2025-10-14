@@ -28,10 +28,13 @@ namespace KYM
             if(linkedCharacter == null) return;
 
             Vector2 inputMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            
+
+            linkedCharacter.IsWalk = Input.GetKey(KeyCode.LeftShift);
             linkedCharacter.SetMovementForward(mainCamera.transform.forward);
             linkedCharacter.Move(inputMove);
-            // linkedCharacter.Rotate();
+            linkedCharacter.Rotate(CameraSystem.Instance.AimingPoint);
+            
+            //Debug.Log(inputMove);
         }
 
         private void LateUpdate()

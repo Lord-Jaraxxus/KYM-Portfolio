@@ -6,13 +6,16 @@ namespace KYM
 {
     public class CharacterBase : MonoBehaviour
     {
+        [SerializeField] private Animator animator;
+        [SerializeField] private CharacterController characterController;
+
+        public bool IsWalk { get; set; } = false;
+        private float walkBlend;
+
         public float MaxHP; // => maxHP;
         public float CurHP; // => curHP;
         public float MaxSP; // => maxSP;
         public float CurSP; // => curSP;
-
-        [SerializeField] private Animator animator;
-        [SerializeField] private CharacterController characterController;
 
         private Vector3 movementForward;
         private float verticalVelocity;
@@ -26,6 +29,13 @@ namespace KYM
         {
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
+        }
+
+        private void Update()
+        {
+            walkBlend = Mathf.Lerp(walkBlend, IsWalk ? 1f : 0f, Time.deltaTime);
+
+            animator.SetFloat("Running", walkBlend);
         }
 
         public void SetMovementForward(Vector3 forward) 
@@ -49,13 +59,11 @@ namespace KYM
             smoothHorizontal = Mathf.Lerp(smoothHorizontal, input.x, Time.deltaTime * 10f);
             smoothVertical = Mathf.Lerp(smoothVertical, input.y, Time.deltaTime * 10f);
 
-            // animator.SetFloat("Magnitude", input.magnitude);
-            // animator.SetFloat("Horizontal", smoothHorizontal);
-            // animator.SetFloat("Vertical", smoothVertical);
+            animator.SetFloat("Magnitude", input.magnitude);
+            animator.SetFloat("Horizontal", smoothHorizontal);
+            animator.SetFloat("Vertical", smoothVertical);
 
-            // 일단 움직여야 하니까 쓰는 코드 
-            Vector3 movement = new Vector3(smoothHorizontal, 0, smoothVertical);
-            transform.position += movement;
+            // Debug.Log($"mag : {input.magnitude}, hor : {smoothHorizontal}, ver : {smoothVertical}");
         }
 
         public void Rotate(Vector3 targetAimPoint) 
