@@ -32,7 +32,7 @@ namespace KYM
             // var soundManagerPrefab = Resources.Load<GameObject>("Sound/Prefab/KYM.SoundManager"); // 사운드 매니저 프리팹 로드
             // var soundManagerInst = Instantiate(soundManagerPrefab); // 사운드 매니저 인스턴스 생성
 
-            // UIManager.Singleton.Initialize(); // UIManager 초기화
+            UIManager.Singleton.Initialize(); // UIManager 초기화
             // GameDataModel.Singleton.Initialize(); // GameDataModel 초기화
             // UserDataModel.Singleton.Initialize(); // UserDataModel 초기화
 #if UNITY_EDITOR

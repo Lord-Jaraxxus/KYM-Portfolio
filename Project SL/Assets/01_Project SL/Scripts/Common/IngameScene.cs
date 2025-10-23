@@ -17,13 +17,13 @@ namespace KYM
                 yield return null; // 씬 로드가 완료될 때까지 대기
             }
 
-            // UIManager.Show<PlayerHUD>(UIList.PlayerHUD); // 타이틀 UI 표시
+            // UIManager.Show<PlayerHUD>(UIList.PlayerHUD); // Player HUD UI 표시
         }
 
         public override IEnumerator OnEnd()
         {
-            // UIManager.Hide<PlayerHUD>(UIList.PlayerHUD); // 타이틀 UI 숨김
-                                                         // 타이틀 씬 종료 시 필요한 작업이 있다면 여기에 추가
+            // UIManager.Hide<PlayerHUD>(UIList.PlayerHUD); // Player HUD UI 숨김
+                                                            // 씬 종료 시 필요한 작업이 있다면 여기에 추가
 
             yield return null; // 현재는 특별한 작업이 없으므로 바로 반환
         }
