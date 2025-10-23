@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class InputManager : MonoBehaviour
+    public class InputManager : SingletonBase<InputManager>
     {
         public Vector2 InputMove { get; private set; }  // 이동 입력 벡터 (수평, 수직)
         public Vector2 InputLook { get; private set; }  // 마우스 이동 입력 벡터 (수평, 수직)
@@ -68,12 +68,12 @@ namespace KYM
             InputLook = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); // 마우스 이동 입력 벡터 설정
             inputMouseScroll = Input.GetAxis("Mouse ScrollWheel"); // 마우스 스크롤 입력 값 설정
 
-            if (Input.GetMouseButton(0)) // 마우스 좌클릭이 눌러져있으면 계속 true
+            if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭이 눌러지면 true
             {
                 OnInputLmc?.Invoke(); // 좌클릭 입력 이벤트 발생
             }
 
-            if (Input.GetMouseButtonDown(1))  // 마우스 우클릭이 눌러져있으면 계속 true
+            if (Input.GetMouseButtonDown(1))  // 마우스 우클릭이 눌러지면 true
             {
                 onInputRmc?.Invoke(); // 우클릭 입력 이벤트 발생
             }

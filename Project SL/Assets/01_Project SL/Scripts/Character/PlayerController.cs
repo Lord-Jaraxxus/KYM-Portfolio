@@ -11,16 +11,21 @@ namespace KYM
         private CharacterBase linkedCharacter;
         private Camera mainCamera;
 
-        private float cameraTrheshold = 0.1f;
+        private float cameraTrheshold = 0.1f; // 카메라 회전 임계값
         private float chinemachineTargetYaw;
         private float cinemachineTargetPitch;
-        private float cameraTopClamp = 85.0f;
-        private float cameraBottomClamp = -30.0f;
+        private float cameraTopClamp = 85.0f; // 카메라 상단 회전 제한
+        private float cameraBottomClamp = -30.0f; // 카메라 하단 회전 제한
 
         private void Awake()
         {
             linkedCharacter = GetComponent<CharacterBase>();
             mainCamera = Camera.main;
+        }
+
+        private void Start()
+        {
+            InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
         }
 
         private void Update()
@@ -41,6 +46,10 @@ namespace KYM
         {
             CameraRotation();
         }
+
+        void OnReceiveInputLmc() => linkedCharacter.Attack();
+
+
 
         private void CameraRotation() 
         {

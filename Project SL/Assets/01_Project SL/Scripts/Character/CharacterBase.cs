@@ -76,5 +76,11 @@ namespace KYM
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
 
+        public void Attack() 
+        {
+            animator.SetTrigger("AttackTrigger");
+            Debug.Log("Attack!");
+        }
+
     }
 }
