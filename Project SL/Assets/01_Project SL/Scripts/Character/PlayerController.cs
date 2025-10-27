@@ -17,10 +17,14 @@ namespace KYM
         private float cameraTopClamp = 85.0f; // 카메라 상단 회전 제한
         private float cameraBottomClamp = -30.0f; // 카메라 하단 회전 제한
 
+        private CommandInvoker commandInvoker;
+
         private void Awake()
         {
             linkedCharacter = GetComponent<CharacterBase>();
             mainCamera = Camera.main;
+
+            commandInvoker = new CommandInvoker();
         }
 
         private void Start()
