@@ -32,6 +32,10 @@ namespace KYM
 
         private void Awake()
         {
+            // 일단 뭐 테스트 해야하니까 여기서 초기화
+            MaxHP = 100f;
+            CurHP = MaxHP;
+
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
         }
@@ -84,7 +88,13 @@ namespace KYM
         public void Attack() 
         {
             animator.SetTrigger("AttackTrigger");
-            Debug.Log("Attack!");
+            // Debug.Log("Attack!");
+        }
+
+        public void Die() 
+        {
+            // animator.SetTrigger("DieTrigger");
+            Debug.Log($"{gameObject.name} is dead!");
         }
 
         public float TakeDamage(float damage)
@@ -94,7 +104,7 @@ namespace KYM
             if (CurHP <= 0) 
             {
                 CurHP = 0;
-                //Die(); 
+                Die(); 
             }
 
             return CurHP;
@@ -113,7 +123,7 @@ namespace KYM
 
         public void OnHit(float damage)
         {
-            throw new System.NotImplementedException();
+            TakeDamage(damage);
         }
     }
 }
