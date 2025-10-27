@@ -24,6 +24,7 @@ namespace KYM
             {
                 hitTargets.Add(hittable);
                 hittable.OnHit(damage);
+                Debug.Log("Hit: " + other.name);
             }
         }
 

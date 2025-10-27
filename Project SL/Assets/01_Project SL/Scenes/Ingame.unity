@@ -736,6 +736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   characterController: {fileID: 0}
+  weapon: {fileID: 0}
   MaxHP: 100
   CurHP: 100
   MaxSP: 0
@@ -1168,6 +1169,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 169604, guid: 507f5dc602b42c549a32a51aa9236bb1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1320094423}
+    - targetCorrespondingSourceObject: {fileID: 169604, guid: 507f5dc602b42c549a32a51aa9236bb1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1320094427}
   m_SourcePrefab: {fileID: 100100000, guid: 507f5dc602b42c549a32a51aa9236bb1, type: 3}
 --- !u!4 &1320094421 stripped
 Transform:
@@ -1206,6 +1210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   characterController: {fileID: 0}
+  weapon: {fileID: 1478189605}
   MaxHP: 0
   CurHP: 0
   MaxSP: 0
@@ -1215,6 +1220,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 492374, guid: 507f5dc602b42c549a32a51aa9236bb1, type: 3}
   m_PrefabInstance: {fileID: 1320094420}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1320094427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320094422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6da3857c1c0ad540b058627c6eb3428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1419699746
 GameObject:
   m_ObjectHideFlags: 0

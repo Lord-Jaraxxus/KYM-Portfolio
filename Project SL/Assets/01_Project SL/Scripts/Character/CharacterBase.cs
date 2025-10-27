@@ -8,6 +8,9 @@ namespace KYM
     {
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
+        private AnimationEventListener animationEventListener;
+
+        [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결
 
         public bool IsWalk { get; set; } = false;
 
@@ -38,6 +41,12 @@ namespace KYM
 
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
+            animationEventListener = GetComponent<AnimationEventListener>();
+        }
+
+        private void Start()
+        {
+            animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent; // 애니메이션 이벤트 리스너 콜백 등록
         }
 
         private void Update()
@@ -45,6 +54,21 @@ namespace KYM
             walkBlend = Mathf.Lerp(walkBlend, IsWalk ? 1f : 0f, Time.deltaTime);
 
             animator.SetFloat("Running", walkBlend);
+        }
+
+        void OnCallbackReceiveAnimationEvent(string eventName)
+        {
+            switch (eventName)
+            {
+                case "EnableHitbox":
+                    weapon.EnableHitbox();
+                    // Debug.Log("Enable Hitbox");
+                    break;
+                case "DisableHitbox":
+                    weapon.DisableHitbox();
+                    // Debug.Log("Disable Hitbox");
+                    break;
+            }
         }
 
         public void SetMovementForward(Vector3 forward) 
