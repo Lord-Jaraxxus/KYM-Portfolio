@@ -4,12 +4,17 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class CharacterBase : MonoBehaviour
+    public class CharacterBase : MonoBehaviour, IHasHp, IHittable
     {
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
 
         public bool IsWalk { get; set; } = false;
+
+        float IHasHp.MaxHP => MaxHP;
+        float IHasHp.CurHP => CurHP;
+
+
         private float walkBlend;
 
         public float MaxHP; // => maxHP;
@@ -82,5 +87,33 @@ namespace KYM
             Debug.Log("Attack!");
         }
 
+        public float TakeDamage(float damage)
+        {
+            CurHP -= damage;
+
+            if (CurHP <= 0) 
+            {
+                CurHP = 0;
+                //Die(); 
+            }
+
+            return CurHP;
+        }
+
+        public void Heal(float amount)
+        {
+            CurHP += amount;
+
+            if (CurHP > MaxHP)
+            {
+                CurHP = MaxHP;
+                //Die(); 
+            }
+        }
+
+        public void OnHit(float damage)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
