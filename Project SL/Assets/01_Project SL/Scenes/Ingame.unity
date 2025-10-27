@@ -460,6 +460,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9556142, guid: f9d38fed7b251cb4f9546516bfaa11c3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 72e4a23a101f34748b2e6715228164b3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -738,7 +742,7 @@ MonoBehaviour:
   characterController: {fileID: 0}
   weapon: {fileID: 0}
   MaxHP: 100
-  CurHP: 100
+  CurHP: 15
   MaxSP: 0
   CurSP: 0
 --- !u!136 &706205737
