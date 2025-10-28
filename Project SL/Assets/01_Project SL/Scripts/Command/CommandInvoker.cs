@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +8,51 @@ namespace KYM
     public class CommandInvoker 
     {
         private Queue<ICommand> commandQueue = new Queue<ICommand>();
+        public bool CanQueueCommand { get; set; } = true; // 큐에 명령 추가 가능 여부
+                
+        public int ComboStep { get; private set; } = 0;
 
-        public void AddCommand(ICommand command)
+        private AnimationEventListener animationEventListener;
+
+        public CommandInvoker(AnimationEventListener animationEventListener)
         {
+            this.animationEventListener = animationEventListener;
+            this.animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent;
+        }
+
+        private void OnCallbackReceiveAnimationEvent(string eventName)
+        {
+            switch (eventName) 
+            {
+                case "EnableCommandQueue":
+                    CanQueueCommand = true;
+                    break;
+                case "DisableCommandQueue":
+                    CanQueueCommand = false;
+                    break;
+                case "EndCombo":    
+                    if (commandQueue.Count == 0)    // 큐에 다음 명령이 없고, 애니메이션이 종료됐다면 콤보 초기화 
+                    { 
+                        ComboStep = 0; 
+                    }
+                    break;
+            }
+        }
+
+        public void TryAddCommand(ICommand command)
+        {
+            if (!CanQueueCommand) return;
+
             commandQueue.Enqueue(command);
         }
 
         public void ExecuteNext()
         {
             if (commandQueue.Count > 0)
+            {
                 commandQueue.Dequeue().Execute();
+
+            }
         }
     }
 }

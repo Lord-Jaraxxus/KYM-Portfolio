@@ -15,6 +15,7 @@ namespace KYM
 
         public void Execute()
         {
+            character.Attack();
         }
     }
 }

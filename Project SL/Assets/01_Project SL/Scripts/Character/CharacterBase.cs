@@ -8,7 +8,8 @@ namespace KYM
     {
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
-        private AnimationEventListener animationEventListener;
+        public AnimationEventListener AnimationEventListener => animationEventListener;
+        private AnimationEventListener animationEventListener {get; set;}
 
         [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결
 
