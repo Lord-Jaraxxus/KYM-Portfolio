@@ -35,8 +35,8 @@ namespace KYM
                 case "EndCombo":
                     CanExecuteCommand = true;
                     if (commandQueue.Count == 0)    // 큐에 다음 명령이 없고, 애니메이션이 종료됐다면 콤보 초기화 
-                    { 
-                        ComboStep = 0; 
+                    {
+                        ComboStep = 0;
                         Debug.Log("Combo Reset");
                     }
                     break;
@@ -49,8 +49,8 @@ namespace KYM
 
             commandQueue.Enqueue(command);
             CanQueueCommand = false; // 명령 추가 후에는 다시 false로 설정하여 다음 명령이 애니메이션 이벤트를 통해 추가되도록 함 (선입력 방지)
-            Debug.Log("Command Added to Queue");
-        }
+            
+            Debug.Log("Command Added to Queue");        }
 
         public void ExecuteNext()
         {
