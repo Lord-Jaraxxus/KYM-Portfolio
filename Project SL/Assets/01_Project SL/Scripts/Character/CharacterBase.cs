@@ -69,6 +69,9 @@ namespace KYM
                     weapon.DisableHitbox();
                     // Debug.Log("Disable Hitbox");
                     break;
+                case "EndCombo":
+                    animator.SetTrigger("TransTrigger");
+                    break;
             }
         }
 
@@ -110,12 +113,28 @@ namespace KYM
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
 
-        public void Attack() 
+        public void Attack1()
         {
             animator.SetTrigger("TransTrigger");
             animator.SetTrigger("AttackTrigger");
+            animator.SetInteger("AttackIndex", 0);
             // Debug.Log("Attack!");
         }
+        public void Attack2()
+        {
+            animator.SetTrigger("TransTrigger");
+            animator.SetTrigger("AttackTrigger");
+            animator.SetInteger("AttackIndex", 1);
+            // Debug.Log("Attack!");
+        }
+        public void Attack3()
+        {
+            animator.SetTrigger("TransTrigger");
+            animator.SetTrigger("AttackTrigger");
+            animator.SetInteger("AttackIndex", 2);
+            // Debug.Log("Attack!");
+        }
+
 
         public void Die() 
         {

@@ -23,13 +23,13 @@ namespace KYM
         {
             linkedCharacter = GetComponent<CharacterBase>();
             mainCamera = Camera.main;
-
-            commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
 
         private void Start()
         {
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
+
+            commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
 
         private void Update()
@@ -42,8 +42,8 @@ namespace KYM
             linkedCharacter.SetMovementForward(mainCamera.transform.forward);
             linkedCharacter.Move(inputMove);
             linkedCharacter.Rotate(CameraSystem.Instance.AimingPoint);
-            
-            //Debug.Log(inputMove);
+
+            if (commandInvoker.CommandQueue.Count > 0) { commandInvoker.ExecuteNext(); }
         }
 
         private void LateUpdate()

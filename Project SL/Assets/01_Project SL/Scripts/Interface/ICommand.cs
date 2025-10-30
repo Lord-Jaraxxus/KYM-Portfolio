@@ -6,6 +6,6 @@ namespace KYM
 {
     public interface ICommand
     {
-        void Execute(); // 명령 실행 메서드
+        void Execute(int comboStep); // 명령 실행 메서드
     }
 }

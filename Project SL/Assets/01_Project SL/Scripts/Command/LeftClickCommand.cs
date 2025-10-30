@@ -13,9 +13,20 @@ namespace KYM
             this.character = character;
         }
 
-        public void Execute()
+        public void Execute(int comboStep)
         {
-            character.Attack();
+            switch (comboStep)
+            {
+                case 0:
+                    character.Attack1();
+                    break;
+                case 1:
+                    character.Attack2();
+                    break;
+                case 2:
+                    character.Attack3();
+                    break;
+            }
         }
     }
 }
