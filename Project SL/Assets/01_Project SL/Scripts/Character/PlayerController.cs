@@ -43,7 +43,9 @@ namespace KYM
             linkedCharacter.Move(inputMove);
             linkedCharacter.Rotate(CameraSystem.Instance.AimingPoint);
 
-            if (commandInvoker.CommandQueue.Count > 0) { commandInvoker.ExecuteNext(); }
+            // if(Input.GetKeyDown())
+
+            // if (commandInvoker.CommandQueue.Count > 0) { commandInvoker.ExecuteNext(); }
         }
 
         private void LateUpdate()

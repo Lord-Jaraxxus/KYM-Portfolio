@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class CharacterBase : MonoBehaviour, IHasHp, IHittable
+    public class CharacterBase : MonoBehaviour, IHittable
     {
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
@@ -14,10 +14,6 @@ namespace KYM
         [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결
 
         public bool IsWalk { get; set; } = false;
-
-        float IHasHp.MaxHP => MaxHP;
-        float IHasHp.CurHP => CurHP;
-
 
         private float walkBlend;
 
@@ -33,6 +29,9 @@ namespace KYM
         private float rotationSmoothTime = 0.15f;
         private float smoothHorizontal;
         private float smoothVertical;
+
+        public bool isStrape = false;
+        private float moveSpeed = 3f; 
 
         private void Awake()
         {
@@ -100,6 +99,7 @@ namespace KYM
             animator.SetFloat("Horizontal", smoothHorizontal);
             animator.SetFloat("Vertical", smoothVertical);
 
+            // characterController.Move();
             // Debug.Log($"mag : {input.magnitude}, hor : {smoothHorizontal}, ver : {smoothVertical}");
         }
 

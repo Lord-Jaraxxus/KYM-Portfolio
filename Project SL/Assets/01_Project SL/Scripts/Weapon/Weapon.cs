@@ -19,7 +19,7 @@ namespace KYM
 
         private void OnTriggerEnter(Collider other)
         {
-            IHittable hittable = other.GetComponent<IHittable>();
+            IHittable hittable = other.transform.root.GetComponent<IHittable>();
             if (hittable != null && !hitTargets.Contains(hittable)) 
             {
                 hitTargets.Add(hittable);
