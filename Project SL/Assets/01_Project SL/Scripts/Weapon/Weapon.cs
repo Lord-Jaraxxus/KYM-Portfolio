@@ -14,7 +14,7 @@ namespace KYM
         void Awake()
         {
             hitbox = GetComponent<Collider>();
-            hitbox.enabled = false; // 처음에는 비활성화
+            if(hitbox != null) hitbox.enabled = false; // 처음에는 비활성화
         }
 
         private void OnTriggerEnter(Collider other)
