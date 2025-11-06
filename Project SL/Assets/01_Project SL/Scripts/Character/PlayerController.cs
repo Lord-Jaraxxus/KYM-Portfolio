@@ -38,6 +38,8 @@ namespace KYM
 
         private void Start()
         {
+            SoundManager.PlayBGM("BGM_Garden");
+
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
