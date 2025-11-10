@@ -40,6 +40,7 @@ namespace KYM
         {
             SoundManager.PlayBGM("BGM_Garden");
 
+            linkedCharacter.Initialize(GameDataModel.Singleton.PlayerStatDto.playerCharacterStatSO, true);
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }

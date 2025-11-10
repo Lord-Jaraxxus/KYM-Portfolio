@@ -8,6 +8,7 @@ namespace KYM
     {
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
+        private CharacterStatDataSO characterStat; // 캐릭터 스탯 데이터 (ScriptableObject)
 
         public AnimationEventListener AnimationEventListener => animationEventListener;
         private AnimationEventListener animationEventListener { get; set; }
@@ -19,10 +20,17 @@ namespace KYM
 
         private float walkBlend;
 
-        public float MaxHP; // => maxHP;
-        public float CurHP; // => curHP;
-        public float MaxSP; // => maxSP;
-        public float CurSP; // => curSP;
+        public float MaxHP => maxHP;
+        public float CurHP => curHP;
+        public float MaxSP => maxSP;
+        public float CurSP => curSP;
+        public float MoveSpeed => moveSpeed;
+
+        [SerializeField] private float maxHP; // 최대 체력
+        [SerializeField] private float curHP; // 현재 체력
+        [SerializeField] private float maxSP; // 최대 스태미나
+        [SerializeField] private float curSP; // 현재 스태미나
+        [SerializeField] private float moveSpeed; // 이동 속도
 
         private Vector3 movementForward;
         private float verticalVelocity;
@@ -33,20 +41,29 @@ namespace KYM
         private float smoothVertical;
 
         private bool isStrafe = false;
-        private float moveSpeed = 3f;
-
-
+       
         private void Awake()
         {
-            // 일단 뭐 테스트 해야하니까 여기서 초기화
-            MaxHP = 100f;
-            //CurHP = MaxHP;
-
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
             animationEventListener = GetComponent<AnimationEventListener>();
 
             SetActiveRagdoll(false);
+        }
+
+
+        private void Start()
+        {
+            animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent; // 애니메이션 이벤트 리스너 콜백 등록
+
+            curHP = MaxHP; // 초기 체력 설정
+            curSP = MaxSP; // 초기 스태미나 설정
+        }
+
+        private void Update()
+        {
+            walkBlend = Mathf.Lerp(walkBlend, IsWalk ? 1f : 0f, Time.deltaTime);
+            animator.SetFloat("Running", walkBlend);
         }
 
         private void SetActiveRagdoll(bool isActive)
@@ -58,16 +75,15 @@ namespace KYM
                 rigid.isKinematic = isActive;
             }
         }
-
-        private void Start()
+        public void Initialize(CharacterStatDataSO statDataSo, bool isPlayer)
         {
-            animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent; // 애니메이션 이벤트 리스너 콜백 등록
-        }
+            this.characterStat = statDataSo; // 캐릭터 스탯 데이터 초기화
 
-        private void Update()
-        {
-            walkBlend = Mathf.Lerp(walkBlend, IsWalk ? 1f : 0f, Time.deltaTime);
-            animator.SetFloat("Running", walkBlend);
+            this.maxHP = characterStat.MaxHP;
+            this.curHP = characterStat.MaxHP;
+            this.maxSP = characterStat.MaxSP;
+            this.curSP = characterStat.MaxSP;
+            this.moveSpeed = characterStat.MoveSpeed;
         }
 
         void OnCallbackReceiveAnimationEvent(string eventName)
@@ -189,11 +205,11 @@ namespace KYM
 
         public float TakeDamage(float damage)
         {
-            CurHP -= damage;
+            curHP -= damage;
 
-            if (CurHP <= 0)
+            if (curHP <= 0)
             {
-                CurHP = 0;
+                curHP = 0;
                 Die();
             }
 
@@ -202,11 +218,11 @@ namespace KYM
 
         public void Heal(float amount)
         {
-            CurHP += amount;
+            curHP += amount;
 
-            if (CurHP > MaxHP)
+            if (curHP > MaxHP)
             {
-                CurHP = MaxHP;
+                curHP = MaxHP;
             }
         }
 

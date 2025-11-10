@@ -33,8 +33,8 @@ namespace KYM
             // var soundManagerInst = Instantiate(soundManagerPrefab); // 사운드 매니저 인스턴스 생성
 
             UIManager.Singleton.Initialize(); // UIManager 초기화
-            // GameDataModel.Singleton.Initialize(); // GameDataModel 초기화
-            // UserDataModel.Singleton.Initialize(); // UserDataModel 초기화
+            GameDataModel.Singleton.Initialize(); // GameDataModel 초기화
+            UserDataModel.Singleton.Initialize(); // UserDataModel 초기화
 #if UNITY_EDITOR
             UnityEngine.SceneManagement.Scene activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
 
