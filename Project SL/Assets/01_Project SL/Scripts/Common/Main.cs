@@ -25,7 +25,7 @@ namespace KYM
             Initialize();   // 초기화 메서드 호출
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             if (isInitialized) return; // 이미 초기화된 경우 중복 실행 방지
 
