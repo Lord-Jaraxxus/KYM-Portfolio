@@ -48,13 +48,14 @@ namespace KYM
             characterController = GetComponent<CharacterController>();
             animationEventListener = GetComponent<AnimationEventListener>();
 
-            SetActiveRagdoll(false);
         }
 
 
         private void Start()
         {
             animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent; // 애니메이션 이벤트 리스너 콜백 등록
+
+            SetActiveRagdoll(false);
 
             curHP = MaxHP; // 초기 체력 설정
             curSP = MaxSP; // 초기 스태미나 설정
@@ -68,13 +69,14 @@ namespace KYM
 
         private void SetActiveRagdoll(bool isActive)
         {
-            animator.enabled = !isActive;
+            // animator.enabled = !isActive; // 랙돌이 제대로 일을 안해서 일단 킵..
             Rigidbody[] ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
             foreach (var rigid in ragdollRigidbodies)
             {
                 rigid.isKinematic = isActive;
             }
         }
+
         public void Initialize(CharacterStatDataSO statDataSo, bool isPlayer)
         {
             this.characterStat = statDataSo; // 캐릭터 스탯 데이터 초기화
@@ -99,7 +101,6 @@ namespace KYM
                     // Debug.Log("Disable Hitbox");
                     break;
                 case "EndCombo":
-                    animator.SetTrigger("TransTrigger");
                     break;
             }
         }
@@ -175,21 +176,18 @@ namespace KYM
 
         public void Attack1()
         {
-            animator.SetTrigger("TransTrigger");
             animator.SetTrigger("AttackTrigger");
             animator.SetInteger("AttackIndex", 0);
             // Debug.Log("Attack!");
         }
         public void Attack2()
         {
-            animator.SetTrigger("TransTrigger");
             animator.SetTrigger("AttackTrigger");
             animator.SetInteger("AttackIndex", 1);
             // Debug.Log("Attack!");
         }
         public void Attack3()
         {
-            animator.SetTrigger("TransTrigger");
             animator.SetTrigger("AttackTrigger");
             animator.SetInteger("AttackIndex", 2);
             // Debug.Log("Attack!");
@@ -198,7 +196,8 @@ namespace KYM
 
         public void Die()
         {
-            animator.SetTrigger("TransTrigger");
+            SetActiveRagdoll(true);
+
             animator.SetTrigger("DeathTrigger");
             Debug.Log($"{gameObject.name} is dead!");
         }

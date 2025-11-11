@@ -675,7 +675,7 @@ PrefabInstance:
       addedObject: {fileID: 706205734}
     - targetCorrespondingSourceObject: {fileID: 185848, guid: f9d38fed7b251cb4f9546516bfaa11c3, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 706205738}
+      addedObject: {fileID: 706205741}
     - targetCorrespondingSourceObject: {fileID: 185848, guid: f9d38fed7b251cb4f9546516bfaa11c3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 706205737}
@@ -1340,10 +1340,11 @@ MonoBehaviour:
   animator: {fileID: 0}
   characterController: {fileID: 0}
   weapon: {fileID: 0}
-  MaxHP: 100
-  CurHP: 15
-  MaxSP: 0
-  CurSP: 0
+  maxHP: 200
+  curHP: 10
+  maxSP: 100
+  curSP: 100
+  moveSpeed: 3
 --- !u!136 &706205737
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1367,33 +1368,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!54 &706205738
-Rigidbody:
+--- !u!114 &706205741
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 706205733}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6da3857c1c0ad540b058627c6eb3428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &745255575
 GameObject:
   m_ObjectHideFlags: 0
@@ -3337,8 +3323,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.14324188
-  m_Center: {x: 0, y: 0.14324188, z: 0}
+  m_Radius: 20
+  m_Center: {x: 0, y: 5, z: 0}
 --- !u!1 &1621493521
 GameObject:
   m_ObjectHideFlags: 0
@@ -3844,8 +3830,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 922313332189195423, guid: b78374036e6477343b3cda32a63da078, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
