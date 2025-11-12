@@ -15,6 +15,7 @@ namespace KYM
         public event System.Action onInputSpace; // 스페이스바 입력 이벤트
         public event System.Action onInputShift; // 쉬프트키 입력 이벤트
         public event System.Action onInputCtrl; // 컨트롤키 입력 이벤트
+        public event System.Action onInputF; // F키 입력 이벤트
 
         public event System.Action<float> onInputMouseScroll; // 마우스 스크롤 입력 이벤트
 
@@ -88,6 +89,10 @@ namespace KYM
             if( Input.GetKeyDown(KeyCode.LeftControl)) // 컨트롤키가 눌러지면 true
             {
                 onInputCtrl?.Invoke(); // 컨트롤키 입력 이벤트 발생
+            }
+            if( Input.GetKeyDown(KeyCode.F)) // F키가 눌러지면 true
+            {
+                onInputF?.Invoke(); // F키 입력 이벤트 발생
             }
 
             float scroll = Input.GetAxis("Mouse ScrollWheel");

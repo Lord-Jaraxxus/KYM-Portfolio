@@ -11,6 +11,8 @@ namespace KYM
         private CharacterBase linkedCharacter;
         private Camera mainCamera;
 
+        [SerializeField] DropItemSensor sensor;
+
         [Header("Camera")]
         [SerializeField] private float cameraThreshold = 0.1f; // 카메라 회전 임계값
         private float cinemachineTargetYaw;
@@ -41,7 +43,10 @@ namespace KYM
             SoundManager.PlayBGM("BGM_Garden");
 
             linkedCharacter.Initialize(GameDataModel.Singleton.PlayerStatDto.playerCharacterStatSO, true);
+
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
+            InputManager.Singleton.onInputF += OnReceiveInputF;
+
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
 
@@ -81,6 +86,24 @@ namespace KYM
         }
 
         void OnReceiveInputLmc() => commandInvoker.TryAddCommand(new LeftClickCommand(linkedCharacter));
+        void OnReceiveInputF() 
+        {
+ 
+               if(sensor.CurrentTarget == null)
+               {
+                      Debug.Log("커런트 타겟이 없습니다.");
+               }
+            
+
+            if (sensor != null && sensor.CurrentTarget != null)
+            {
+                sensor.CurrentTarget.Interact();
+            }
+            else
+            {
+                Debug.Log("획득 가능한 아이템이 없습니다.");
+            }
+        }
 
         private void CameraRotation()
         {
