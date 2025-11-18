@@ -89,15 +89,10 @@ namespace KYM
         void OnReceiveInputF() 
         {
  
-               if(sensor.CurrentTarget == null)
-               {
-                      Debug.Log("커런트 타겟이 없습니다.");
-               }
-            
-
-            if (sensor != null && sensor.CurrentTarget != null)
+            if (sensor != null && sensor.CurrentTarget != null) // 가까이에 주울 아이템이 있을 때
             {
                 sensor.CurrentTarget.Interact();
+                linkedCharacter.Root();
             }
             else
             {

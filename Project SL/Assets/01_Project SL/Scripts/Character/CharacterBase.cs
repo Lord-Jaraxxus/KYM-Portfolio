@@ -193,6 +193,10 @@ namespace KYM
             // Debug.Log("Attack!");
         }
 
+        public void Root() 
+        {
+            animator.SetTrigger("RootTrigger");
+        }
 
         public void Die()
         {
