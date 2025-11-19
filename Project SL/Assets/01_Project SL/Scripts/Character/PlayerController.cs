@@ -46,6 +46,7 @@ namespace KYM
 
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
             InputManager.Singleton.onInputF += OnReceiveInputF;
+            InputManager.Singleton.onInputI += OnReceiveInputI;
 
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
@@ -98,6 +99,10 @@ namespace KYM
             {
                 Debug.Log("획득 가능한 아이템이 없습니다.");
             }
+        }
+        void OnReceiveInputI() 
+        {
+            UIManager.Toggle<InventoryUI>(UIList.InventoryUI);
         }
 
         private void CameraRotation()

@@ -16,6 +16,7 @@ namespace KYM
         public event System.Action onInputShift; // 쉬프트키 입력 이벤트
         public event System.Action onInputCtrl; // 컨트롤키 입력 이벤트
         public event System.Action onInputF; // F키 입력 이벤트
+        public event System.Action onInputI; // I키 입력 이벤트
 
         public event System.Action<float> onInputMouseScroll; // 마우스 스크롤 입력 이벤트
 
@@ -69,30 +70,34 @@ namespace KYM
             InputLook = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); // 마우스 이동 입력 벡터 설정
             inputMouseScroll = Input.GetAxis("Mouse ScrollWheel"); // 마우스 스크롤 입력 값 설정
 
-            if (Input.GetMouseButtonDown(0)) // 마우스 좌클릭이 눌러지면 true
+            if (Input.GetMouseButtonDown(0)) 
             {
                 OnInputLmc?.Invoke(); // 좌클릭 입력 이벤트 발생
             }
 
-            if (Input.GetMouseButtonDown(1))  // 마우스 우클릭이 눌러지면 true
+            if (Input.GetMouseButtonDown(1))  
             {
                 onInputRmc?.Invoke(); // 우클릭 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.Space)) // 스페이스바가 눌러지면 true
+            if( Input.GetKeyDown(KeyCode.Space)) 
             {
                 onInputSpace?.Invoke(); // 스페이스바 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.LeftShift)) // 쉬프트키가 눌러지면 true
+            if( Input.GetKeyDown(KeyCode.LeftShift)) 
             {
                 onInputShift?.Invoke(); // 쉬프트키 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.LeftControl)) // 컨트롤키가 눌러지면 true
+            if( Input.GetKeyDown(KeyCode.LeftControl)) 
             {
                 onInputCtrl?.Invoke(); // 컨트롤키 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.F)) // F키가 눌러지면 true
+            if( Input.GetKeyDown(KeyCode.F)) 
             {
                 onInputF?.Invoke(); // F키 입력 이벤트 발생
+            }
+            if (Input.GetKeyDown(KeyCode.I)) 
+            {
+                onInputI?.Invoke(); // I키 입력 이벤트 발생
             }
 
             float scroll = Input.GetAxis("Mouse ScrollWheel");
