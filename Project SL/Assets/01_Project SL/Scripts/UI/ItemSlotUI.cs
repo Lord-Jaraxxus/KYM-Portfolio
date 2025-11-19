@@ -12,7 +12,11 @@ namespace KYM
         Image icon;
         public TextMeshProUGUI itemName;
 
-        // public SetData(ItemSO itemSO) { }
+        public void SetData(ItemDataSO itemSO) 
+        {
+            icon.sprite = itemSO.icon;
+            itemName.text = itemSO.itemName;
+        }
     }
 }
 
