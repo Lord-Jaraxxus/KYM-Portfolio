@@ -1478,6 +1478,7 @@ GameObject:
   - component: {fileID: 657270503}
   - component: {fileID: 657270506}
   - component: {fileID: 657270507}
+  - component: {fileID: 657270508}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -1536,6 +1537,18 @@ MonoBehaviour:
   CameraRadius: 0.2
   DampingIntoCollision: 0
   DampingFromCollision: 2
+--- !u!114 &657270508
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657270502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &706205733 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 185848, guid: f9d38fed7b251cb4f9546516bfaa11c3, type: 3}
@@ -1555,6 +1568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   characterController: {fileID: 0}
+  lockOnPointData: {fileID: 11400000, guid: 5841bedda11d29c4ebfaac6ab5926551, type: 2}
   weapon: {fileID: 0}
   maxHP: 200
   curHP: 10
@@ -3750,6 +3764,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <AimingPoint>k__BackingField: {x: 0, y: 0, z: 0}
+  mainCamera: {fileID: 253334492}
+  tpsCamera: {fileID: 1652808524}
 --- !u!1 &1623846305 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 134962, guid: f9d38fed7b251cb4f9546516bfaa11c3, type: 3}

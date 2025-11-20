@@ -8,6 +8,8 @@ namespace KYM
     {
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
+        [SerializeField] private LockOnPointSO lockOnPointData;
+
         private CharacterStatDataSO characterStat; // 캐릭터 스탯 데이터 (ScriptableObject)
 
         public AnimationEventListener AnimationEventListener => animationEventListener;
@@ -41,7 +43,9 @@ namespace KYM
         private float smoothVertical;
 
         private bool isStrafe = false;
-       
+
+        private List<Transform> lockOnPointContainer = new(); 
+
         private void Awake()
         {
             animator = GetComponent<Animator>();
@@ -59,6 +63,29 @@ namespace KYM
 
             curHP = MaxHP; // 초기 체력 설정
             curSP = MaxSP; // 초기 스태미나 설정
+
+            InitializeLockOnPoint();
+
+            if(lockOnPointData != null) CameraSystem.Instance.RegisterCharacter(this);
+        }
+
+        private void InitializeLockOnPoint()
+        {
+            if (lockOnPointData != null)
+            {
+                lockOnPointContainer.Clear();
+                for (int i = 0; i < lockOnPointData.TargetPoints.Count; i++)
+                {
+                    HumanBodyBones tartgetBoneType = lockOnPointData.TargetPoints[i];
+                    Transform targetBoneTransform = animator.GetBoneTransform(tartgetBoneType);
+                    lockOnPointContainer.Add(targetBoneTransform);
+                }
+            }
+        }
+
+        public Transform GetLockOnPoint(int index)
+        {
+            return lockOnPointContainer[index % lockOnPointContainer.Count];
         }
 
         private void Update()
@@ -69,11 +96,11 @@ namespace KYM
 
         private void SetActiveRagdoll(bool isActive)
         {
-            // animator.enabled = !isActive; // 랙돌이 제대로 일을 안해서 일단 킵..
+            animator.enabled = !isActive; // 랙돌이 제대로 일을 안해서 일단 킵..
             Rigidbody[] ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
             foreach (var rigid in ragdollRigidbodies)
             {
-                rigid.isKinematic = isActive;
+                rigid.isKinematic = !isActive;
             }
         }
 

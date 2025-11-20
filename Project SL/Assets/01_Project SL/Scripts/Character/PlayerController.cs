@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Claims;
 using UnityEngine;
 
 namespace KYM
@@ -47,6 +49,7 @@ namespace KYM
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
             InputManager.Singleton.onInputF += OnReceiveInputF;
             InputManager.Singleton.onInputI += OnReceiveInputI;
+            InputManager.Singleton.onInputTab += OnReceiveInputTab;
 
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
@@ -58,7 +61,6 @@ namespace KYM
             // 입력
             Vector2 inputMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             bool isWalk = Input.GetKey(KeyCode.LeftShift);
-            bool isAim = Input.GetMouseButton(1); // 우클릭 시 정조준(Strafe) 예시
 
             // 이동 기준 전방: 시네머신 타깃의 수평 투영 forward 사용
             Vector3 camForwardFlat = Vector3.ProjectOnPlane(
@@ -69,8 +71,22 @@ namespace KYM
             // 상태 전달
             linkedCharacter.IsWalk = isWalk;
             linkedCharacter.SetMovementForward(camForwardFlat);
-            linkedCharacter.SetStrafe(isAim);
             linkedCharacter.Move(inputMove);
+
+            if (CameraSystem.Instance.IsActiveLockOn)
+            {
+                // 캐릭터 방향을 락온 타겟 방향으로 조정, Y값은 바꾸지 않음
+                Vector3 direction = (CameraSystem.Instance.AimingPoint - linkedCharacter.transform.position).normalized;
+                direction.y = 0f;
+                linkedCharacter.transform.forward = direction;
+
+                linkedCharacter.SetStrafe(true);
+            }
+            else 
+            {
+                linkedCharacter.SetStrafe(false);
+            }
+
 
             // 공격
             if (Input.GetMouseButtonDown(0))
@@ -83,7 +99,14 @@ namespace KYM
 
         private void LateUpdate()
         {
-            CameraRotation();
+            if (CameraSystem.Instance.IsActiveLockOn)
+            {
+                CinemachineCameraTarget.rotation = Quaternion.identity;
+            }
+            else
+            {
+                CameraRotation();
+            }
         }
 
         void OnReceiveInputLmc() => commandInvoker.TryAddCommand(new LeftClickCommand(linkedCharacter));
@@ -103,6 +126,10 @@ namespace KYM
         void OnReceiveInputI() 
         {
             UIManager.Toggle<InventoryUI>(UIList.InventoryUI);
+        }
+        private void OnReceiveInputTab()
+        {
+            CameraSystem.Instance.SetLockOnToggle();
         }
 
         private void CameraRotation()
