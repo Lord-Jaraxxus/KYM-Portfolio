@@ -9,6 +9,7 @@ namespace KYM
     {
         public const string EditorUserDataPath = "Assets/01_Project KYM/Anothers/UserData/";
         [field: SerializeField] public PlayerInfoDto PlayerInfoDto { get; private set; } = new();
+        [field: SerializeField] public PlayerItemDTO PlayerItemDto { get; private set; } = new();
         [field: SerializeField] public Dictionary<string /* Item Name */, PlayerItemDTO> PlayerItemDtoDictionary { get; private set; } = new();
 
         public void Initialize()
@@ -36,6 +37,12 @@ namespace KYM
             string savePath = $"{EditorUserDataPath}/{typeof(T)}.json";
 
             FileManager.WriteFileFromString(savePath, jsonFormat);
+        }
+
+        public void AddItem() 
+        {
+            // PlayerItemDTO.PlayerItems.Add();
+            // PlayerItemDTO.IncreaseItemCount();
         }
     }
 }

@@ -6,6 +6,7 @@ namespace KYM
 {
     public class DropItem : MonoBehaviour, IInteractable
     {
+        public ItemDataSO itemData; // 획득 가능한 아이템 데이터
         public void Interact()
         {
             // 아이템 획득 로직 구현

@@ -31,7 +31,13 @@ namespace KYM
 
     public class PlayerItemDTO : UserDataDTO
     {
-        // [field: SerializeField] public ItemDataSO itemDataSO;
-        // [field: SerializeField] public int Count;
+        [System.Serializable]
+        public class PlayerItemData 
+        {
+            [field: SerializeField] public string ItemID { get; private set; }
+            [field: SerializeField] public int ItemCount { get; private set; }
+        }
+
+        public List<PlayerItemData> PlayerItems { get; private set; } = new();
     }
 }
