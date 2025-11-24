@@ -66,10 +66,11 @@ namespace KYM
             // 가장 가까운 대상 갱신
             if (currentTarget != nearest)
             {
-                Debug.Log($"Nearest item changed: {nearest}");
                 currentTarget = nearest;
                 // TODO: 여기서 UIManager나 PlayerController에
                 // "대상 변경됨" 이벤트 알릴 수도 있음
+
+                //Debug.Log($"Nearest item changed: {nearest}");
             }
         }
 

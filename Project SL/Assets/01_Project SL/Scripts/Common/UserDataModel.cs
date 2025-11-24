@@ -42,6 +42,12 @@ namespace KYM
         public void AddItem(string itemID, int itemCount) 
         {
             PlayerItemDto.AddItem(itemID, itemCount);
+
+            Debug.Log("Current Player Items:");
+            foreach (var item in PlayerItemDto.PlayerItems)
+            {
+                Debug.Log($"ItemID: {item.ItemID}, Count: {item.ItemCount}");
+            }
         }
     }
 }

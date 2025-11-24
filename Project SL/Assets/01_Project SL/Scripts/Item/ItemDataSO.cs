@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace KYM
 {
-    [CreateAssetMenu(menuName = "Inventory/Item")]
+    [CreateAssetMenu(fileName = "CharacterStatData", menuName = "PROJECT KYM/ItemData")]
     public class ItemDataSO : ScriptableObject
     {
         public string ID;
+        public int ItemCount;
+
         public string itemName;
         public Sprite icon;
         public string description;
