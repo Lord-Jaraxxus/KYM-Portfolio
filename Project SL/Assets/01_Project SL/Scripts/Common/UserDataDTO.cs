@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace KYM
 {
@@ -36,8 +37,50 @@ namespace KYM
         {
             [field: SerializeField] public string ItemID { get; private set; }
             [field: SerializeField] public int ItemCount { get; private set; }
+
+            public PlayerItemData(string itemID, int itemCount) 
+            {
+                ItemID = itemID;
+                ItemCount = itemCount;
+            }
+            public void IncreaseItemCount(int count) 
+            {
+                ItemCount += count;
+            }
+            public void DecreaseItemCount(int count) 
+            {
+                ItemCount -= count;
+            }
         }
 
         public List<PlayerItemData> PlayerItems { get; private set; } = new();
+
+        public void AddItem(string itemID, int itemCount) 
+        {
+            var existingItem = PlayerItems.Find(item => item.ItemID == itemID);
+            if (existingItem != null)
+            {
+                existingItem.IncreaseItemCount(itemCount);
+            }
+            else
+            {
+                PlayerItems.Add(new PlayerItemData(itemID, itemCount));
+            }
+        }
+        public void RemoveItem(string itemID, int count) 
+        {
+            var existingItem = PlayerItems.Find(item => item.ItemID == itemID);
+
+            if (existingItem != null)
+            {
+                existingItem.DecreaseItemCount(count);
+            }
+            else return;
+
+            if (existingItem.ItemCount <= 0)
+            {
+                PlayerItems.Remove(existingItem);
+            }
+        }
     }
 }

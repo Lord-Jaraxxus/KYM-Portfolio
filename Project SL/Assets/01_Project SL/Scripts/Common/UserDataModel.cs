@@ -39,10 +39,9 @@ namespace KYM
             FileManager.WriteFileFromString(savePath, jsonFormat);
         }
 
-        public void AddItem() 
+        public void AddItem(string itemID, int itemCount) 
         {
-            // PlayerItemDTO.PlayerItems.Add();
-            // PlayerItemDTO.IncreaseItemCount();
+            PlayerItemDto.AddItem(itemID, itemCount);
         }
     }
 }
