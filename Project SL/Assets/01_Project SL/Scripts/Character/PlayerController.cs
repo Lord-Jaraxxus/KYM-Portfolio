@@ -125,7 +125,7 @@ namespace KYM
         }
         void OnReceiveInputI() 
         {
-            UIManager.Toggle<InventoryUI>(UIList.InventoryUI);
+            UIManager.Toggle<InfiniteUI>(UIList.InventoryUI);
         }
         private void OnReceiveInputTab()
         {
