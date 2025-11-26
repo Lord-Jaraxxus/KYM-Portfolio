@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -11,6 +12,8 @@ namespace KYM
         [field: SerializeField] public PlayerInfoDto PlayerInfoDto { get; private set; } = new();
         [field: SerializeField] public PlayerItemDTO PlayerItemDto { get; private set; } = new();
         [field: SerializeField] public Dictionary<string /* Item Name */, PlayerItemDTO> PlayerItemDtoDictionary { get; private set; } = new();
+
+        public event Action OnInventoryUpdated;
 
         public void Initialize()
         {
@@ -42,6 +45,7 @@ namespace KYM
         public void AddItem(string itemID, int itemCount) 
         {
             PlayerItemDto.AddItem(itemID, itemCount);
+            OnInventoryUpdated?.Invoke();
 
             Debug.Log("Current Player Items:");
             foreach (var item in PlayerItemDto.PlayerItems)
