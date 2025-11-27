@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5126f71b48afb2a49a1f7905653d7a1f, type: 3}
-  m_Name: ItemData 2
+  m_Name: ItemData_Material
   m_EditorClassIdentifier: 
-  ID: sword
+  ID: material
   ItemCount: 1
-  itemName: Sword
+  itemName: Material
+  category: 1
   icon: {fileID: 0}
   description: 

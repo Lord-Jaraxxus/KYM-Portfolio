@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5126f71b48afb2a49a1f7905653d7a1f, type: 3}
-  m_Name: ItemData 1
+  m_Name: ItemData_Quest
   m_EditorClassIdentifier: 
-  ID: potion
-  ItemCount: 5
-  itemName: Potion Box
+  ID: quest
+  ItemCount: 1
+  itemName: Quest
+  category: 2
   icon: {fileID: 0}
   description: 
