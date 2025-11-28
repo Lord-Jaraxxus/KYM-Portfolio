@@ -13,7 +13,7 @@ namespace KYM
         [field: SerializeField] public PlayerItemDTO PlayerItemDto { get; private set; } = new();
         [field: SerializeField] public Dictionary<string /* Item Name */, PlayerItemDTO> PlayerItemDtoDictionary { get; private set; } = new();
 
-        public event Action OnInventoryUpdated;
+        public event Action<PlayerItemDTO.PlayerItemData> OnInventoryUpdated;
 
         public void Initialize()
         {
@@ -44,8 +44,8 @@ namespace KYM
 
         public void AddItem(string itemID, int itemCount) 
         {
-            PlayerItemDto.AddItem(itemID, itemCount);
-            OnInventoryUpdated?.Invoke();
+            PlayerItemDTO.PlayerItemData changedData = PlayerItemDto.AddItem(itemID, itemCount);
+            OnInventoryUpdated?.Invoke(changedData);
 
             Debug.Log("Current Player Items:");
             foreach (var item in PlayerItemDto.PlayerItems)

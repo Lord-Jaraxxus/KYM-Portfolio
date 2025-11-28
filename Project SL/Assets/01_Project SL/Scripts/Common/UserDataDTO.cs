@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace KYM
 {
@@ -30,6 +29,7 @@ namespace KYM
         public void SaveData() => UserDataModel.Singleton.SaveData<PlayerInfoDto>(this);
     }
 
+    [System.Serializable]
     public class PlayerItemDTO : UserDataDTO
     {
         [System.Serializable]
@@ -53,18 +53,21 @@ namespace KYM
             }
         }
 
-        public List<PlayerItemData> PlayerItems { get; private set; } = new();
+        [field:SerializeField] public List<PlayerItemData> PlayerItems { get; private set; } = new();
 
-        public void AddItem(string itemID, int itemCount) 
+        public PlayerItemData AddItem(string itemID, int itemCount) 
         {
-            var existingItem = PlayerItems.Find(item => item.ItemID == itemID);
+            PlayerItemData existingItem = PlayerItems.Find(item => item.ItemID == itemID);
             if (existingItem != null)
             {
                 existingItem.IncreaseItemCount(itemCount);
+                return existingItem;
             }
             else
-            {
-                PlayerItems.Add(new PlayerItemData(itemID, itemCount));
+            {   
+                PlayerItemData newItem = new PlayerItemData(itemID, itemCount);
+                PlayerItems.Add(newItem);
+                return newItem;
             }
         }
         public void RemoveItem(string itemID, int count) 

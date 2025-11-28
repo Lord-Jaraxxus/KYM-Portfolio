@@ -18,10 +18,5 @@ namespace KYM
         {
             gameObject.SetActive(false); // 게임 오브젝트 비활성화
         }
-
-        public virtual void Toggle() // UI의 활성화 상태를 토글하는 메서드
-        {
-            gameObject.SetActive(!gameObject.activeSelf); // 현재 활성화 상태의 반대로 설정
-        }
     }
 }

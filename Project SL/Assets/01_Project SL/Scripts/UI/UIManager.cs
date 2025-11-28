@@ -84,15 +84,6 @@ namespace KYM
             return targetUI;
         }
 
-        public static T Toggle<T>(UIList uiName) where T : UIBase 
-        {
-            var targetUI = Singleton.GetUI<T>(uiName); // UIManager에서 UI를 가져옴
-            if (!targetUI) return null; // UI가 없으면 null 반환
-
-            targetUI.Toggle(); // UI의 활성화 상태를 토글
-            return targetUI;
-        }
-
         public T GetUI<T>(UIList uiName) where T : UIBase 
         {
             // UI가 팝업인지 패널인지에 따라 컨테이너 선택

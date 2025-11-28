@@ -10,6 +10,7 @@ namespace KYM
         public Color color;
         public Sprite icon;
         public string itemName;
+        public int itemCount;
     }
 
     public class InfiniteUI_ListItem : Gpm.Ui.InfiniteScrollItem

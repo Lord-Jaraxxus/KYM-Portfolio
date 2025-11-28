@@ -123,10 +123,21 @@ namespace KYM
                 Debug.Log("획득 가능한 아이템이 없습니다.");
             }
         }
+
         void OnReceiveInputI() 
         {
-            UIManager.Toggle<InfiniteUI>(UIList.InventoryUI);
+            var inventoryUI = UIManager.Singleton.GetUI<InfiniteUI>(UIList.InventoryUI);
+
+            if (inventoryUI.gameObject.activeSelf) 
+            { 
+                UIManager.Hide<InfiniteUI>(UIList.InventoryUI);
+            }
+            else 
+            {
+                UIManager.Show<InfiniteUI>(UIList.InventoryUI);
+            }
         }
+
         private void OnReceiveInputTab()
         {
             CameraSystem.Instance.SetLockOnToggle();
