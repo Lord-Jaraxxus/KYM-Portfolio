@@ -18,14 +18,16 @@ namespace KYM
         public UnityEngine.UI.Image iconImage;
         public UnityEngine.UI.Image backgroundImage;
         public TMPro.TextMeshProUGUI itemNameText;
+        public TMPro.TextMeshProUGUI itemCountText;
 
         public override void UpdateData(InfiniteScrollData scrollData)
-        {
+        { 
             var convertData = scrollData as InfiniteUI_ListData;
 
             backgroundImage.color = convertData.color;
             iconImage.sprite = convertData.icon;
             itemNameText.text = convertData.itemName;
+            itemCountText.text = $"x {convertData.itemCount}";
         }
     }
 }
