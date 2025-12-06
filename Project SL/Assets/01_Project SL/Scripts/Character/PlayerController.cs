@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using UnityEngine;
 
@@ -11,7 +10,6 @@ namespace KYM
     {
         [field: SerializeField] public Transform CinemachineCameraTarget { get; private set; }
 
-        CharacterState[] interactBlockedState = { CharacterState.Interacct, CharacterState.Attack }; // 상호작용 불가 상태들
         private CharacterBase linkedCharacter;
         private Camera mainCamera;
 
@@ -114,15 +112,13 @@ namespace KYM
         void OnReceiveInputLmc() => commandInvoker.TryAddCommand(new LeftClickCommand(linkedCharacter));
         void OnReceiveInputF() 
         {
-            if (interactBlockedState.Contains(linkedCharacter.CurrentState)) { return; } // 상호작용 불가 상태일 때 메서드 종료
-
+ 
             if (sensor != null && sensor.CurrentTarget != null) // 가까이에 주울 아이템이 있을 때
             {
-                linkedCharacter.CurrentState = CharacterState.Interacct; // 상호작용 상태로 전환
                 sensor.CurrentTarget.Interact();
-                linkedCharacter.Root(); // 다른 상호작용들이 추가될 때를 대비해서 조치가 필요
+                linkedCharacter.Root();
             }
-            else // 가까이에 주울 아이템이 없을 때
+            else
             {
                 Debug.Log("획득 가능한 아이템이 없습니다.");
             }

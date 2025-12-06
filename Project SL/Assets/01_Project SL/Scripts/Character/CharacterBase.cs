@@ -1,18 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace KYM
 {
-    public enum CharacterState
-    {
-        Idle,
-        Move,
-        Attack,
-        Interacct,
-    }
-
     public class CharacterBase : MonoBehaviour, IHittable
     {
         [SerializeField] private Animator animator;
@@ -25,10 +16,6 @@ namespace KYM
         private AnimationEventListener animationEventListener { get; set; }
 
         [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결
-
-        public CharacterState CurrentState { get; set; } = CharacterState.Idle;
-        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interacct };  // Attack 동작을 멈출 상태들
-        CharacterState[] stopStates = { CharacterState.Attack, CharacterState.Interacct };  // Move 동작을 멈출 상태들
 
         public bool IsWalk { get; set; } = false;
 
@@ -65,11 +52,6 @@ namespace KYM
             characterController = GetComponent<CharacterController>();
             animationEventListener = GetComponent<AnimationEventListener>();
 
-            var attackState = animator.GetBehaviour<AttackStateMachineBehaviour>();
-            attackState?.setCharacter(this);
-            var interactState = animator.GetBehaviour<InteractStateMachineBehaviour>();
-            interactState?.setCharacter(this);
-            
         }
 
 
@@ -163,8 +145,6 @@ namespace KYM
 
         public void Move(Vector2 input)
         {
-            if (stopStates.Contains(CurrentState)) { return; }  // 해당 상태일 경우 Move 함수 종료
-
             float dt = Time.deltaTime;
             bool hasInput = input.sqrMagnitude > 0.0001f;
 
@@ -223,9 +203,6 @@ namespace KYM
 
         public void Attack1()
         {
-            if (attackBlockedStates.Contains(CurrentState)) { return; }  // 해당 상태일 경우 Attack 함수 종료
-
-            CurrentState = CharacterState.Attack;
             animator.SetTrigger("AttackTrigger");
             animator.SetInteger("AttackIndex", 0);
             // Debug.Log("Attack!");
