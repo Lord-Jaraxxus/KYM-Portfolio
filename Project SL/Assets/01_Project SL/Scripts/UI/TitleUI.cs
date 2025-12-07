@@ -19,7 +19,12 @@ namespace KYM
 
         public void OnClickStartButton()
         {
-            Main.Singleton.ChangeScene(SceneType.Ingame); // 게임 시작 버튼 클릭 시 Ingame 씬으로 변경
+            var loadingUI = UIManager.Show<LoadingUI>(UIList.LoadingUI); // 로딩 UI 표시
+
+            loadingUI.ShowLoadingUI(() => // 로딩 UI 표시
+            {
+                Main.Singleton.ChangeScene(SceneType.Ingame); // 게임 시작 버튼 클릭 시 Ingame 씬으로 변경
+            });
         }
         public void OnClickQuitButton()
         {
