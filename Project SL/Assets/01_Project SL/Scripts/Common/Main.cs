@@ -34,7 +34,7 @@ namespace KYM
 
             UIManager.Singleton.Initialize(); // UIManager 초기화
             GameDataModel.Singleton.Initialize(); // GameDataModel 초기화
-            // UserDataModel.Singleton.Initialize(); // UserDataModel 초기화
+            // UserDataModel.Singleton.Initialize(); // UserDataModel 초기화 - 아직 저장 기능이랑 데이터가 없으므로 주석 처리
 #if UNITY_EDITOR
             UnityEngine.SceneManagement.Scene activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
 
@@ -100,9 +100,9 @@ namespace KYM
 
         private IEnumerator ChangeSceneAsync<T>(SceneType sceneType, System.Action sceneLoadAfterCallback = null) where T : SceneBase // 비동기 씬 변경 코루틴
         {
-            // UIManager.Singleton.HideAll(); // 모든 UI 숨김
-            // var loadingUI = UIManager.Show<LoadingUI>(UIList.LoadingUI); // 로딩 UI 표시
-            // loadingUI.SetLoadingProgress(0f); // 로딩 진행률 초기화
+            UIManager.Singleton.HideAll(); // 모든 UI 숨김
+            var loadingUI = UIManager.Show<LoadingUI>(UIList.LoadingUI); // 로딩 UI 표시
+            loadingUI.SetLoadingProgress(0f); // 로딩 진행률 초기화
 
             yield return null; // 다음 프레임까지 대기
 
@@ -113,7 +113,7 @@ namespace KYM
                 sceneInstance = null; // 씬 인스턴스 변수 초기화
             }
 
-            //loadingUI.SetLoadingProgress(0.25f); // 로딩 진행률 업데이트
+            loadingUI.SetLoadingProgress(0.25f); // 로딩 진행률 업데이트
             yield return null; // 다음 프레임까지 대기
 
             var async = SceneManager.LoadSceneAsync("Empty", LoadSceneMode.Single); // 빈 씬 로드 시작
@@ -122,7 +122,7 @@ namespace KYM
                 yield return null; // 다음 프레임까지 대기
             }
 
-            // loadingUI.SetLoadingProgress(0.5f); // 로딩 진행률 업데이트
+            loadingUI.SetLoadingProgress(0.5f); // 로딩 진행률 업데이트
             yield return null;
 
             GameObject sceneInstanceGO = new GameObject(typeof(T).Name); // 새로운 씬 인스턴스 오브젝트 생성
@@ -131,10 +131,10 @@ namespace KYM
             currentSceneType = sceneType; // 현재 씬 타입 업데이트
 
             yield return StartCoroutine(sceneInstance.OnStart()); // 씬 시작 처리
-            // loadingUI.SetLoadingProgress(1f); // 로딩 진행률 업데이트
+            loadingUI.SetLoadingProgress(1f); // 로딩 진행률 업데이트
             yield return null; // 다음 프레임까지 대기
 
-            // UIManager.Hide<LoadingUI>(UIList.LoadingUI); // 로딩 UI 숨김
+            UIManager.Hide<LoadingUI>(UIList.LoadingUI); // 로딩 UI 숨김
             sceneLoadAfterCallback?.Invoke(); // 씬 로드 후 콜백 호출
         }
         public void SystemQuit()
