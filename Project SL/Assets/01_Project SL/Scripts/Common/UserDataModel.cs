@@ -17,8 +17,10 @@ namespace KYM
 
         public void Initialize()
         {
-            LoadData<PlayerInfoDto>(out PlayerInfoDto loadPlayerInfoDto);
-            PlayerInfoDto = loadPlayerInfoDto;
+            // 아직 플레이어 위치라던가, 아무튼 세이브 데이터가 없으니 주석처리
+
+            // LoadData<PlayerInfoDto>(out PlayerInfoDto loadPlayerInfoDto);
+            // PlayerInfoDto = loadPlayerInfoDto;
         }
 
         public void LoadData<T>(out T loadData) where T : UserDataDTO, new()

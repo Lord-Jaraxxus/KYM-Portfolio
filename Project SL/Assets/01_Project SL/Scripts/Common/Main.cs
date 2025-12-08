@@ -34,7 +34,7 @@ namespace KYM
 
             UIManager.Singleton.Initialize(); // UIManager 초기화
             GameDataModel.Singleton.Initialize(); // GameDataModel 초기화
-            // UserDataModel.Singleton.Initialize(); // UserDataModel 초기화 - 아직 저장 기능이랑 데이터가 없으므로 주석 처리
+            UserDataModel.Singleton.Initialize(); // UserDataModel 초기화 
 #if UNITY_EDITOR
             UnityEngine.SceneManagement.Scene activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
 

@@ -17,7 +17,7 @@ namespace KYM
                 yield return null; // 씬 로딩이 완료될 때까지 대기
             }
 
-           UIManager.Show<TitleUI>(UIList.TitleUI); // 타이틀 UI 표시
+           UIManager.Show<TitleUI>(UIList.TitleUI); // 씬 로딩이 완료되면 타이틀 UI 표시
         }
 
         public override IEnumerator OnEnd()
