@@ -103,8 +103,8 @@ namespace KYM
             UIManager.Singleton.HideAll(); // 모든 UI 숨김
             var loadingUI = UIManager.Show<LoadingUI>(UIList.LoadingUI); // 로딩 UI 표시
             loadingUI.SetLoadingProgress(0f); // 로딩 진행률 초기화
-
-            yield return null; // 다음 프레임까지 대기
+            loadingUI.ShowLoadingUI(null); // 로딩 UI 표시 시작
+            yield return StartCoroutine(loadingUI.WaitForFadeInComplete()); // 페이드 인 끝날때까지 대기
 
             if (sceneInstance) // 현재 씬 인스턴스가 존재하는 경우
             {
@@ -130,11 +130,16 @@ namespace KYM
             sceneInstance = sceneInstanceGO.AddComponent<T>(); // 씬 인스턴스 컴포넌트 추가
             currentSceneType = sceneType; // 현재 씬 타입 업데이트
 
-            yield return StartCoroutine(sceneInstance.OnStart()); // 씬 시작 처리
+            loadingUI.SetLoadingProgress(0.75f); // 로딩 진행률 업데이트
+            yield return null; // 다음 프레임까지 대기
+
+            yield return StartCoroutine(sceneInstance.OnStart()); // 씬 시작 처리, SceneManager.LoadSceneAsync는 각 씬 스크립트의 Onstart에서 호출함
+
             loadingUI.SetLoadingProgress(1f); // 로딩 진행률 업데이트
             yield return null; // 다음 프레임까지 대기
 
-            UIManager.Hide<LoadingUI>(UIList.LoadingUI); // 로딩 UI 숨김
+            loadingUI.HideLoadingUI(); // 로딩 UI 숨김 시작
+            
             sceneLoadAfterCallback?.Invoke(); // 씬 로드 후 콜백 호출
         }
         public void SystemQuit()

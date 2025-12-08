@@ -93,7 +93,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2099051817672632340
 RectTransform:
   m_ObjectHideFlags: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
   loadingPanel: {fileID: 9177014239002821128}
   loadingBar: {fileID: 8428548541903239090}
   loadingPercentText: {fileID: 5041233966724752941}
-  fadeSpeed: 0.5
+  fadeSpeed: 1
 --- !u!1 &4676666490896244105
 GameObject:
   m_ObjectHideFlags: 0
