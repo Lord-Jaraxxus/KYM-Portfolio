@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KYM
 {
@@ -9,7 +11,8 @@ namespace KYM
         [Header("Components")]
         [SerializeField] private CanvasGroup group;
         [SerializeField] private GameObject loadingPanel;
-        [SerializeField] private UnityEngine.UI.Image loadingBar;
+        [SerializeField] private Image loadingBar;
+        [SerializeField] private TextMeshProUGUI loadingPercentText;
 
         [Header("Setting")]
         [SerializeField] private float fadeSpeed = 1f;
@@ -82,7 +85,8 @@ namespace KYM
         public void SetLoadingProgress(float progress)
         {
             progress = Mathf.Clamp01(progress); // 안정장치?
-           loadingBar.fillAmount = progress;    // 0에서 1사이의 비율만큼 로딩바 채우기
+            loadingBar.fillAmount = progress;    // 0에서 1사이의 비율만큼 로딩바 채우기
+            loadingPercentText.text = $"{(int)(progress * 100f)}%"; // 퍼센트 텍스트 업데이트
         }
 
     }
