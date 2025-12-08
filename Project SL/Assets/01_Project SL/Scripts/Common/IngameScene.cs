@@ -18,12 +18,15 @@ namespace KYM
             }
 
             // UIManager.Show<PlayerHUD>(UIList.PlayerHUD); // Player HUD UI 표시
+            UIManager.Show<GlobalUI>(UIList.GlobalUI); // Global UI 표시
         }
 
         public override IEnumerator OnEnd()
         {
             // UIManager.Hide<PlayerHUD>(UIList.PlayerHUD); // Player HUD UI 숨김
-                                                            // 씬 종료 시 필요한 작업이 있다면 여기에 추가
+            UIManager.Hide<GlobalUI>(UIList.GlobalUI); // Global UI 숨김
+
+            // 씬 종료 시 필요한 작업이 있다면 여기에 추가
 
             yield return null; // 현재는 특별한 작업이 없으므로 바로 반환
         }

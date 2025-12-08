@@ -21,6 +21,7 @@ namespace KYM
         CrosshairUI,
         GameOverUI,
         InteractionUI,
+        GlobalUI,
 
         PANEL_END,
     }
