@@ -19,6 +19,7 @@ namespace KYM
 
             // UIManager.Show<PlayerHUD>(UIList.PlayerHUD); // Player HUD UI 표시
             UIManager.Show<GlobalUI>(UIList.GlobalUI); // Global UI 표시
+            UIManager.Hide<InventoryUI>(UIList.InventoryUI); // Inventory UI 숨기고 시작
         }
 
         public override IEnumerator OnEnd()

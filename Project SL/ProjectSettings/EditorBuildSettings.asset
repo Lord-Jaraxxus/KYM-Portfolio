@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01_Project SL/Scenes/Ingame.unity
     guid: 6dc05e9d7ff9dea46b1bcdc3a4fcb439
+  - enabled: 1
+    path: Assets/01_Project SL/Scenes/Town.unity
+    guid: 24c3fba15d26e7f4d896867e174c39be
   m_configObjects: {}
