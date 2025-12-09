@@ -15,5 +15,7 @@ MonoBehaviour:
   ID: potion
   ItemCount: 1
   itemName: Potion
+  category: 0
   icon: {fileID: 0}
   description: 
+  price: 300

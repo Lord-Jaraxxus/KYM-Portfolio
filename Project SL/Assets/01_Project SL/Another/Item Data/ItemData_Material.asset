@@ -18,3 +18,4 @@ MonoBehaviour:
   category: 1
   icon: {fileID: 0}
   description: 
+  price: 100
