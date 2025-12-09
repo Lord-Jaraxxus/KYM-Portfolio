@@ -26,5 +26,6 @@ namespace KYM
         public ItemCategory category;
         public Sprite icon;
         public string description;
+        public int price;
     }
 }
