@@ -7,7 +7,7 @@ namespace KYM
 {
     public class TitleScene : SceneBase
     {
-        public override bool IsAdditiveScene => false;
+        public override bool IsAdditiveScene => false; // ≈∏¿Ã∆≤ æ¿¿∫ ¥‹¿œ æ¿¿∏∑Œ ∑ŒµÂµ 
 
         public override IEnumerator OnStart()
         {

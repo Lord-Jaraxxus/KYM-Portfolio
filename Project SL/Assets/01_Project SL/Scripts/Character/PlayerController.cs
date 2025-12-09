@@ -44,8 +44,6 @@ namespace KYM
 
         private void Start()
         {
-            SoundManager.PlayBGM("BGM_Garden");
-
             linkedCharacter.Initialize(GameDataModel.Singleton.PlayerStatDto.playerCharacterStatSO, true);
 
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;

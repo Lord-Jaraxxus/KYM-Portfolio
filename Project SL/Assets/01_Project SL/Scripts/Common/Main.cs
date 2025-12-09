@@ -6,11 +6,14 @@ using UnityEngine.SceneManagement;
 
 namespace KYM
 {
-    public enum SceneType 
+    public enum SceneType
     {
         None,
         Title,  // 타이틀 씬
         Ingame, // 인게임 씬
+
+        Town,   // 마을 씬
+        Dungeon // 던전 씬
     }
 
     public class Main : SingletonBase<Main>
@@ -29,8 +32,8 @@ namespace KYM
         {
             if (isInitialized) return; // 이미 초기화된 경우 중복 실행 방지
 
-            // var soundManagerPrefab = Resources.Load<GameObject>("Sound/Prefab/KYM.SoundManager"); // 사운드 매니저 프리팹 로드
-            // var soundManagerInst = Instantiate(soundManagerPrefab); // 사운드 매니저 인스턴스 생성
+            var soundManagerPrefab = Resources.Load<GameObject>("Sound/Prefab/KYM.SoundManager"); // 사운드 매니저 프리팹 로드
+            var soundManagerInst = Instantiate(soundManagerPrefab); // 사운드 매니저 인스턴스 생성
 
             UIManager.Singleton.Initialize(); // UIManager 초기화
             GameDataModel.Singleton.Initialize(); // GameDataModel 초기화
@@ -38,7 +41,7 @@ namespace KYM
 #if UNITY_EDITOR
             UnityEngine.SceneManagement.Scene activeScene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
 
-            if (activeScene.name == "Main") 
+            if (activeScene.name == "Main")
             {
                 ChangeScene(SceneType.Title); // 타이틀 씬으로 전환
             }
@@ -47,6 +50,30 @@ namespace KYM
 #endif
             isInitialized = true; // 초기화 완료 플래그 설정
         }
+
+        private void PlaySceneBGM(SceneType sceneType)
+        {
+            SoundManager.StopAll();
+
+            switch (sceneType)
+            {
+                case SceneType.Title:
+                    SoundManager.PlayBGM("BGM_Title");
+                    break;
+
+                case SceneType.Ingame:
+                    // SoundManager.PlayBGM("BGM_Ingame"); // 인게임 배경음악 재생
+                    SoundManager.PlayBGM("BGM_Garden"); // 일단 임시로 이거
+                    break;
+                case SceneType.Town:
+                    SoundManager.PlayBGM("BGM_Town");
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
 
         public void ChangeScene(SceneType sceneType, System.Action sceneLoadAfterCallback = null)   // 씬 변경 메서드 
         {
@@ -58,18 +85,17 @@ namespace KYM
             {
                 case SceneType.Title:
                     ChangeScene<TitleScene>(sceneType, sceneLoadAfterCallback);
-                    // SoundManager.StopAll(); // 모든 사운드 정지
-                    // SoundManager.PlayBGM("BGM_Title"); // 타이틀 배경음악 재생
                     break;
 
                 case SceneType.Ingame:
                     ChangeScene<IngameScene>(sceneType, sceneLoadAfterCallback);
-                    // SoundManager.StopAll(); // 모든 사운드 정지
-                    // SoundManager.PlayBGM("BGM_Ingame"); // 게임 배경음악 재생
+                    break;
+                case SceneType.Town:
+                    ChangeScene<TownScene>(sceneType, sceneLoadAfterCallback);
                     break;
 
                 default:
-                    throw new System.NotImplementedException($"SceneType {sceneType} is not implemented."); 
+                    throw new System.NotImplementedException($"SceneType {sceneType} is not implemented.");
             }
         }
 
@@ -83,9 +109,11 @@ namespace KYM
                 case SceneType.Title: // 타이틀 씬
                     ChangeScene<TitleScene>(sceneType);
                     break;
-
                 case SceneType.Ingame: // 게임 씬
                     ChangeScene<IngameScene>(sceneType);
+                    break;
+                case SceneType.Town: // 마을 씬 
+                    ChangeScene<TownScene>(sceneType);
                     break;
 
                 default:
@@ -139,7 +167,8 @@ namespace KYM
             yield return null; // 다음 프레임까지 대기
 
             loadingUI.HideLoadingUI(); // 로딩 UI 숨김 시작
-            
+            PlaySceneBGM(sceneType); // 씬에 맞는 배경음악 재생
+
             sceneLoadAfterCallback?.Invoke(); // 씬 로드 후 콜백 호출
         }
         public void SystemQuit()
