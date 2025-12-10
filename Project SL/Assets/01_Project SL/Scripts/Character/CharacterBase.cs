@@ -166,6 +166,7 @@ namespace KYM
             if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 Move 함수 종료
             {
                 characterController.Move(Vector3.zero); // Move 명령 멈추기... 안되네;
+                animator.SetFloat("Magnitude", input.magnitude);
                 return; 
             }  
 

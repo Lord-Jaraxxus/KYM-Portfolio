@@ -55,6 +55,15 @@ namespace KYM
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
 
+        private void OnDestroy()
+        {
+            InputManager.Singleton.OnInputLmc   -= OnReceiveInputLmc;
+            InputManager.Singleton.onInputF     -= OnReceiveInputF;
+            InputManager.Singleton.onInputI     -= OnReceiveInputI;
+            InputManager.Singleton.onInputTab   -= OnReceiveInputTab;
+            InputManager.Singleton.onInputESC   -= OnReceiveInputESC;
+        }
+
         private void Update()
         {
             if (linkedCharacter == null) return;
