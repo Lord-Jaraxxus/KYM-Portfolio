@@ -6,9 +6,11 @@ namespace KYM
 {
     public enum ItemCategory
     {
-        Consumable,
-        Material,
-        Quest,
+        All = 0,
+        Equipment = 1,
+        Material = 2,
+        Consumable = 3,
+        Quest = 4,
         Equipment_Weapon,
         Equipment_Helmet,
         Equipment_Armor,

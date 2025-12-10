@@ -16,6 +16,7 @@ namespace KYM
         public event System.Action onInputShift; // 쉬프트키 입력 이벤트
         public event System.Action onInputCtrl; // 컨트롤키 입력 이벤트
         public event System.Action onInputTab; // 탭키 입력 이벤트
+        public event System.Action onInputESC; // ESC키 입력 이벤트
         public event System.Action onInputF; // F키 입력 이벤트
         public event System.Action onInputI; // I키 입력 이벤트
 
@@ -71,36 +72,40 @@ namespace KYM
             InputLook = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")); // 마우스 이동 입력 벡터 설정
             inputMouseScroll = Input.GetAxis("Mouse ScrollWheel"); // 마우스 스크롤 입력 값 설정
 
-            if (Input.GetMouseButtonDown(0)) 
+            if (Input.GetMouseButtonDown(0))
             {
                 OnInputLmc?.Invoke(); // 좌클릭 입력 이벤트 발생
             }
 
-            if (Input.GetMouseButtonDown(1))  
+            if (Input.GetMouseButtonDown(1))
             {
                 onInputRmc?.Invoke(); // 우클릭 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.Space)) 
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 onInputSpace?.Invoke(); // 스페이스바 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.LeftShift)) 
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 onInputShift?.Invoke(); // 쉬프트키 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.LeftControl)) 
+            if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 onInputCtrl?.Invoke(); // 컨트롤키 입력 이벤트 발생
             }
-            if( Input.GetKeyDown(KeyCode.Tab)) 
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
                 onInputTab?.Invoke(); // 탭키 입력 이벤트 발생
             }
-            if ( Input.GetKeyDown(KeyCode.F)) 
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                onInputESC?.Invoke(); // ESC키 입력 이벤트 발생
+            }
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 onInputF?.Invoke(); // F키 입력 이벤트 발생
             }
-            if (Input.GetKeyDown(KeyCode.I)) 
+            if (Input.GetKeyDown(KeyCode.I))
             {
                 onInputI?.Invoke(); // I키 입력 이벤트 발생
             }

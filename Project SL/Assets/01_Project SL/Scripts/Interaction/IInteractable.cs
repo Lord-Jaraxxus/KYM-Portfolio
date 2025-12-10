@@ -5,9 +5,11 @@ public enum InteractableType
 {
     DropItem,
     Portal,
-    NPC,
     Lever,
-    Whatever
+
+    NPC_Merchant,
+    NPC_Dialogue,
+    NPC_QuestGiver,
 }
 
 namespace KYM

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201d2f4e94c748c4199d31fe4500e371, type: 3}
   m_Name: ShopData
   m_EditorClassIdentifier: 
-  shopName: 
+  shopID: 1
+  shopName: First Shop
   itemsForSale:
   - {fileID: 11400000, guid: 39557888d0596ba46b3da183e1e229a1, type: 2}
   - {fileID: 11400000, guid: fa7e7216b06b5d043b882d0e4aa9a147, type: 2}

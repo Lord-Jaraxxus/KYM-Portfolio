@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: pants
   ItemCount: 1
   itemName: Pants
-  category: 6
+  category: 1
   icon: {fileID: 0}
   description: 
   price: 1000

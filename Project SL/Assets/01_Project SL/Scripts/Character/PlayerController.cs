@@ -11,11 +11,11 @@ namespace KYM
     {
         [field: SerializeField] public Transform CinemachineCameraTarget { get; private set; }
 
-        CharacterState[] interactBlockedState = { CharacterState.Interacct, CharacterState.Attack }; // 상호작용 불가 상태들
+        CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack }; // 상호작용 불가 상태들
         private CharacterBase linkedCharacter;
         private Camera mainCamera;
 
-        [SerializeField] DropItemSensor sensor;
+        [SerializeField] InteractionSensor sensor;
 
         [Header("Camera")]
         [SerializeField] private float cameraThreshold = 0.1f; // 카메라 회전 임계값
@@ -50,6 +50,7 @@ namespace KYM
             InputManager.Singleton.onInputF += OnReceiveInputF;
             InputManager.Singleton.onInputI += OnReceiveInputI;
             InputManager.Singleton.onInputTab += OnReceiveInputTab;
+            InputManager.Singleton.onInputESC += OnReceiveInputESC;
 
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
@@ -82,7 +83,7 @@ namespace KYM
 
                 linkedCharacter.SetStrafe(true);
             }
-            else 
+            else
             {
                 linkedCharacter.SetStrafe(false);
             }
@@ -110,39 +111,70 @@ namespace KYM
         }
 
         void OnReceiveInputLmc() => commandInvoker.TryAddCommand(new LeftClickCommand(linkedCharacter));
-        void OnReceiveInputF() 
+        void OnReceiveInputF()
         {
             if (interactBlockedState.Contains(linkedCharacter.CurrentState)) { return; } // 상호작용 불가 상태일 때 메서드 종료
 
-            if (sensor != null && sensor.CurrentTarget != null) // 가까이에 주울 아이템이 있을 때
+            if (sensor != null && sensor.CurrentTarget != null) // 가까이에 상호작용 가능한 뭔가가 있을 때
             {
-                linkedCharacter.CurrentState = CharacterState.Interacct; // 상호작용 상태로 전환
                 sensor.CurrentTarget.Interact();
-                linkedCharacter.Root(); // 다른 상호작용들이 추가될 때를 대비해서 조치가 필요
+
+                switch (sensor.CurrentTarget.Type)
+                {
+                    case InteractableType.DropItem: // 드롭 아이템을 주웠다면
+                        linkedCharacter.CurrentState = CharacterState.Interact; // 상호작용 상태로 전환
+                        linkedCharacter.Root(); // 캐릭터가 줍는 애니메이션 실행
+                        break;
+                    case InteractableType.NPC_Merchant: // 상점 NPC와 상호작용 했다면
+                        linkedCharacter.CurrentState = CharacterState.Interact;
+                        break;
+                    default:
+                        break;
+                }
             }
-            else // 가까이에 주울 아이템이 없을 때
+            else // 가까이에 상호작용 할 대상이 없을 때
             {
-                Debug.Log("획득 가능한 아이템이 없습니다.");
+                Debug.Log("상호작용 대상이 없습니다.");
             }
         }
 
-        void OnReceiveInputI() 
+        void OnReceiveInputI()
         {
-            var inventoryUI = UIManager.Singleton.GetUI<InfiniteUI>(UIList.InventoryUI);
+            var inventoryUI = UIManager.Singleton.GetUI<InventoryUI>(UIList.InventoryUI);
 
-            if (inventoryUI.gameObject.activeSelf) 
-            { 
-                UIManager.Hide<InfiniteUI>(UIList.InventoryUI);
-            }
-            else 
+            if (inventoryUI.gameObject.activeSelf)
             {
-                UIManager.Show<InfiniteUI>(UIList.InventoryUI);
+                UIManager.Hide<InventoryUI>(UIList.InventoryUI);
             }
+            else
+            {
+                UIManager.Show<InventoryUI>(UIList.InventoryUI);
+            }
+
+            Debug.Log("인벤토리 토글");
         }
 
         private void OnReceiveInputTab()
         {
             CameraSystem.Instance.SetLockOnToggle();
+        }
+
+        private void OnReceiveInputESC()
+        {
+            ShopUI shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
+            bool isOpen = shopUI != null && shopUI.gameObject.activeSelf;
+
+            if (isOpen && linkedCharacter.CurrentState == CharacterState.Interact) // 상점이 켜져있고, 플레이어가 상호작용 중이라면
+            {
+                UIManager.Hide<ShopUI>(UIList.ShopUI);
+                linkedCharacter.CurrentState = CharacterState.Idle; // 상호작용 상태 해제
+            }
+            else
+            {
+                // 상점 안켜져있으면인데, 뭐 메뉴라도 띄울까?
+                GlobalUI globalUI = UIManager.Show<GlobalUI>(UIList.GlobalUI);
+                globalUI.SetMenuPanel(true);
+            }
         }
 
         private void CameraRotation()

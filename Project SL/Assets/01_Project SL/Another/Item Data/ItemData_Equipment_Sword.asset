@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: sword
   ItemCount: 1
   itemName: Sword
-  category: 3
+  category: 1
   icon: {fileID: 0}
   description: 
   price: 1500

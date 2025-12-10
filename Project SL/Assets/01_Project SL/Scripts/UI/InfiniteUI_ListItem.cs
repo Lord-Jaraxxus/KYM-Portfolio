@@ -1,7 +1,9 @@
 using Gpm.Ui;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KYM
 {
@@ -9,8 +11,10 @@ namespace KYM
     {
         public Color color;
         public Sprite icon;
+        public string itemID;
         public string itemName;
         public int itemCount;
+        public int itemPrice;
     }
 
     public class InfiniteUI_ListItem : Gpm.Ui.InfiniteScrollItem
@@ -19,15 +23,38 @@ namespace KYM
         public UnityEngine.UI.Image backgroundImage;
         public TMPro.TextMeshProUGUI itemNameText;
         public TMPro.TextMeshProUGUI itemCountText;
+        public TMPro.TextMeshProUGUI itemPriceText;
+
+        public string itemID;
+        public UnityEngine.UI.Button itemButton;
+        public Action<InfiniteUI_ListData> onItemClicked;
+        InfiniteUI_ListData listData;
 
         public override void UpdateData(InfiniteScrollData scrollData)
-        { 
-            var convertData = scrollData as InfiniteUI_ListData;
+        {
+            listData = scrollData as InfiniteUI_ListData;
+            itemID = listData.itemID;
 
-            backgroundImage.color = convertData.color;
-            iconImage.sprite = convertData.icon;
-            itemNameText.text = convertData.itemName;
-            itemCountText.text = $"x {convertData.itemCount}";
+            backgroundImage.color = listData.color;
+            iconImage.sprite = listData.icon;
+            itemNameText.text = listData.itemName;
+            itemCountText.text = $"x {listData.itemCount}";
+            itemPriceText.text = $"{listData.itemPrice}G";
+        }
+
+        // 버튼 연결용
+        private void Start()
+        {
+            itemButton.onClick.RemoveAllListeners();
+            itemButton.onClick.AddListener(OnClickItemButton);
+
+            ShopUI shop = GetComponentInParent<ShopUI>();
+            onItemClicked += shop.OnClickPurchaseButtonFromList;
+        }
+
+        private void OnClickItemButton()
+        {
+            onItemClicked?.Invoke(listData);
         }
     }
 }

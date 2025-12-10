@@ -49,4 +49,9 @@ namespace KYM
         }
     }
 
+    [System.Serializable]
+    public class ShopDataDTO : GameDataDTO
+    {
+        [field: SerializeField] public List<ShopDataSO> ShopDatas { get; private set; } = new(); // 상점 데이터 리스트
+    }
 }

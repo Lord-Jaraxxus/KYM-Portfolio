@@ -11,6 +11,7 @@ namespace KYM
         BulletinBoardUI,
         DialogueUI,
         InventoryUI,
+        ShopUI,
 
         POPUP_END, 
         PANEL_START,

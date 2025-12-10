@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: armor
   ItemCount: 1
   itemName: Armor
-  category: 5
+  category: 1
   icon: {fileID: 0}
   description: 
   price: 1000

@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: quest
   ItemCount: 1
   itemName: Quest
-  category: 2
+  category: 4
   icon: {fileID: 0}
   description: 
   price: 500

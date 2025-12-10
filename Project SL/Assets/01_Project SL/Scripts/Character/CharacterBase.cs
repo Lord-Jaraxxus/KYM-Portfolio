@@ -10,7 +10,7 @@ namespace KYM
         Idle,
         Move,
         Attack,
-        Interacct,
+        Interact,
     }
 
     public class CharacterBase : MonoBehaviour, IHittable
@@ -26,9 +26,9 @@ namespace KYM
 
         [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결
 
-        public CharacterState CurrentState { get; set; } = CharacterState.Idle;
-        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interacct };  // Attack 동작을 멈출 상태들
-        CharacterState[] stopStates = { CharacterState.Attack, CharacterState.Interacct };  // Move 동작을 멈출 상태들
+        [SerializeField] public CharacterState CurrentState { get; set; } = CharacterState.Idle;
+        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact };  // Attack 동작을 멈출 상태들
+        CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact };  // Move 동작을 멈출 상태들
 
         public bool IsWalk { get; set; } = false;
 
@@ -163,7 +163,11 @@ namespace KYM
 
         public void Move(Vector2 input)
         {
-            if (stopStates.Contains(CurrentState)) { return; }  // 해당 상태일 경우 Move 함수 종료
+            if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 Move 함수 종료
+            {
+                characterController.Move(Vector3.zero); // Move 명령 멈추기... 안되네;
+                return; 
+            }  
 
             float dt = Time.deltaTime;
             bool hasInput = input.sqrMagnitude > 0.0001f;

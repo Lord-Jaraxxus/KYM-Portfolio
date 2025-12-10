@@ -15,7 +15,7 @@ namespace KYM
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            this.linkedCharacter.CurrentState = CharacterState.Interacct;
+            this.linkedCharacter.CurrentState = CharacterState.Interact;
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -32,5 +32,10 @@ namespace KYM
         {
             Main.Singleton.ChangeScene(SceneType.Title); // 타이틀 버튼 클릭시 타이틀 씬으로 변경
         }
+
+        public void SetMenuPanel(bool willOpen) // 외부에서 메뉴 패널 열고 닫기 제어, ESC 누르면 나오게 하고 싶어서 한번 해봄
+        {
+            menuPanel.SetActive(willOpen);
+        }
     }
 }

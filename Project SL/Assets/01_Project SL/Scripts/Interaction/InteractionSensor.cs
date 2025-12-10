@@ -25,7 +25,7 @@ namespace KYM
             if (interactable != null && !detectedInteractables.Contains(interactable))
             {
                 detectedInteractables.Add(interactable);
-                Debug.Log($"Item detected: {interactable}");
+                // Debug.Log($"Item detected: {interactable}");
             }
         }
         private void OnTriggerExit(Collider other)

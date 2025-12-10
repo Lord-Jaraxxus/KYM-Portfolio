@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class CommandInvoker 
+    public class CommandInvoker
     {
         public Queue<ICommand> CommandQueue => commandQueue;
         private Queue<ICommand> commandQueue = new Queue<ICommand>();
@@ -24,7 +24,7 @@ namespace KYM
 
         private void OnCallbackReceiveAnimationEvent(string eventName)
         {
-            switch (eventName) 
+            switch (eventName)
             {
                 case "EnableCommandQueue":
                     CanQueueCommand = true;
@@ -49,8 +49,8 @@ namespace KYM
 
             commandQueue.Enqueue(command);
             CanQueueCommand = false; // 명령 추가 후에는 다시 false로 설정하여 다음 명령이 애니메이션 이벤트를 통해 추가되도록 함 (선입력 방지)
-            
-            Debug.Log("Command Added to Queue");        }
+
+        }
 
         public void ExecuteNext()
         {
