@@ -82,8 +82,6 @@ namespace KYM
             isFadingOut = false;
 
             OnLoadingTask = task; // 작업 등록
-
-            Debug.Log("왜 페이드인을 안하고 시작할꼬");
         }
 
         public void HideLoadingUI()

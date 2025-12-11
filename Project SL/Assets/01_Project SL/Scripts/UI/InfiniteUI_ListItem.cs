@@ -39,17 +39,21 @@ namespace KYM
             iconImage.sprite = listData.icon;
             itemNameText.text = listData.itemName;
             itemCountText.text = $"x {listData.itemCount}";
-            itemPriceText.text = $"{listData.itemPrice}G";
+
+            if (itemPriceText != null) { itemPriceText.text = $"{listData.itemPrice}G"; }  // itemPriceText가 없다면 ㄴㄴ. 인벤토리엔 가격표시가 없으니까 따로 빼둠
         }
 
         // 버튼 연결용
         private void Start()
         {
-            itemButton.onClick.RemoveAllListeners();
-            itemButton.onClick.AddListener(OnClickItemButton);
+            if (itemPriceText != null) // 아이템 가격에 대한 GUI가 있다면, 즉 상점에 표시된 아이템이라면. 일단 이렇게 처리해놓긴 했는데;  
+            {
+                itemButton.onClick.RemoveAllListeners();
+                itemButton.onClick.AddListener(OnClickItemButton);
 
-            ShopUI shop = GetComponentInParent<ShopUI>();
-            onItemClicked += shop.OnClickPurchaseButtonFromList;
+                ShopUI shop = GetComponentInParent<ShopUI>();
+                onItemClicked += shop.OnClickPurchaseButtonFromList;
+            }
         }
 
         private void OnClickItemButton()

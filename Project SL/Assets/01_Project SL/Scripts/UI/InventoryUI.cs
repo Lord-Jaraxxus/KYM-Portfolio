@@ -49,8 +49,9 @@ namespace KYM
                 InfiniteUI_ListData newData = new InfiniteUI_ListData();
                 newData.color = Random.ColorHSV();
                 newData.itemName = item.ItemID;
-                newData.icon = null; // Assign an icon if available
-                newData.itemCount = item.ItemCount; 
+                newData.icon = null; // 맞다 아이콘은 PlayerItemData에는 없지; ItemSO 연결해야하나
+                newData.itemCount = item.ItemCount;
+                newData.itemPrice = 0; // 인벤토리에선 안쓰니까, 나중에 필요하면 뭐 바꾸지
 
                 infiniteScroll.InsertData(newData);
                 infiniteDataContainer.Add(item.ItemID, newData);
@@ -73,8 +74,9 @@ namespace KYM
                 InfiniteUI_ListData newData = new InfiniteUI_ListData();
                 newData.color = Random.ColorHSV();
                 newData.itemName = changedData.ItemID;
-                newData.icon = null; // Assign an icon if available
+                newData.icon = null; // 어....? 맞다 아이콘은 PlayerItemData에는 없지; ItemSO 연결해야하나
                 newData.itemCount = changedData.ItemCount;
+                newData.itemPrice = 0; // 인벤토리에선 안쓰니까, 나중에 필요하면 뭐 바꾸지
 
                 infiniteScroll.InsertData(newData);
                 infiniteDataContainer.Add(changedData.ItemID, newData);

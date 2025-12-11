@@ -48,12 +48,6 @@ namespace KYM
         {
             PlayerItemDTO.PlayerItemData changedData = PlayerItemDto.AddItem(itemID, itemCount);
             OnInventoryUpdated?.Invoke(changedData);
-
-            Debug.Log("Current Player Items:");
-            foreach (var item in PlayerItemDto.PlayerItems)
-            {
-                Debug.Log($"ItemID: {item.ItemID}, Count: {item.ItemCount}");
-            }
         }
     }
 }
