@@ -131,11 +131,10 @@ namespace KYM
                 switch (sensor.CurrentTarget.Type)
                 {
                     case InteractableType.DropItem: // 드롭 아이템을 주웠다면
-                        linkedCharacter.CurrentState = CharacterState.Interact; // 상호작용 상태로 전환
                         linkedCharacter.Root(); // 캐릭터가 줍는 애니메이션 실행
                         break;
                     case InteractableType.NPC_Merchant: // 상점 NPC와 상호작용 했다면
-                        linkedCharacter.CurrentState = CharacterState.Interact;
+                        linkedCharacter.CurrentState = CharacterState.Interact; // <이것도 CharacterBase쪽으로 빼야하는디
                         break;
                     default:
                         break;

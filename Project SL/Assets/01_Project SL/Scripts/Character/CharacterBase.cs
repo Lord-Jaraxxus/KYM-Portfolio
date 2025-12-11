@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace KYM
 {
@@ -27,8 +28,9 @@ namespace KYM
         [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결
 
         [SerializeField] public CharacterState CurrentState { get; set; } = CharacterState.Idle;
-        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact };  // Attack 동작을 멈출 상태들
-        CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact };  // Move 동작을 멈출 상태들
+        CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact };  // Move 동작 진입이 불가한 상태들
+        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact };  // Attack 동작 진입이 불가한 상태들
+        CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack }; // 상호작용 동작 진입이 불가 상태들
 
         public bool IsWalk { get; set; } = false;
 
@@ -248,8 +250,11 @@ namespace KYM
             // Debug.Log("Attack!");
         }
 
-        public void Root() 
+        public void Root()
         {
+            if (interactBlockedState.Contains(CurrentState)) { return; } // 해당 상태일 경우 Root 함수 종료
+
+            CurrentState = CharacterState.Interact;
             animator.SetTrigger("RootTrigger");
         }
 
