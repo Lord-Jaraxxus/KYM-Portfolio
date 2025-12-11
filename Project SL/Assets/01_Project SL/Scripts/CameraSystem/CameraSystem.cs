@@ -9,28 +9,48 @@ namespace KYM
         public static CameraSystem Instance { get; private set; }
         public bool IsActiveLockOn => lockOnActived;
 
-        public Vector3 LockOnPoint => tpsCamera.LookAt.position == null ? AimingPoint : tpsCamera.LookAt.position;
         [field: SerializeField] public Vector3 AimingPoint { get; private set; }
 
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Cinemachine.CinemachineVirtualCamera tpsCamera;
+        [SerializeField] private Cinemachine.CinemachineVirtualCamera lockOnCamera;
+        private int characterLayerMask;
 
         private List<CharacterBase> detectedCharacter = new();
         
         private bool lockOnActived = false;
+        private Transform lockOnTargetPoint;
 
         private void Awake() => Instance = this;
+
+        public void Start()
+        {
+            characterLayerMask = LayerMask.GetMask("Character");
+        }
 
         private void Update()
         {
             Ray screenCenterRay = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 1f));
-            if (Physics.Raycast(screenCenterRay, out RaycastHit hitInfo, 1000f))
+            if (Physics.Raycast(screenCenterRay, out RaycastHit hitInfo, 1000f, characterLayerMask))
             {
-                AimingPoint = hitInfo.point;
+                // Player 자기 자신이면 무시
+                if (hitInfo.collider.CompareTag("Player"))
+                {
+                    AimingPoint = screenCenterRay.GetPoint(1000f);
+                }
+                else
+                {
+                    AimingPoint = hitInfo.point;
+                }
             }
             else
             {
                 AimingPoint = screenCenterRay.GetPoint(1000f);
+            }
+
+            if (lockOnTargetPoint != null)
+            {
+                lockOnCamera.Follow.LookAt(lockOnTargetPoint); 
             }
         }
 
@@ -50,11 +70,13 @@ namespace KYM
             lockOnActived = isActive;
             if (lockOnActived)
             {
-                CalculateInsightLockOnPoint();
+                lockOnCamera.gameObject.SetActive(true);
+                CalculateInsightLockOnPoint(); 
             }
             else
             {
-                tpsCamera.LookAt = null; // Look at 을 다시 초기화
+                lockOnCamera.gameObject.SetActive(false);
+                lockOnTargetPoint = null;
             }
         }
 
@@ -93,7 +115,7 @@ namespace KYM
             if (nearestCharacter != null)
             {
                 Transform lockOnPoint = nearestCharacter.GetLockOnPoint(0);
-                tpsCamera.LookAt = lockOnPoint;
+                lockOnTargetPoint = lockOnPoint;
             }
         }
     }

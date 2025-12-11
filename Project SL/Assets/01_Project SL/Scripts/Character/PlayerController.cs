@@ -111,7 +111,7 @@ namespace KYM
         {
             if (CameraSystem.Instance.IsActiveLockOn)
             {
-                CinemachineCameraTarget.rotation = Quaternion.identity;
+                // CinemachineCameraTarget.rotation = Quaternion.identity;
             }
             else
             {
