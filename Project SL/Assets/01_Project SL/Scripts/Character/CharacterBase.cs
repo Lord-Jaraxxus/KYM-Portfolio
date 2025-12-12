@@ -167,7 +167,7 @@ namespace KYM
         {
             if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 Move 함수 종료
             {
-                characterController.Move(Vector3.zero); // Move 명령 멈추기... 안되네;
+                characterController.Move(Vector3.zero);
                 animator.SetFloat("Magnitude", 0f);
                 return; 
             }  
@@ -217,6 +217,37 @@ namespace KYM
             animator.SetFloat("Vertical", smoothVertical);
         }
 
+        public void MoveAI(Vector3 worldDir)
+        {
+            // 1) 입력 방향 체크
+            bool hasInput = worldDir.sqrMagnitude > 0.0001f;
+            Vector3 moveDir = hasInput ? worldDir.normalized : Vector3.zero;
+
+            float dt = Time.deltaTime;
+
+            // 2) AI 회전 — 입력 방향을 바라보도록
+            if (hasInput)
+            {
+                float desiredYaw = Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg;
+
+                float yaw = Mathf.SmoothDampAngle(
+                    transform.eulerAngles.y,
+                    desiredYaw,
+                    ref rotationVelocity,
+                    rotationSmoothTime
+                );
+
+                transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+            }
+
+            // 3) 이동
+            float speed = moveSpeed;
+            Vector3 displacement = moveDir * speed * dt;
+            characterController.Move(displacement);
+
+            // 4) 애니메이션 — AI는 Magnitude 하나로 충분
+            animator.SetFloat("Magnitude", hasInput ? 1f : 0f);
+        }
 
         public void Rotate(Vector3 targetAimPoint)
         {
