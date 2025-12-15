@@ -59,7 +59,7 @@ namespace KYM
 
         private bool isStrafe = false;
 
-        private List<Transform> lockOnPointContainer = new(); 
+        private List<Transform> lockOnPointContainer = new();
 
         private void Awake()
         {
@@ -71,7 +71,7 @@ namespace KYM
             attackState?.setCharacter(this);
             var interactState = animator.GetBehaviour<InteractStateMachineBehaviour>();
             interactState?.setCharacter(this);
-            
+
         }
 
 
@@ -86,7 +86,7 @@ namespace KYM
 
             InitializeLockOnPoint();
 
-            if(lockOnPointData != null) CameraSystem.Instance.RegisterCharacter(this);
+            if (lockOnPointData != null) CameraSystem.Instance.RegisterCharacter(this);
         }
 
         private void InitializeLockOnPoint()
@@ -140,11 +140,11 @@ namespace KYM
             switch (eventName)
             {
                 case "EnableHitbox":
-                    weapon.EnableHitbox();
+                    weapon?.EnableHitbox(); // AI(적 캐릭터)도 무기 추가해줘야 하긴 하는데... 일단 ?로 막아!
                     // Debug.Log("Enable Hitbox");
                     break;
                 case "DisableHitbox":
-                    weapon.DisableHitbox();
+                    weapon?.DisableHitbox();
                     // Debug.Log("Disable Hitbox");
                     break;
                 case "EndCombo":
@@ -169,8 +169,8 @@ namespace KYM
             {
                 characterController.Move(Vector3.zero);
                 animator.SetFloat("Magnitude", 0f);
-                return; 
-            }  
+                return;
+            }
 
             float dt = Time.deltaTime;
             bool hasInput = input.sqrMagnitude > 0.0001f;
@@ -219,6 +219,13 @@ namespace KYM
 
         public void MoveAI(Vector3 worldDir)
         {
+            if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 MoveAI 종료, AI도 공격하면서 이동하는거 막기 위함
+            {
+                characterController.Move(Vector3.zero);
+                animator.SetFloat("Magnitude", 0f);
+                return;
+            }
+
             // 1) 입력 방향 체크
             bool hasInput = worldDir.sqrMagnitude > 0.0001f;
             Vector3 moveDir = hasInput ? worldDir.normalized : Vector3.zero;
@@ -251,6 +258,8 @@ namespace KYM
 
         public void Rotate(Vector3 targetAimPoint)
         {
+            if (moveBlockedStates.Contains(CurrentState)) { return; }   // AI가 공격하면서 회전하는 것을 막기 위함
+
             Vector3 aimTarget = targetAimPoint;
             aimTarget.y = transform.position.y;
             Vector3 pos = transform.position;
@@ -261,11 +270,18 @@ namespace KYM
 
         public void Attack1()
         {
+            if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 Move 함수 종료, AI도 공격하면서 이동하는거 막기 위함
+            {
+                characterController.Move(Vector3.zero);
+                animator.SetFloat("Magnitude", 0f);
+                return;
+            }
+
             if (attackBlockedStates.Contains(CurrentState)) { return; }  // 해당 상태일 경우 Attack 함수 종료
 
             CurrentState = CharacterState.Attack;
             animator.SetTrigger("AttackTrigger");
-            animator.SetInteger("AttackIndex", 0);
+            // animator.SetInteger("AttackIndex", 0);
             // Debug.Log("Attack!");
         }
         public void Attack2()
@@ -281,7 +297,7 @@ namespace KYM
             // Debug.Log("Attack!");
         }
 
-        public void Root() 
+        public void Root()
         {
 
             if (interactBlockedState.Contains(CurrentState)) { return; } // 해당 상태일 경우 Root 함수 종료
