@@ -37,6 +37,7 @@ namespace KYM
         CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Move 동작 진입이 불가한 상태들
         CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Attack 동작 진입이 불가한 상태들
         CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack, CharacterState.Hit, CharacterState.Dead }; // 상호작용 동작 진입이 불가 상태들
+        CharacterState[] hitBlockedStates = { CharacterState.Dead }; // 피격 동작 진입이 불가한 상태들
 
         // 캐릭터 스텟 관련 변수들
         private CharacterStatDataSO characterStat; // 캐릭터 스탯 데이터 (ScriptableObject)
@@ -71,15 +72,18 @@ namespace KYM
 
         private void Awake()
         {
+            // 컴포넌트들 가져오기
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
             animationEventListener = GetComponent<AnimationEventListener>();
 
+            // State Machine Behaviour에 이 캐릭터 인스턴스 연결
             var attackState = animator.GetBehaviour<AttackStateMachineBehaviour>();
             attackState?.setCharacter(this);
             var interactState = animator.GetBehaviour<InteractStateMachineBehaviour>();
             interactState?.setCharacter(this);
-
+            var hitState = animator.GetBehaviour<HitStateMachineBehaviour>();
+            hitState?.setCharacter(this);
         }
 
 
@@ -280,6 +284,10 @@ namespace KYM
         {
             return !interactBlockedState.Contains(CurrentState); // 상호작용 가능한 상태인지 반환
         }
+        public bool CanAttack()
+        {
+            return !attackBlockedStates.Contains(CurrentState); // 공격 가능한 상태인지 반환
+        }
 
         public void Interact() 
         {
@@ -292,19 +300,21 @@ namespace KYM
 
         public void Attack1()
         {
-            if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 Move 함수 종료, AI도 공격하면서 이동하는거 막기 위함
-            {
-                characterController.Move(Vector3.zero);
-                animator.SetFloat("Magnitude", 0f);
-                return;
-            }
+            //if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 Move 함수 종료, AI도 공격하면서 이동하는거 막기 위함
+            //{
+            //    characterController.Move(Vector3.zero);
+            //    animator.SetFloat("Magnitude", 0f);
+            //    return;
+            //}
 
             if (attackBlockedStates.Contains(CurrentState)) { return; }  // 해당 상태일 경우 Attack 함수 종료
 
-            CurrentState = CharacterState.Attack;
+            // CurrentState = CharacterState.Attack; // 일단 여기서 안해도 되긴 하는데, 버그 없던가?
+            animator.ResetTrigger("AttackTrigger");
             animator.SetTrigger("AttackTrigger");
+
             // animator.SetInteger("AttackIndex", 0);
-            // Debug.Log("Attack!");
+            Debug.Log("Attack!");
         }
         public void Attack2()
         {
@@ -359,7 +369,16 @@ namespace KYM
 
         public void OnHit(float damage)
         {
-            // TODO : 피격 시 애니메이션 재생, 캐릭터 상태 피격상태로 전환
+            if (hitBlockedStates.Contains(CurrentState)) { return; }   // 죽었는데 피격되면 안되니까
+
+            // 현재 실행중일 수도 있는 애니메이션 트리거 초기화
+            animator.ResetTrigger("AttackTrigger");
+            animator.ResetTrigger("RootTrigger");
+            animator.ResetTrigger("HitTrigger");
+
+            // TODO : 피격 시 애니메이션 재생 -> StateMachineBehaviour에서 캐릭터 상태 피격상태로 전환
+            animator.SetTrigger("HitTrigger");
+
             TakeDamage(damage);
         }
     }

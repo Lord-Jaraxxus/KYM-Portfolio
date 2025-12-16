@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <CharType>k__BackingField: 0
   <ID>k__BackingField: 1
-  <MaxHP>k__BackingField: 1000
+  <MaxHP>k__BackingField: 20
   <MaxSP>k__BackingField: 100
   <SpConsumeRate>k__BackingField: 10
   <SpRecoveryRate>k__BackingField: 5
