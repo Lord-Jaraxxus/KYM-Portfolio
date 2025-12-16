@@ -11,7 +11,6 @@ namespace KYM
     {
         [field: SerializeField] public Transform CinemachineCameraTarget { get; private set; }
 
-        CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack }; // 상호작용 불가 상태들
         private CharacterBase linkedCharacter;
         private Camera mainCamera;
 
@@ -44,19 +43,42 @@ namespace KYM
 
         private void Start()
         {
+            // 캐릭터 초기화
             linkedCharacter.Initialize(GameDataModel.Singleton.PlayerStatDto.playerCharacterStatSO, true);
 
+            // UI - PlayerHUD 초기화
+            var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
+            playerHUD.RefreshHpUI(linkedCharacter.CurHP, linkedCharacter.MaxHP);
+            playerHUD.RefreshSpUI(linkedCharacter.CurSP, linkedCharacter.MaxSP);
+
+            // 이벤트 구독
+            linkedCharacter.OnHpChanged += playerHUD.RefreshHpUI;   // 플레이어 캐릭터 HP 변경시 HUD 갱신
+            linkedCharacter.OnSpChanged += playerHUD.RefreshSpUI;   // 플레이어 캐릭터 SP 변경시 HUD 갱신
+
+            // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
             InputManager.Singleton.onInputF += OnReceiveInputF;
             InputManager.Singleton.onInputI += OnReceiveInputI;
             InputManager.Singleton.onInputTab += OnReceiveInputTab;
             InputManager.Singleton.onInputESC += OnReceiveInputESC;
 
+
+            // 콤보용 뭐시기들 초기화 예정
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
 
         private void OnDestroy()
         {
+            if (linkedCharacter != null) // 연결된 캐릭터가 존재한다면
+            { 
+                var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
+
+                // 이벤트 구독 해제
+                linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;  
+                linkedCharacter.OnSpChanged -= playerHUD.RefreshSpUI;
+            }
+
+            // Input 이벤트 구독 해제
             InputManager.Singleton.OnInputLmc   -= OnReceiveInputLmc;
             InputManager.Singleton.onInputF     -= OnReceiveInputF;
             InputManager.Singleton.onInputI     -= OnReceiveInputI;
@@ -122,7 +144,7 @@ namespace KYM
         void OnReceiveInputLmc() => commandInvoker.TryAddCommand(new LeftClickCommand(linkedCharacter));
         void OnReceiveInputF()
         {
-            if (interactBlockedState.Contains(linkedCharacter.CurrentState)) { return; } // 상호작용 불가 상태일 때 메서드 종료
+            if (linkedCharacter.CanInteract() == false) { return; } // 상호작용 불가 상태시 종료
 
             if (sensor != null && sensor.CurrentTarget != null) // 가까이에 상호작용 가능한 뭔가가 있을 때
             {
@@ -131,10 +153,10 @@ namespace KYM
                 switch (sensor.CurrentTarget.Type)
                 {
                     case InteractableType.DropItem: // 드롭 아이템을 주웠다면
-                        linkedCharacter.Root(); // 캐릭터가 줍는 애니메이션 실행
+                        linkedCharacter.Interact(); // 캐릭터가 줍는 애니메이션 실행
                         break;
                     case InteractableType.NPC_Merchant: // 상점 NPC와 상호작용 했다면
-                        linkedCharacter.CurrentState = CharacterState.Interact; // <이것도 CharacterBase쪽으로 빼야하는디
+                        linkedCharacter.CurrentState = CharacterState.Interact; // 이것도 CharacterBase쪽으로 빼야하는디
                         break;
                     default:
                         break;

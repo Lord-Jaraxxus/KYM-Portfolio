@@ -18,27 +18,28 @@ namespace KYM
 
     public class CharacterBase : MonoBehaviour, IHittable
     {
+        // Third Party...? 아무튼 뭐 애니메이터, 캐릭터 컨트롤러, 애니메이션 이벤트 리스너, 무기 등등 그런것들
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
-        [SerializeField] private LockOnPointSO lockOnPointData;
-
-        private CharacterStatDataSO characterStat; // 캐릭터 스탯 데이터 (ScriptableObject)
 
         public AnimationEventListener AnimationEventListener => animationEventListener;
         private AnimationEventListener animationEventListener { get; set; }
 
-        [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결
+        [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결, 나중에 자동으로 바꿔도?
 
+        // 이벤트들
+        public event System.Action<float, float> OnHpChanged; // 체력 변경 이벤트 (CallBack), (현재 체력, 최대 체력)
+        public event System.Action<float, float> OnSpChanged; // 스태미나 변경 이벤트 (CallBack), (현재 스태미나, 최대 스태미나)
+        public event System.Action OnCharacterDeath; // 사망 이벤트 (CallBack)
+
+        // 캐릭터 상태 관련 변수들
         [SerializeField] public CharacterState CurrentState { get; set; } = CharacterState.Idle;
         CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Move 동작 진입이 불가한 상태들
         CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Attack 동작 진입이 불가한 상태들
         CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack, CharacterState.Hit, CharacterState.Dead }; // 상호작용 동작 진입이 불가 상태들
 
-        public bool IsWalk { get; set; } = false;
-
-
-        private float walkBlend;
-
+        // 캐릭터 스텟 관련 변수들
+        private CharacterStatDataSO characterStat; // 캐릭터 스탯 데이터 (ScriptableObject)
         public float MaxHP => maxHP;
         public float CurHP => curHP;
         public float MaxSP => maxSP;
@@ -51,6 +52,10 @@ namespace KYM
         [SerializeField] private float curSP; // 현재 스태미나
         [SerializeField] private float moveSpeed; // 이동 속도
 
+        // 캐릭터 이동 + 카메라 관련 변수들
+        public bool IsWalk { get; set; } = false;
+        private float walkBlend;
+
         private Vector3 movementForward;
         private float verticalVelocity;
         private float targetRotation;
@@ -60,8 +65,9 @@ namespace KYM
         private float smoothVertical;
 
         private bool isStrafe = false;
-
+        [SerializeField] private LockOnPointSO lockOnPointData;
         private List<Transform> lockOnPointContainer = new();
+
 
         private void Awake()
         {
@@ -142,7 +148,7 @@ namespace KYM
             switch (eventName)
             {
                 case "EnableHitbox":
-                    weapon?.EnableHitbox(); // AI(적 캐릭터)도 무기 추가해줘야 하긴 하는데... 일단 ?로 막아!
+                    weapon?.EnableHitbox(); // 무기가 없으면 ?로 일단 거름
                     // Debug.Log("Enable Hitbox");
                     break;
                 case "DisableHitbox":
@@ -270,6 +276,20 @@ namespace KYM
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
 
+        public bool CanInteract()
+        {
+            return !interactBlockedState.Contains(CurrentState); // 상호작용 가능한 상태인지 반환
+        }
+
+        public void Interact() 
+        {
+            if (interactBlockedState.Contains(CurrentState)) { return; } // 해당 상태일 경우 Interact 함수 종료
+            CurrentState = CharacterState.Interact; // 상호작용 상태로 전환
+
+            // TODO : 이 밑에서 이제 상호작용 종류를 switch문 같은걸로 나눠서 어떻게 해야..
+            Root(); // 상호작용 애니메이션 재생, 애니메이션이 끝나면 Idle 상태로 돌아감
+        }
+
         public void Attack1()
         {
             if (moveBlockedStates.Contains(CurrentState)) // 해당 상태일 경우 Move 함수 종료, AI도 공격하면서 이동하는거 막기 위함
@@ -301,9 +321,6 @@ namespace KYM
 
         public void Root()
         {
-
-            if (interactBlockedState.Contains(CurrentState)) { return; } // 해당 상태일 경우 Root 함수 종료
-            CurrentState = CharacterState.Interact;
             animator.SetTrigger("RootTrigger");
         }
 
@@ -321,6 +338,8 @@ namespace KYM
         public float TakeDamage(float damage)
         {
             curHP -= damage;
+            curHP = Mathf.Clamp(curHP, 0f, MaxHP); // 체력 0 ~ 최대 체력 사이로 제한
+            OnHpChanged?.Invoke(CurHP, MaxHP); // 체력 변경 이벤트 호출
 
             if (curHP <= 0)
             {
@@ -334,15 +353,13 @@ namespace KYM
         public void Heal(float amount)
         {
             curHP += amount;
-
-            if (curHP > MaxHP)
-            {
-                curHP = MaxHP;
-            }
+            curHP = Mathf.Clamp(curHP, 0f, MaxHP); // 체력 0 ~ 최대 체력 사이로 제한
+            OnHpChanged?.Invoke(CurHP, MaxHP); // 체력 변경 이벤트 호출
         }
 
         public void OnHit(float damage)
         {
+            // TODO : 피격 시 애니메이션 재생, 캐릭터 상태 피격상태로 전환
             TakeDamage(damage);
         }
     }
