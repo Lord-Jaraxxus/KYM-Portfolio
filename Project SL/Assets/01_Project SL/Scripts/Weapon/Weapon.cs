@@ -6,8 +6,10 @@ namespace KYM
 {
     public class Weapon : MonoBehaviour
     {
+        public CharacterBase HittedCharacter => hittedCharacter;
+
         public float damage = 10f; // 데미지는 뭐 스텟이나 강공 약공 스킬 등등 가변적으로 변해야 하긴 하는데
-        public CharacterBase hittedCharacter = null; // 이 무기에 맞은 캐릭터
+        private CharacterBase hittedCharacter = null; // 이 무기에 맞은 캐릭터
         Collider hitbox;
 
         void Awake()
@@ -32,7 +34,8 @@ namespace KYM
 
         public void EnableHitbox()
         {
-            hitbox.enabled = true;
+            if (hitbox != null) hitbox.enabled = true;
+            else Debug.LogWarning("Hitbox Collider is missing!");
         }
 
         public void DisableHitbox()

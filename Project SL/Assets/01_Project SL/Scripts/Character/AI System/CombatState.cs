@@ -37,12 +37,12 @@ namespace KYM
                 if (targetDistance > AttackRange)
                 {
                     Chase(brain); // 타겟이 공격 범위를 벗어나면 추격
-                    Debug.Log("Chasing Target. Distance: " + targetDistance);
+                    // Debug.Log("Chasing Target. Distance: " + targetDistance);
                 }
                 else
                 {
                     Attack(brain); // 타겟이 공격 범위 내에 있으면 공격
-                    Debug.Log("Attacking Target. Distance: " + targetDistance);
+                    // Debug.Log("Attacking Target. Distance: " + targetDistance);
                 }
             }
         }
