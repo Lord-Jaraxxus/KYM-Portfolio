@@ -50,10 +50,12 @@ namespace KYM
             var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
             playerHUD.RefreshHpUI(linkedCharacter.CurHP, linkedCharacter.MaxHP);
             playerHUD.RefreshSpUI(linkedCharacter.CurSP, linkedCharacter.MaxSP);
+            playerHUD.RefreshGoldUI(UserDataModel.Singleton.PlayerEconomyDTO.Gold);
 
             // 이벤트 구독
             linkedCharacter.OnHpChanged += playerHUD.RefreshHpUI;   // 플레이어 캐릭터 HP 변경시 HUD 갱신
             linkedCharacter.OnSpChanged += playerHUD.RefreshSpUI;   // 플레이어 캐릭터 SP 변경시 HUD 갱신
+            UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
 
             // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;

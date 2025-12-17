@@ -87,6 +87,22 @@ namespace KYM
         }
     }
 
+    public class PlayerEconomyDTO : UserDataDTO
+    {
+        [field: SerializeField] public int Gold { get; private set; } = 0; // 시작할때는 0골드
+
+        public void AddGold(int amount) 
+        {
+            Gold += amount;
+        }
+        public void SubtractGold(int amount) 
+        {
+            if(Gold < amount) { return; } // Gold가 부족할때 이벤트가 또 있어야하는데..
+
+            Gold -= amount;
+        }
+    }
+
     public class PlayerEquipDTO : UserDataDTO
     {
         public class PlayerEquipSlotData 
