@@ -103,12 +103,18 @@ namespace KYM
             if (isExistItem)
             {
                 // TODO : 이미 존재하는 Infinite Data 이므로, 수량만 갱신하여 infinite scroll 에 반영
-
                 if (itemStocks[data.itemID] <= 0) { return; } // 아이템 수량이 0 이하면 구매 불가
-                itemStocks[data.itemID] -= 1; // 재고 수량 감소   
+                if (UserDataModel.Singleton.PlayerEconomyDTO.Gold < data.itemPrice) { return; } // 소지 골드가 부족하면 구매 불가
 
+                itemStocks[data.itemID] -= 1; // 재고 수량 감소
+
+                // 인피니티 스크롤 데이터 갱신
                 infiniteDataContainer[data.itemID].itemCount = itemStocks[data.itemID];
-                infiniteScroll.UpdateData(infiniteDataContainer[data.itemID]); 
+                infiniteScroll.UpdateData(infiniteDataContainer[data.itemID]);
+
+                // UserDataModel 안의 Data 갱신
+                UserDataModel.Singleton.AddItem(data.itemID, 1); // 플레이어 인벤토리에 아이템 1개 추가, 이거 작동하나??? 잘 되네?
+                UserDataModel.Singleton.SubtractGold(data.itemPrice); // 플레이어 소지 골드에서 아이템 가격만큼 차감 처리
             }
             else
             {
