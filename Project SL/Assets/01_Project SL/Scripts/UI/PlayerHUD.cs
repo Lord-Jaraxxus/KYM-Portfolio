@@ -14,6 +14,8 @@ namespace KYM
         [SerializeField] TextMeshProUGUI hpText;
         [SerializeField] TextMeshProUGUI spText;
 
+        [SerializeField] TextMeshProUGUI goldText;
+
         public void RefreshHpUI(float currentHp, float maxHp)
         {
             float hpRatio = currentHp / maxHp;
@@ -26,6 +28,11 @@ namespace KYM
             float spRatio = currentSp / maxSp;
             spBar.fillAmount = spRatio;
             spText.text = $"{currentSp} / {maxSp}";
+        }
+
+        public void RefreshGoldUI(int currentGold)
+        {
+            goldText.text = $"{currentGold}";
         }
     }
 }
