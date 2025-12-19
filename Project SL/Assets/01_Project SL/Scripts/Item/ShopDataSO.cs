@@ -7,8 +7,8 @@ namespace KYM
     [CreateAssetMenu(fileName = "ShopData", menuName = "PROJECT KYM/ShopData")]
     public class ShopDataSO : ScriptableObject
     {
-        public int shopID;
-        public string shopName;
-        public List<ItemDataSO> itemsForSale;
+        public string ShopID;
+        public string ShopName;
+        public List<ItemDataSO> ItemsForSale;
     }
 }

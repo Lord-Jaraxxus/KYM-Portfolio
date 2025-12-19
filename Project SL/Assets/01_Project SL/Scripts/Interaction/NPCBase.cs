@@ -7,7 +7,7 @@ namespace KYM
     public class NPCBase : MonoBehaviour, IInteractable
     {
         [SerializeField] public InteractableType Type => InteractableType.NPC_Merchant;
-        [SerializeField] private int shopID;
+        [SerializeField] private string shopID;
 
         public Transform GetTransform()
         {

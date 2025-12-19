@@ -12,6 +12,7 @@ namespace KYM
         [field: SerializeField] public PlayerInfoDto PlayerInfoDto { get; private set; } = new();
         [field: SerializeField] public PlayerItemDTO PlayerItemDto { get; private set; } = new();
         [field: SerializeField] public PlayerEconomyDTO PlayerEconomyDTO { get; private set; } = new();
+        [field: SerializeField] public PlayerShopDTO PlayerShopDTO { get; private set; } = new();
 
 
         public event Action<PlayerItemDTO.PlayerItemData> OnInventoryUpdated;
@@ -20,11 +21,24 @@ namespace KYM
         public void Initialize()
         {
             // 아직 플레이어 위치라던가, 아무튼 세이브 데이터가 없으니 주석처리
-
             // LoadData<PlayerInfoDto>(out PlayerInfoDto loadPlayerInfoDto);
             // PlayerInfoDto = loadPlayerInfoDto;
 
-            AddGold(5000); // 일단 이렇게 초기화, 나중에 세이브데이터로 바꾸기
+            AddGold(5000); // 일단 이렇게 골드 초기화, 나중에 세이브데이터로 바꾸기
+
+            // 상점 데이터 초기화, 일단 GameDataModel에 있는 상점 데이터로 초기화 (SO 그대로)
+            foreach (ShopDataSO shopData in GameDataModel.Singleton.ShopDataDTO.ShopDatas) 
+            {
+                PlayerShopDTO.ShopData newShopData = new PlayerShopDTO.ShopData(shopData.ShopID); // 생성자로 초기화 
+
+                foreach (ItemDataSO itemData in shopData.ItemsForSale)
+                {
+                    PlayerShopDTO.ItemStock newItemStock = new PlayerShopDTO.ItemStock(itemData.ItemID, itemData.ItemCount); // 생성자로 초기화
+                    newShopData.ItemStocks.Add(newItemStock);
+                }
+
+                PlayerShopDTO.ShopDatas.Add(newShopData);
+            }
         }
 
         public void LoadData<T>(out T loadData) where T : UserDataDTO, new()

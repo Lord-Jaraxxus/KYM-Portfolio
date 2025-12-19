@@ -15,7 +15,7 @@ namespace KYM
             Debug.Log("아이템을 획득했습니다!");
             Destroy(gameObject); // 아이템 오브젝트 제거
 
-            UserDataModel.Singleton.AddItem(itemData.ID, itemData.ItemCount);
+            UserDataModel.Singleton.AddItem(itemData.ItemID, itemData.ItemCount);
         }
 
         public Transform GetTransform() => this.transform;

@@ -21,13 +21,13 @@ namespace KYM
     [CreateAssetMenu(fileName = "ItemData", menuName = "PROJECT KYM/ItemData")]
     public class ItemDataSO : ScriptableObject
     {
-        public string ID;
+        public string ItemID;
         public int ItemCount;
 
-        public string itemName;
-        public ItemCategory category;
-        public Sprite icon;
-        public string description;
-        public int price;
+        public string ItemName;
+        public ItemCategory Category;
+        public Sprite Icon;
+        public string Description;
+        public int Price;
     }
 }

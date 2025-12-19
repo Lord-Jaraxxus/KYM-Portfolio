@@ -87,6 +87,50 @@ namespace KYM
         }
     }
 
+    [System.Serializable]
+    public class PlayerShopDTO : UserDataDTO // 상점들의 아이템 재고 데이터를 담는 DTO
+    {
+        [System.Serializable]
+        public class ItemStock // 아이템 한 종류의 재고 데이터
+        {
+            public string ItemID { get; private set; }
+            public int ItemCount { get; private set; }
+
+            public ItemStock(string itemID, int itemCount) 
+            {
+                ItemID = itemID;
+                ItemCount = itemCount;
+            }
+            public void IncreaseStock(int amount) 
+            {
+                ItemCount += amount;
+            }
+            public bool DecreaseStock(int amount) 
+            {
+                if (ItemCount < amount)
+                    return false;
+
+                ItemCount -= amount;
+                return true;
+            }
+        }
+
+        [System.Serializable]
+        public class ShopData // 상점 하나의 재고 데이터
+        {
+            public string ShopID { get; private set; } // 상점 ID
+            public List<ItemStock> ItemStocks { get; private set; } = new List<ItemStock>(); // 아이템 재고 리스트
+
+            public ShopData(string shopID) 
+            {
+                ShopID = shopID;
+            }
+        }
+
+        [field: SerializeField] public List<ShopData> ShopDatas { get; private set; } = new List<ShopData>(); // 상점들의 재고 데이터 리스트
+    }
+
+    [System.Serializable]
     public class PlayerEconomyDTO : UserDataDTO
     {
         [field: SerializeField] public int Gold { get; private set; } = 0; // 시작할때는 0골드
@@ -103,6 +147,7 @@ namespace KYM
         }
     }
 
+    [System.Serializable]
     public class PlayerEquipDTO : UserDataDTO
     {
         public class PlayerEquipSlotData 
