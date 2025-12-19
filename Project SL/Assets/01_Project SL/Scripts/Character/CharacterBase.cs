@@ -21,7 +21,6 @@ namespace KYM
         // Third Party...? 아무튼 뭐 애니메이터, 캐릭터 컨트롤러, 애니메이션 이벤트 리스너, 무기 등등 그런것들
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
-
         public AnimationEventListener AnimationEventListener => animationEventListener;
         private AnimationEventListener animationEventListener { get; set; }
 
@@ -280,7 +279,8 @@ namespace KYM
             transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 20f);
         }
 
-        public void SetCharacterState(CharacterState state) 
+
+        public void SetCharacterState(CharacterState state) // 캐릭터 상태를 내부적으로 변경하기 위한 함수
         {
             CurrentState = state;
         }

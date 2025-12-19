@@ -51,11 +51,14 @@ namespace KYM
             playerHUD.RefreshHpUI(linkedCharacter.CurHP, linkedCharacter.MaxHP);
             playerHUD.RefreshSpUI(linkedCharacter.CurSP, linkedCharacter.MaxSP);
             playerHUD.RefreshGoldUI(UserDataModel.Singleton.PlayerEconomyDTO.Gold);
+            // UI - 상점 UI 초기화
+            var shopUI = UIManager.Singleton.GetUI<ShopUI> (UIList.ShopUI);
 
             // 이벤트 구독
             linkedCharacter.OnHpChanged += playerHUD.RefreshHpUI;   // 플레이어 캐릭터 HP 변경시 HUD 갱신
             linkedCharacter.OnSpChanged += playerHUD.RefreshSpUI;   // 플레이어 캐릭터 SP 변경시 HUD 갱신
             UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
+            shopUI.OnShopClosed += linkedCharacter.SetCharacterState; // 상점 닫기 버튼 클릭시 (상점 닫힐시) 플레이어 상태 변경
 
             // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
@@ -74,10 +77,13 @@ namespace KYM
             if (linkedCharacter != null) // 연결된 캐릭터가 존재한다면
             { 
                 var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
+                var shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
 
                 // 이벤트 구독 해제
                 linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;
                 linkedCharacter.OnSpChanged -= playerHUD.RefreshSpUI;
+                UserDataModel.Singleton.OnEconomyUpdated -= playerHUD.RefreshGoldUI;
+                shopUI.OnShopClosed -= linkedCharacter.SetCharacterState; 
             }
 
             // Input 이벤트 구독 해제

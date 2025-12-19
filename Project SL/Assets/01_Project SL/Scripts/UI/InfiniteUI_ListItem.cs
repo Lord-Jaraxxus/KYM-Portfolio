@@ -30,6 +30,20 @@ namespace KYM
         public Action<InfiniteUI_ListData> onItemClicked;
         InfiniteUI_ListData listData;
 
+        private void Start()
+        {
+            if (itemPriceText != null) // (인벤토리 or 상점 구분) 아이템 가격에 대한 GUI가 있다면, 즉 상점에 표시된 아이템이라면. 일단 이렇게 처리해놓긴 했는데;  
+            {
+                // 버튼 연결
+
+                itemButton.onClick.RemoveAllListeners();
+                itemButton.onClick.AddListener(OnClickItemButton);
+
+                ShopUI shop = GetComponentInParent<ShopUI>();
+                onItemClicked += shop.OnClickPurchaseButtonFromList;
+            }
+        }
+
         public override void UpdateData(InfiniteScrollData scrollData)
         {
             listData = scrollData as InfiniteUI_ListData;
@@ -41,19 +55,6 @@ namespace KYM
             itemCountText.text = $"x {listData.itemCount}";
 
             if (itemPriceText != null) { itemPriceText.text = $"{listData.itemPrice}G"; }  // itemPriceText가 없다면 ㄴㄴ. 인벤토리엔 가격표시가 없으니까 따로 빼둠
-        }
-
-        // 버튼 연결용
-        private void Start()
-        {
-            if (itemPriceText != null) // 아이템 가격에 대한 GUI가 있다면, 즉 상점에 표시된 아이템이라면. 일단 이렇게 처리해놓긴 했는데;  
-            {
-                itemButton.onClick.RemoveAllListeners();
-                itemButton.onClick.AddListener(OnClickItemButton);
-
-                ShopUI shop = GetComponentInParent<ShopUI>();
-                onItemClicked += shop.OnClickPurchaseButtonFromList;
-            }
         }
 
         private void OnClickItemButton()

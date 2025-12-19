@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,26 +8,34 @@ namespace KYM
 {
     public class ShopUI : UIBase
     {
+        // 상점 데이터 관련
         [SerializeField] public string shopID;    // 얘가 여기 있어도 되남;
-        ShopDataSO shopDataSO;          // 상점 데이터 (품목, 수량, 가격)
+        ShopDataSO shopDataSO; // 상점 데이터 (품목, 수량, 가격)
         bool initialized = false;
-
-        // 상점 카테고리 토글 관련
-        ItemCategory Currentcategory;
-        public ToggleGroup toggleGroup;        // 상점 카테고리 토글 그룹
-        public List<Toggle> toggles;           // 상점 카테고리 토글들
+        // 여기에 들고있는게 편하겠다, 유저데이터 출신임
+        PlayerShopDTO.ShopData shopData;
 
         // 인피니티 스크롤 관련 
         public Gpm.Ui.InfiniteScroll infiniteScroll;
         public GameObject listItemPrefab;
         private Dictionary<string, InfiniteUI_ListData> infiniteDataContainer = new();
 
-        // 여기에 들고있는게 편하겠다, 유저데이터 출신임
-        PlayerShopDTO.ShopData shopData;
+
+        // 상점 카테고리 토글 관련
+        ItemCategory Currentcategory;
+        public ToggleGroup toggleGroup;        // 상점 카테고리 토글 그룹
+        public List<Toggle> toggles;           // 상점 카테고리 토글들
+
+        // 버튼과 이벤트
+        [SerializeField] private Button closeButton; // 상점 닫기 버튼
+        public event System.Action<CharacterState> OnShopClosed; // 상점창 닫힘 이벤트 
 
         private void Awake()
         {
             listItemPrefab.SetActive(false);
+
+            // 버튼 클릭 이벤트에 메서드 연결
+            closeButton.onClick.AddListener(OnClickExitButton);
         }
 
         private void Start()
@@ -106,6 +115,40 @@ namespace KYM
             }
         }
 
+        private void RefreshShopList()
+        {
+            infiniteScroll.ClearData();
+            infiniteDataContainer.Clear();
+
+            foreach (var item in shopDataSO.ItemsForSale)
+            {
+                if (item.Category != Currentcategory && Currentcategory != ItemCategory.All)
+                {
+                    continue;// 현재 카테고리에 해당하지 않는 아이템은 건너뜀
+                }
+
+                InfiniteUI_ListData newData = new InfiniteUI_ListData();
+                newData.itemID = item.ItemID;
+                newData.icon = item.Icon;
+                newData.itemName = item.ItemName;
+                newData.itemPrice = item.Price;
+                newData.color = Color.gray; // Default color for shop items
+
+                PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
+                newData.itemCount = itemStock.ItemCount; // 재고 수량은 유저 데이터에서 따로 관리중인걸 가져와서 반영
+
+                infiniteScroll.InsertData(newData);
+                infiniteDataContainer.Add(item.ItemID, newData);
+            }
+        }
+
+        private void OnToggleSelected(int index)
+        {
+            Currentcategory = (ItemCategory)index;
+
+            RefreshShopList();
+        }
+
         public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data)
         {
             // TODO : 구매 버튼 클릭 시 처리 로직
@@ -139,39 +182,12 @@ namespace KYM
             // TODO : 수량 0 이하로 내려갔을때 처리 필요 (상점에서 제거 등)
         }
 
-        private void RefreshShopList()
+        public void OnClickExitButton()
         {
-            infiniteScroll.ClearData();
-            infiniteDataContainer.Clear();
+            UIManager.Hide<ShopUI>(UIList.ShopUI);  // UIManager를 통해 닫기
 
-            foreach (var item in shopDataSO.ItemsForSale)
-            {
-                if (item.Category != Currentcategory && Currentcategory != ItemCategory.All)
-                {
-                    continue;// 현재 카테고리에 해당하지 않는 아이템은 건너뜀
-                }
-
-                InfiniteUI_ListData newData = new InfiniteUI_ListData();
-                newData.itemID = item.ItemID;
-                newData.icon = item.Icon;
-                newData.itemName = item.ItemName;
-                newData.itemPrice = item.Price;
-                newData.color = Color.gray; // Default color for shop items
-
-                PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
-                newData.itemCount = itemStock.ItemCount; // 재고 수량은 유저 데이터에서 따로 관리중인걸 가져와서 반영
-
-                infiniteScroll.InsertData(newData);
-                infiniteDataContainer.Add(item.ItemID, newData);
-            }
-        }
-
-
-        private void OnToggleSelected(int index)
-        {
-            Currentcategory = (ItemCategory)index;
-
-            RefreshShopList();
+            // TODO : 캐릭터한테 상호작용이 끝났음을 보내야 하는데...
+            OnShopClosed?.Invoke(CharacterState.Idle);
         }
     }
 }

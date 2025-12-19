@@ -15,7 +15,7 @@ namespace KYM
         [field: SerializeField] public PlayerShopDTO PlayerShopDTO { get; private set; } = new();
 
 
-        public event Action<PlayerItemDTO.PlayerItemData> OnInventoryUpdated;
+        public event Action<PlayerItemDTO.PlayerItemData> OnInventoryUpdated; 
         public event Action<int> OnEconomyUpdated; // 골드 등 재화 정보 변경시 이벤트
 
         public void Initialize()

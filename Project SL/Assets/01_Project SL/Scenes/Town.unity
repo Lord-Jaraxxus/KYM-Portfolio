@@ -862,6 +862,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 324047080657694755, guid: 45524764a06c414458c6ee4442baddaf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00084083143
+      objectReference: {fileID: 0}
+    - target: {fileID: 5306000896413238544, guid: 45524764a06c414458c6ee4442baddaf, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5306000896413238544, guid: 45524764a06c414458c6ee4442baddaf, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5306000896413238544, guid: 45524764a06c414458c6ee4442baddaf, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5607056497200603911, guid: 45524764a06c414458c6ee4442baddaf, type: 3}
       propertyPath: m_Name
       value: UI.ShopUI
