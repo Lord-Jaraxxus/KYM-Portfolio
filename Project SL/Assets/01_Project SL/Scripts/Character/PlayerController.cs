@@ -76,7 +76,7 @@ namespace KYM
                 var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
 
                 // 이벤트 구독 해제
-                linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;  
+                linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;
                 linkedCharacter.OnSpChanged -= playerHUD.RefreshSpUI;
             }
 
@@ -146,23 +146,12 @@ namespace KYM
         void OnReceiveInputLmc() => commandInvoker.TryAddCommand(new LeftClickCommand(linkedCharacter));
         void OnReceiveInputF()
         {
-            if (linkedCharacter.CanInteract() == false) { return; } // 상호작용 불가 상태시 종료
+            if (linkedCharacter.CanInteract() == false) { return; } // 플레이어 캐릭터가 상호작용 불가 상태시 종료
 
             if (sensor != null && sensor.CurrentTarget != null) // 가까이에 상호작용 가능한 뭔가가 있을 때
             {
-                sensor.CurrentTarget.Interact();
-
-                switch (sensor.CurrentTarget.Type)
-                {
-                    case InteractableType.DropItem: // 드롭 아이템을 주웠다면
-                        linkedCharacter.Interact(); // 캐릭터가 줍는 애니메이션 실행
-                        break;
-                    case InteractableType.NPC_Merchant: // 상점 NPC와 상호작용 했다면
-                        linkedCharacter.CurrentState = CharacterState.Interact; // 이것도 CharacterBase쪽으로 빼야하는디
-                        break;
-                    default:
-                        break;
-                }
+                sensor.CurrentTarget.Interact();    // 일단 상호작용 물체의 Interact 메소드 실행
+                linkedCharacter.TryInteract(sensor.CurrentTarget.Type); // 상호작용 타입에 따라서 CharacterBase에서 처리
             }
             else // 가까이에 상호작용 할 대상이 없을 때
             {
@@ -199,7 +188,8 @@ namespace KYM
             if (isOpen && linkedCharacter.CurrentState == CharacterState.Interact) // 상점이 켜져있고, 플레이어가 상호작용 중이라면
             {
                 UIManager.Hide<ShopUI>(UIList.ShopUI);
-                linkedCharacter.CurrentState = CharacterState.Idle; // 상호작용 상태 해제
+                linkedCharacter.SetCharacterState(CharacterState.Interact); // 이렇게 해도 되남;
+                // linkedCharacter.CurrentState = CharacterState.Idle; // 상호작용 상태 해제 -> 이것도 CharacterBase로 옮기고 싶은데, 어떻게?
             }
             else
             {
