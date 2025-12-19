@@ -22,7 +22,7 @@ namespace KYM
         private Dictionary<string, InfiniteUI_ListData> infiniteDataContainer = new();
 
         // 여기에 들고있는게 편하겠다, 유저데이터 출신임
-        PlayerShopDTO.ShopData shopData; 
+        PlayerShopDTO.ShopData shopData;
 
         private void Awake()
         {
@@ -49,16 +49,25 @@ namespace KYM
         {
             base.Show();
 
-            if (!initialized)
+            if (initialized == false) // 상점을 처음 여는 거라면
             {
                 Initiialize();
                 initialized = true;
             }
-            else 
-            { 
-                RefreshShopList(); 
+            else
+            {
+                if (shopData == null || shopData.ShopID == null) return; // 상점 데이터가 비어있다면 리턴, 로그 띄워야하남?
+
+                if (shopID != shopData.ShopID) // 전에 열었던 상점과 다른 상점을 열었다면 (shopID가 바뀌었다면)
+                {
+                    Initiialize();
+                }
+                else // 전에 열었던 상점과 같은 상점을 열었다면
+                {
+                    RefreshShopList();
+                }
             }
-                
+
         }
 
         private void Initiialize()  // 초기화 함수, 상점UI 맨 처음 부를때만 호출되도록 -> 근데 상점 여러개 만들면 어떡함?;;
@@ -66,6 +75,8 @@ namespace KYM
             infiniteScroll.ClearData();
             infiniteDataContainer.Clear();
             // 토글도 맨 앞엣놈으로 초기화 시켜야대는데
+
+            shopData = UserDataModel.Singleton.PlayerShopDTO.ShopDatas.Find(shop => shop.ShopID == shopID); // 유저 데이터에서 이 상점의 재고 데이터 찾아서 연결
 
             foreach (ShopDataSO so in GameDataModel.Singleton.ShopDataDTO.ShopDatas) // 상점 ID에 맞는 상점 데이터 불러오기
             {
@@ -76,25 +87,26 @@ namespace KYM
                 }
             }
 
-            // 게임 데이터 모델에서 상점 재고 데이터 불러오기 
+            // GameDataModel에서 상점 재고 데이터 불러와서 인피니티 스크롤에 데이터 삽입
             foreach (var item in shopDataSO.ItemsForSale)
             {
                 InfiniteUI_ListData newData = new InfiniteUI_ListData();
                 newData.itemID = item.ItemID;
                 newData.icon = item.Icon;
                 newData.itemName = item.ItemName;
-                newData.itemCount = item.ItemCount; // TODO : 나중에 UserDataModel에서 재고 수량 불러오도록 변경 필요 (세이브파일에서)
                 newData.itemPrice = item.Price;
                 newData.color = Color.gray; // Default color for shop items
 
-                infiniteScroll.InsertData(newData); 
+                // 재고 수량은 UserDataModel에서 따로 관리중인걸 가져와서 반영
+                PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
+                newData.itemCount = itemStock.ItemCount;
+
+                infiniteScroll.InsertData(newData);
                 infiniteDataContainer.Add(item.ItemID, newData);
             }
-
-            shopData = UserDataModel.Singleton.PlayerShopDTO.ShopDatas.Find(shop => shop.ShopID == shopID); // 유저 데이터에서 이 상점의 재고 데이터 찾아서 연결
         }
 
-        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data) 
+        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data)
         {
             // TODO : 구매 버튼 클릭 시 처리 로직
             Debug.Log(data.itemID);
@@ -106,7 +118,7 @@ namespace KYM
             {
                 // TODO : 이미 존재하는 Infinite Data 이므로, 수량만 갱신하여 infinite scroll 에 반영
                 PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == data.itemID);
-                if(itemStock.ItemCount <= 0) { return; } // 아이템 재고 수량이 0 이하면 구매 불가
+                if (itemStock.ItemCount <= 0) { return; } // 아이템 재고 수량이 0 이하면 구매 불가
                 if (UserDataModel.Singleton.PlayerEconomyDTO.Gold < data.itemPrice) { return; } // 소지 골드가 부족하면 구매 불가
 
                 itemStock.DecreaseStock(1); // 아이템 재고 수량 감소
