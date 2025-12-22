@@ -42,9 +42,10 @@ namespace KYM
                 ShopUI shop = GetComponentInParent<ShopUI>();
                 onItemClicked += shop.OnClickPurchaseButtonFromList;
             }
-            else // 인벤토리를 열었다면. 
+            else // 인벤토리에서 열렸다면.
             {
                 InventoryUI inventory = UIManager.Singleton.GetUI<InventoryUI>(UIList.InventoryUI);
+                onItemClicked += inventory.OnClickItemButton;
             }
         }
 
@@ -64,6 +65,8 @@ namespace KYM
         private void OnClickItemButton()
         {
             onItemClicked?.Invoke(listData);
+
+            Debug.Log("아이템 눌러씀");
         }
     }
 }

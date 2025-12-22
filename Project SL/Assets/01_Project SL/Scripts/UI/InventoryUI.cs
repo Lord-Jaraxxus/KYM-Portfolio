@@ -3,23 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KYM
 {
     public class InventoryUI : UIBase
     {
+        [SerializeField] private Button modalButton;
+        [SerializeField] private GameObject panel;
+        [SerializeField] private Button useButton;
+        [SerializeField] private Button dropButton;
+
+        // Infinite UI 관련
         public Gpm.Ui.InfiniteScroll infiniteScroll;
         public GameObject listItemPrefab;
-
         private Dictionary<string, InfiniteUI_ListData> infiniteDataContainer = new();
+
+        // 클릭된 아이템 데이터
+        private InfiniteUI_ListData selectedItemData = null;
 
         private void Awake()
         {
             listItemPrefab.SetActive(false);
+
+            // 버튼 연결
+            modalButton.onClick.AddListener(OnclickModalButton);
+            useButton.onClick.AddListener(OnClickUseButton);
+            dropButton.onClick.AddListener(OnClickDropButton);
         }
-            
+
         private void OnEnable()
         {
+            panel.SetActive(false); // 버튼 패널 꺼두기
+            modalButton.gameObject.SetActive(false); // 모달도 꺼두기
+
             if (UserDataModel.Singleton) 
             {
                 UserDataModel.Singleton.OnInventoryUpdated += OnReceiveInventoryUpdated;
@@ -81,9 +98,52 @@ namespace KYM
 
                 infiniteScroll.InsertData(newData);
                 infiniteDataContainer.Add(changedData.ItemID, newData);
-            }
-
-
+            }        
         }
+
+        // 아이템 버튼을 눌렀을 때, InfiniteUI_ListItem에서 이벤트가 날아오면 실행
+        public void OnClickItemButton(InfiniteUI_ListData data) 
+        {
+            panel.SetActive(true); // 팝업 패널 활성화
+            modalButton.gameObject.SetActive(true); // 모달도 같이 활성화
+
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);     //Screen 좌표계
+            mousePos.z = 0;
+
+
+            RectTransform panelRect = panel.GetComponent<RectTransform>();
+            RectTransform canvasRect = panel.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect,
+                Input.mousePosition,
+                null, // Screen Space - Overlay니까 null
+                out localPos
+            );
+
+            panelRect.anchoredPosition = localPos;
+
+            selectedItemData = data; // 현재 선택한 아이템의 데이터를 저장
+        }
+
+        private void OnclickModalButton() 
+        {
+            panel.SetActive(false); // 팝업 패널 비활성화
+            modalButton.gameObject.SetActive(false); // 모달도 같이 비활성화
+
+            selectedItemData = null; 
+        }
+
+        private void OnClickUseButton() 
+        {
+            // TODO : 아이템 사용, 즉 아이템 갯수를 1개 줄이고 0개가 되면 인벤토리에서 없애고 장비면 장착, 소모품이면 효과 적용 해야함...;  
+        }
+
+        private void OnClickDropButton() 
+        {
+            // TODO : 이건 진짜 빡센데? 모든 아이템 프리펩 들고있을 수도 없고 ㅋㅋㅋㅋ
+        }
+
     }
 }

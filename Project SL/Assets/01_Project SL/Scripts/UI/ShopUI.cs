@@ -148,7 +148,8 @@ namespace KYM
             RefreshShopList();
         }
 
-        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data) // 구매 버튼을 눌렀을 때, InfiniteUI_ListItem에서 이벤트가 날아오면 실행
+        // 구매 버튼을 눌렀을 때, InfiniteUI_ListItem에서 이벤트가 날아오면 실행
+        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data) 
         {
             // TODO : 구매 버튼 클릭 시 처리 로직
             Debug.Log(data.itemID);
@@ -181,7 +182,7 @@ namespace KYM
             // TODO : 수량 0 이하로 내려갔을때 처리 필요 (상점에서 제거 등)
         }
 
-        public void OnClickExitButton()
+        private void OnClickExitButton()
         {
             UIManager.Hide<ShopUI>(UIList.ShopUI);  // UIManager를 통해 닫기
 
