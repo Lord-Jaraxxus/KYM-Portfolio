@@ -33,29 +33,29 @@ namespace KYM
     public class PlayerItemDTO : UserDataDTO
     {
         [System.Serializable]
-        public class PlayerItemData 
+        public class PlayerItemData
         {
             [field: SerializeField] public string ItemID { get; private set; }
             [field: SerializeField] public int ItemCount { get; private set; }
 
-            public PlayerItemData(string itemID, int itemCount) 
+            public PlayerItemData(string itemID, int itemCount)
             {
                 ItemID = itemID;
                 ItemCount = itemCount;
             }
-            public void IncreaseItemCount(int count) 
+            public void IncreaseItemCount(int count)
             {
                 ItemCount += count;
             }
-            public void DecreaseItemCount(int count) 
+            public void DecreaseItemCount(int count)
             {
                 ItemCount -= count;
             }
         }
 
-        [field:SerializeField] public List<PlayerItemData> PlayerItems { get; private set; } = new();
+        [field: SerializeField] public List<PlayerItemData> PlayerItems { get; private set; } = new();
 
-        public PlayerItemData AddItem(string itemID, int itemCount) 
+        public PlayerItemData AddItem(string itemID, int itemCount)
         {
             PlayerItemData existingItem = PlayerItems.Find(item => item.ItemID == itemID);
             if (existingItem != null)
@@ -64,26 +64,32 @@ namespace KYM
                 return existingItem;
             }
             else
-            {   
+            {
                 PlayerItemData newItem = new PlayerItemData(itemID, itemCount);
                 PlayerItems.Add(newItem);
                 return newItem;
             }
         }
-        public void RemoveItem(string itemID, int count) 
+        public PlayerItemData RemoveItem(string itemID, int count)
         {
-            var existingItem = PlayerItems.Find(item => item.ItemID == itemID);
+            PlayerItemData existingItem = PlayerItems.Find(item => item.ItemID == itemID);
 
-            if (existingItem != null)
+            if (existingItem != null)   // null 검사 후 갯수 깎기
             {
                 existingItem.DecreaseItemCount(count);
             }
-            else return;
+            else
+            {
+                Debug.Log("existingItem is null");
+                return null;
+            }
 
-            if (existingItem.ItemCount <= 0)
+            if (existingItem.ItemCount <= 0) // 수량이 0개 이하면 PlayerItems 리스트에서 아이템을 삭제
             {
                 PlayerItems.Remove(existingItem);
             }
+
+            return existingItem;    // 수량이 0개던 남았던 일단 아이템 데이터는 넘겨줘야 하므로
         }
     }
 
@@ -96,16 +102,16 @@ namespace KYM
             public string ItemID { get; private set; }
             public int ItemCount { get; private set; }
 
-            public ItemStock(string itemID, int itemCount) 
+            public ItemStock(string itemID, int itemCount)
             {
                 ItemID = itemID;
                 ItemCount = itemCount;
             }
-            public void IncreaseStock(int amount) 
+            public void IncreaseStock(int amount)
             {
                 ItemCount += amount;
             }
-            public bool DecreaseStock(int amount) 
+            public bool DecreaseStock(int amount)
             {
                 if (ItemCount < amount)
                     return false;
@@ -121,7 +127,7 @@ namespace KYM
             public string ShopID { get; private set; } // 상점 ID
             public List<ItemStock> ItemStocks { get; private set; } = new List<ItemStock>(); // 아이템 재고 리스트
 
-            public ShopData(string shopID) 
+            public ShopData(string shopID)
             {
                 ShopID = shopID;
             }
@@ -135,13 +141,13 @@ namespace KYM
     {
         [field: SerializeField] public int Gold { get; private set; } = 0; // 시작할때는 0골드
 
-        public void AddGold(int amount) 
+        public void AddGold(int amount)
         {
             Gold += amount;
         }
-        public void SubtractGold(int amount) 
+        public void SubtractGold(int amount)
         {
-            if(Gold < amount) { return; } // Gold가 부족할때 이벤트가 또 있어야하는데..
+            if (Gold < amount) { return; } // Gold가 부족할때 이벤트가 또 있어야하는데..
 
             Gold -= amount;
         }
@@ -150,7 +156,7 @@ namespace KYM
     [System.Serializable]
     public class PlayerEquipDTO : UserDataDTO
     {
-        public class PlayerEquipSlotData 
+        public class PlayerEquipSlotData
         {
             public EquipSlotType SlotType;
             public string EquippedItemID; // 장착된 아이템 ID

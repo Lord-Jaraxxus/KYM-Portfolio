@@ -65,8 +65,6 @@ namespace KYM
         private void OnClickItemButton()
         {
             onItemClicked?.Invoke(listData);
-
-            Debug.Log("아이템 눌러씀");
         }
     }
 }

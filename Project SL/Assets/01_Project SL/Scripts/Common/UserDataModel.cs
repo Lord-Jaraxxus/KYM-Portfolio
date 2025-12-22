@@ -68,6 +68,20 @@ namespace KYM
             OnInventoryUpdated?.Invoke(changedData);
         }
 
+        public void RemoveItem(string itemID, int itemCount) 
+        {
+            PlayerItemDTO.PlayerItemData changedData = PlayerItemDto.RemoveItem(itemID, itemCount);
+
+            if (changedData != null)
+            {
+                OnInventoryUpdated?.Invoke(changedData);
+            }
+            else
+            {
+                Debug.Log("ChangedData is null.");
+            }
+        }
+
         public void AddGold(int amount)
         {
             PlayerEconomyDTO.AddGold(amount);
