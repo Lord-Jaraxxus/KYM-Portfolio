@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -81,6 +82,8 @@ namespace KYM
                 infiniteScroll.InsertData(newData);
                 infiniteDataContainer.Add(changedData.ItemID, newData);
             }
+
+
         }
     }
 }

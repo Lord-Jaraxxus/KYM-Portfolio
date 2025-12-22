@@ -76,7 +76,6 @@ namespace KYM
                     RefreshShopList();
                 }
             }
-
         }
 
         private void Initiialize()  // 초기화 함수, 상점UI 맨 처음 부를때만 호출되도록 -> 근데 상점 여러개 만들면 어떡함?;;
@@ -149,7 +148,7 @@ namespace KYM
             RefreshShopList();
         }
 
-        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data)
+        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data) // 구매 버튼을 눌렀을 때, InfiniteUI_ListItem에서 이벤트가 날아오면 실행
         {
             // TODO : 구매 버튼 클릭 시 처리 로직
             Debug.Log(data.itemID);
