@@ -54,4 +54,10 @@ namespace KYM
     {
         [field: SerializeField] public List<ShopDataSO> ShopDatas { get; private set; } = new(); // 상점 데이터 리스트
     }
+
+    [System.Serializable]
+    public class ItemDatabase : GameDataDTO // 아이템 정보 검색을 위해 ItemDataSO들을 로딩해서 들고있는 데이터베이스
+    {
+        [field: SerializeField] public Dictionary<string, ItemDataSO> ItemDatas { get; private set; } = new();
+    }
 }

@@ -62,7 +62,7 @@ namespace KYM
             infiniteScroll.ClearData();
             infiniteDataContainer.Clear();
 
-            foreach (var item in UserDataModel.Singleton.PlayerItemDto.PlayerItems)
+            foreach (PlayerItemDTO.PlayerItemData item in UserDataModel.Singleton.PlayerItemDto.PlayerItems)
             {
                 InfiniteUI_ListData newData = new InfiniteUI_ListData();
                 newData.itemID = item.ItemID;
@@ -152,8 +152,13 @@ namespace KYM
             panel.SetActive(false); // 팝업 패널 비활성화
             modalButton.gameObject.SetActive(false); // 모달도 같이 비활성화
 
-            // TODO : 아이템 사용, 즉 아이템 갯수를 1개 줄이고 0개가 되면 인벤토리에서 없애고 장비면 장착, 소모품이면 효과 적용 해야함...;
-            UserDataModel.Singleton.RemoveItem(selectedItemData.itemID, 1); 
+            // TODO : 아이템 사용, 즉 아이템 갯수를 1개 줄이고 0개가 되면 인벤토리에서 없애기 + 장비면 장착, 소모품이면 효과 적용 해야함...;
+
+            switch(selectedItemData.itemID)
+                {
+                case:
+            }
+            UserDataModel.Singleton.RemoveItem(selectedItemData.itemID, 1);
         }
 
         private void OnClickDropButton()
