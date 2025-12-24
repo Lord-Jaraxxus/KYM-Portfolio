@@ -30,6 +30,7 @@ namespace KYM
         private void Awake()
         {
             linkedCharacter = GetComponent<CharacterBase>();
+            PlayerCharacterContext.Singleton.Register(linkedCharacter); // 플레이어 캐릭터 등록
             mainCamera = Camera.main;
 
             // 현재 타깃 회전값에서 시작 (튀는 것 방지)
@@ -53,6 +54,8 @@ namespace KYM
             playerHUD.RefreshGoldUI(UserDataModel.Singleton.PlayerEconomyDTO.Gold);
             // UI - 상점 UI 초기화
             var shopUI = UIManager.Singleton.GetUI<ShopUI> (UIList.ShopUI);
+            // UI - 캐릭터 정보창 UI 초기화
+            var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
 
             // 이벤트 구독
             linkedCharacter.OnHpChanged += playerHUD.RefreshHpUI;   // 플레이어 캐릭터 HP 변경시 HUD 갱신
@@ -62,20 +65,22 @@ namespace KYM
 
             // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
-            InputManager.Singleton.onInputF += OnReceiveInputF;
-            InputManager.Singleton.onInputI += OnReceiveInputI;
             InputManager.Singleton.onInputTab += OnReceiveInputTab;
             InputManager.Singleton.onInputESC += OnReceiveInputESC;
+            InputManager.Singleton.onInputF += OnReceiveInputF;
+            InputManager.Singleton.onInputI += OnReceiveInputI;
+            InputManager.Singleton.onInputP += OnReceiveInputP;
 
 
             // 콤보용 뭐시기들 초기화 예정
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
         }
 
+
         private void OnDestroy()
         {
             if (linkedCharacter != null) // 연결된 캐릭터가 존재한다면
-            { 
+            {
                 var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
                 var shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
 
@@ -92,6 +97,9 @@ namespace KYM
             InputManager.Singleton.onInputI     -= OnReceiveInputI;
             InputManager.Singleton.onInputTab   -= OnReceiveInputTab;
             InputManager.Singleton.onInputESC   -= OnReceiveInputESC;
+            InputManager.Singleton.onInputP     -= OnReceiveInputP;
+
+            PlayerCharacterContext.Singleton.Unregister(); // 등록된 캐릭터 해제
         }
 
         private void Update()
@@ -150,6 +158,31 @@ namespace KYM
         }
 
         void OnReceiveInputLmc() => commandInvoker.TryAddCommand(new LeftClickCommand(linkedCharacter));
+
+        private void OnReceiveInputTab()
+        {
+            CameraSystem.Instance.SetLockOnToggle();
+        }
+
+        private void OnReceiveInputESC()
+        {
+            ShopUI shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
+            bool isOpen = shopUI != null && shopUI.gameObject.activeSelf;
+
+            if (isOpen && linkedCharacter.CurrentState == CharacterState.Interact) // 상점이 켜져있고, 플레이어가 상호작용 중이라면
+            {
+                UIManager.Hide<ShopUI>(UIList.ShopUI);
+                linkedCharacter.SetCharacterState(CharacterState.Interact); // 이렇게 해도 되남;
+                // linkedCharacter.CurrentState = CharacterState.Idle; // 상호작용 상태 해제 -> 이것도 CharacterBase로 옮기고 싶은데, 어떻게?
+            }
+            else
+            {
+                // 상점 안켜져있으면인데, 뭐 메뉴라도 띄울까?
+                GlobalUI globalUI = UIManager.Show<GlobalUI>(UIList.GlobalUI);
+                globalUI.SetMenuPanel(true);
+            }
+        }
+
         void OnReceiveInputF()
         {
             if (linkedCharacter.CanInteract() == false) { return; } // 플레이어 캐릭터가 상호작용 불가 상태시 종료
@@ -178,30 +211,19 @@ namespace KYM
                 UIManager.Show<InventoryUI>(UIList.InventoryUI);
             }
 
-            Debug.Log("인벤토리 토글");
+            // Debug.Log("인벤토리 토글");
         }
-
-        private void OnReceiveInputTab()
+        private void OnReceiveInputP()
         {
-            CameraSystem.Instance.SetLockOnToggle();
-        }
+            var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
 
-        private void OnReceiveInputESC()
-        {
-            ShopUI shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
-            bool isOpen = shopUI != null && shopUI.gameObject.activeSelf;
-
-            if (isOpen && linkedCharacter.CurrentState == CharacterState.Interact) // 상점이 켜져있고, 플레이어가 상호작용 중이라면
+            if (characterInfoUI.gameObject.activeSelf)
             {
-                UIManager.Hide<ShopUI>(UIList.ShopUI);
-                linkedCharacter.SetCharacterState(CharacterState.Interact); // 이렇게 해도 되남;
-                // linkedCharacter.CurrentState = CharacterState.Idle; // 상호작용 상태 해제 -> 이것도 CharacterBase로 옮기고 싶은데, 어떻게?
+                UIManager.Hide<CharacterInfoUI>(UIList.CharacterInfoUI);
             }
             else
             {
-                // 상점 안켜져있으면인데, 뭐 메뉴라도 띄울까?
-                GlobalUI globalUI = UIManager.Show<GlobalUI>(UIList.GlobalUI);
-                globalUI.SetMenuPanel(true);
+                UIManager.Show<CharacterInfoUI>(UIList.CharacterInfoUI);
             }
         }
 

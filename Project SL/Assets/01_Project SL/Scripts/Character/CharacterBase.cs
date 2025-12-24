@@ -395,5 +395,20 @@ namespace KYM
 
             TakeDamage(damage);
         }
+
+        public void EquipItem(ItemDataSO itemDataSO) 
+        {
+            // TODO : 장비템 착용 후 필요한 동작들
+            UserDataModel.Singleton.PlayerEquipDTO.EquipItem(itemDataSO);
+
+            // 여기서 이벤트를 보내는 게 맞는 것 같기는 한데?????? 일단 그냥 UI를 가져와서?
+            CharacterInfoUI characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
+            if (characterInfoUI != null) { characterInfoUI.SetIcon(itemDataSO); }
+        }
+
+        public void UneqipItem(ItemDataSO itemDataSO) 
+        {
+            // TODO : 장비탬 해제 후 필요한 동작들
+        }
     }
 }

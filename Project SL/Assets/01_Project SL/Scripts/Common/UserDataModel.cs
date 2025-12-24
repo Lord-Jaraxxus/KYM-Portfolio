@@ -13,7 +13,7 @@ namespace KYM
         [field: SerializeField] public PlayerItemDTO PlayerItemDto { get; private set; } = new();
         [field: SerializeField] public PlayerEconomyDTO PlayerEconomyDTO { get; private set; } = new();
         [field: SerializeField] public PlayerShopDTO PlayerShopDTO { get; private set; } = new();
-
+        [field: SerializeField] public PlayerEquipDTO PlayerEquipDTO { get; private set; } = new();
 
         public event Action<PlayerItemDTO.PlayerItemData> OnInventoryUpdated; 
         public event Action<int> OnEconomyUpdated; // 골드 등 재화 정보 변경시 이벤트

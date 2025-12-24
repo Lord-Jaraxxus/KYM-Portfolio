@@ -8,13 +8,16 @@ namespace KYM
 
     public interface IUsableItem : IItemAction
     {
+        ItemDataSO ItemDataSO { get; }
+
         bool CanUse(CharacterBase character);
         void Use(CharacterBase character);
     }
 
     public interface IEquipableItem : IItemAction 
     {
-        EquipSlotType SlotType { get; }
+        ItemDataSO ItemDataSO { get; }
+
         void Equip(CharacterBase character);
         void Unequip(CharacterBase character);
     }

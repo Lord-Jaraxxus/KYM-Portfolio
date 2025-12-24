@@ -59,5 +59,14 @@ namespace KYM
     public class ItemDatabase : GameDataDTO // 아이템 정보 검색을 위해 ItemDataSO들을 로딩해서 들고있는 데이터베이스
     {
         [field: SerializeField] public Dictionary<string, ItemDataSO> ItemDatas { get; private set; } = new();
+
+        public ItemDataSO GetItemDataSO(string itemID) 
+        {
+            // 받아온 PlayerItemData에서 ID를 가져와 Itembase에서 ID로 검색해서 해당 아이템의 itemDataSO를 가져옴, itemDataSO변수에 담김, 해당 ID의 아이템SO가 없으면 null 리턴
+            if (!GameDataModel.Singleton.ItemDatabase.ItemDatas.TryGetValue(itemID, out ItemDataSO itemDataSO))
+                return null;
+            else 
+                return itemDataSO;
+        }
     }
 }

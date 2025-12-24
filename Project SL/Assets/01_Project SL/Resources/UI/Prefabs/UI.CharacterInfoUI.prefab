@@ -12,13 +12,14 @@ GameObject:
   - component: {fileID: 1801002680842776565}
   - component: {fileID: 1944450743420925110}
   - component: {fileID: 5755326624566877787}
+  - component: {fileID: 2832963843566244283}
   m_Layer: 0
   m_Name: UI.CharacterInfoUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7503737429881565152
 RectTransform:
   m_ObjectHideFlags: 0
@@ -102,6 +103,23 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2832963843566244283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 441536581507016488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fb7a24e91f78e44800fd24d4627e9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EquipIcon_Head: {fileID: 328711251194660391}
+  EquipIcon_Body: {fileID: 5984542513094232485}
+  EquipIcon_Legs: {fileID: 6267866268359727881}
+  EquipIcon_Weapon: {fileID: 6805304144558893834}
+  EquipIcon_Shield: {fileID: 6957828647900408035}
 --- !u!1 &585475052375550020
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +320,7 @@ GameObject:
   - component: {fileID: 6558334559503018592}
   - component: {fileID: 6957828647900408035}
   m_Layer: 0
-  m_Name: Icon_Equip
+  m_Name: Icon_Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -523,7 +541,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3747615750522927663}
   m_Layer: 0
-  m_Name: Equipment_ Pants
+  m_Name: Equipment_ Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -999,7 +1017,7 @@ GameObject:
   - component: {fileID: 1032828718658892167}
   - component: {fileID: 6267866268359727881}
   m_Layer: 0
-  m_Name: Icon_Equip
+  m_Name: Icon_Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1149,7 +1167,7 @@ GameObject:
   - component: {fileID: 6519514372456497898}
   - component: {fileID: 6805304144558893834}
   m_Layer: 0
-  m_Name: Icon_Equip
+  m_Name: Icon_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1224,7 +1242,7 @@ GameObject:
   - component: {fileID: 2638448259759086036}
   - component: {fileID: 328711251194660391}
   m_Layer: 0
-  m_Name: Icon_Equip
+  m_Name: Icon_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1451,7 +1469,7 @@ GameObject:
   - component: {fileID: 1512527409202625476}
   - component: {fileID: 5984542513094232485}
   m_Layer: 0
-  m_Name: Icon_Equip
+  m_Name: Icon_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1524,7 +1542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4502469019328105292}
   m_Layer: 0
-  m_Name: Equipment_Helm
+  m_Name: Equipment_Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1561,7 +1579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1428709973289611397}
   m_Layer: 0
-  m_Name: Equipment_ Chest
+  m_Name: Equipment_ Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

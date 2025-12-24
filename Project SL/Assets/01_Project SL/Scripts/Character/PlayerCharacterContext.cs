@@ -12,5 +12,10 @@ namespace KYM
         {
             CurrentPlayerCharacter = playerCharacter;
         }
+
+        public void Unregister() 
+        {
+            CurrentPlayerCharacter = null;
+        }
     }
 }

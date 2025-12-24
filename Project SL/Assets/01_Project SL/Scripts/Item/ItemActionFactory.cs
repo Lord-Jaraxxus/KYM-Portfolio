@@ -6,9 +6,18 @@ namespace KYM
 {
     public static class ItemActionFactory
     {
-        public static void Create(ItemDataSO itemDataSO) 
+        public static IItemAction Create(ItemDataSO itemDataSO) 
         {
+            switch (itemDataSO.ItemActionType)
+            {
+                case ItemActionType.Equip:
+                    return new EquipableItemAction(itemDataSO);
 
+                case ItemActionType.Potion:
+                    return null;
+                default: 
+                    return null;
+            }
         }
     }
 }

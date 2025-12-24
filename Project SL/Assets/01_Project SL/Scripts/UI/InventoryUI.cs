@@ -1,10 +1,7 @@
-using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 namespace KYM
 {
@@ -161,20 +158,23 @@ namespace KYM
 
             // TODO : 아이템 사용, 즉 아이템 갯수를 1개 줄이고 0개가 되면 인벤토리에서 없애기 + 장비면 장착, 소모품이면 효과 적용 해야함...;
 
-            // 받아온 PlayerItemData에서 ID를 가져와 Itembase에서 ID로 검색해서 해당 아이템의 itemDataSO를 가져옴, itemDataSO변수에 담김, 해당 아이템의 SO가 없으면 리턴
-            if (!GameDataModel.Singleton.ItemDatabase.ItemDatas.TryGetValue(selectedItemData.itemID, out ItemDataSO itemDataSO))
-                return;
+            ItemDataSO itemDataSO = GameDataModel.Singleton.ItemDatabase.GetItemDataSO(selectedItemData.itemID); // ID를 통해 아이템데이터베이스에서 ItemSO를 가져옴
+            IItemAction itemAction = ItemActionFactory.Create(itemDataSO); // 아이템 액션 인스턴스 생성
+            CharacterBase playerCharacter = PlayerCharacterContext.Singleton.CurrentPlayerCharacter; // 현재 플레이어 캐릭터 가져옴
 
-            switch (itemDataSO.ItemCategory)
+            if (itemAction is IUsableItem usable) // 사용한 아이템이 소모품일 경우
             {
-                case ItemCategory.Equipment:
-                    UserDataModel.Singleton.RemoveItem(selectedItemData.itemID, 1); // 일단 장비템도 사용..하는걸로.
-                    break;
-                case ItemCategory.Consumable:
-                    UserDataModel.Singleton.RemoveItem(selectedItemData.itemID, 1);
-                    break;
-                default:
-                    break;
+                UserDataModel.Singleton.RemoveItem(selectedItemData.itemID, 1); // 일단 UDM에서 갯수 하나 줄임
+                // usable.Use(playerCharacter); 이건 좀 나중에 구현
+            }
+            else if (itemAction is IEquipableItem equipable) // 사용한 아이템이 장비템일 경우
+            {
+                UserDataModel.Singleton.RemoveItem(selectedItemData.itemID, 1); // 장비템도 일단 UDM에서 갯수 하나 줄임
+                equipable.Equip(playerCharacter);
+            }
+            else // 사용 불가 아이템일 경우
+            {
+                Debug.Log("사용 불가 아이템을 사용하셨습니다!");
             }
         }
 

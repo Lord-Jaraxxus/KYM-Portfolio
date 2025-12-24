@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemID: pants
   ItemCount: 1
   ItemName: Pants
-  Category: 1
-  Icon: {fileID: 0}
+  ItemCategory: 1
+  Icon: {fileID: 21300000, guid: 6fb1928d759f710499e2a0531f7d03e9, type: 3}
   Description: 
   Price: 1000
+  ItemActionType: 1
+  EquipSlotType: 3
