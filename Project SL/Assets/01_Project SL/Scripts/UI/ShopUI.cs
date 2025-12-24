@@ -121,7 +121,7 @@ namespace KYM
 
             foreach (var item in shopDataSO.ItemsForSale)
             {
-                if (item.Category != Currentcategory && Currentcategory != ItemCategory.All)
+                if (item.ItemCategory != Currentcategory && Currentcategory != ItemCategory.All)
                 {
                     continue;// 현재 카테고리에 해당하지 않는 아이템은 건너뜀
                 }

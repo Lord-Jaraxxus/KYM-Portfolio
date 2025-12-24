@@ -11,11 +11,6 @@ namespace KYM
         Material = 2,
         Consumable = 3,
         Quest = 4,
-        Equipment_Weapon,
-        Equipment_Helmet,
-        Equipment_Armor,
-        Equipment_Pants,
-        Equipment_Boots,
     }
 
     [CreateAssetMenu(fileName = "ItemData", menuName = "PROJECT KYM/ItemData")]
@@ -25,7 +20,7 @@ namespace KYM
         public int ItemCount;
 
         public string ItemName;
-        public ItemCategory Category;
+        public ItemCategory ItemCategory;
         public Sprite Icon;
         public string Description;
         public int Price;

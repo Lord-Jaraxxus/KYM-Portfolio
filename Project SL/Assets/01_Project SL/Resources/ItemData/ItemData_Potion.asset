@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5126f71b48afb2a49a1f7905653d7a1f, type: 3}
   m_Name: ItemData_Potion
   m_EditorClassIdentifier: 
-  ItemID: potion
+  ItemID: potion_drop
   ItemCount: 1
   ItemName: Potion
-  Category: 3
+  ItemCategory: 0
   Icon: {fileID: 0}
   Description: 
   Price: 0
