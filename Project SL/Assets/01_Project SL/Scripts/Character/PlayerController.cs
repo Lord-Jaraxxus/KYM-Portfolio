@@ -62,6 +62,7 @@ namespace KYM
             linkedCharacter.OnSpChanged += playerHUD.RefreshSpUI;   // 플레이어 캐릭터 SP 변경시 HUD 갱신
             UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
             shopUI.OnShopClosed += linkedCharacter.SetCharacterState; // 상점 닫기 버튼 클릭시 (상점 닫힐시) 플레이어 상태 변경
+            linkedCharacter.OnEquipChanged += characterInfoUI.SetIcon; // 장착 아이템 변경시 장비창의 아이콘 갱신
 
             // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
@@ -83,12 +84,14 @@ namespace KYM
             {
                 var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
                 var shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
+                var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
 
-                // 이벤트 구독 해제
+                // UI 이벤트 구독 해제
                 linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;
                 linkedCharacter.OnSpChanged -= playerHUD.RefreshSpUI;
                 UserDataModel.Singleton.OnEconomyUpdated -= playerHUD.RefreshGoldUI;
-                shopUI.OnShopClosed -= linkedCharacter.SetCharacterState; 
+                shopUI.OnShopClosed -= linkedCharacter.SetCharacterState;
+                linkedCharacter.OnEquipChanged -= characterInfoUI.SetIcon; // 장착 아이템 변경시 장비창의 아이콘 갱신
             }
 
             // Input 이벤트 구독 해제
@@ -172,7 +175,7 @@ namespace KYM
             if (isOpen && linkedCharacter.CurrentState == CharacterState.Interact) // 상점이 켜져있고, 플레이어가 상호작용 중이라면
             {
                 UIManager.Hide<ShopUI>(UIList.ShopUI);
-                linkedCharacter.SetCharacterState(CharacterState.Interact); // 이렇게 해도 되남;
+                linkedCharacter.SetCharacterState(CharacterState.Idle); // 이렇게 해도 되남;
                 // linkedCharacter.CurrentState = CharacterState.Idle; // 상호작용 상태 해제 -> 이것도 CharacterBase로 옮기고 싶은데, 어떻게?
             }
             else

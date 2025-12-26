@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using static KYM.PlayerEquipDTO;
 
 namespace KYM
 {
@@ -98,5 +100,43 @@ namespace KYM
             int playerGoldAmount = PlayerEconomyDTO.Gold;
             OnEconomyUpdated?.Invoke(playerGoldAmount);
         }
+
+        public PlayerEquipSlotData GetSameSlotEquip(EquipSlotType equipSlotType) 
+        {
+            PlayerEquipSlotData sameEquipSlotData = PlayerEquipDTO.PlayerEquipSlots.FirstOrDefault(i => i.SlotType == equipSlotType);
+
+            return sameEquipSlotData;
+        }
+        public void UpdateEquipedItemData(ItemDataSO itemDataSO) // 이게 맞나.... 일단 임시로라도. 나중에 장비 갈아끼울때 고쳐야할듯
+        {
+            // 같은 슬롯의 장비를 이미 장착하고 있다면, 변수로 가져옴.
+            PlayerEquipSlotData sameEquipSlotData = GetSameSlotEquip(itemDataSO.EquipSlotType);
+            if (sameEquipSlotData == null) // 같은 슬롯의 장비가 없었다면, 즉 빈 슬롯에 장비를 끼우는 거라면 
+            {
+                // 새로 슬롯 데이터를 만들어서 리스트에 넣어줌
+                PlayerEquipSlotData playerEquipSlotData = new PlayerEquipSlotData();
+                playerEquipSlotData.EquipedItemDataSO = itemDataSO;
+                playerEquipSlotData.SlotType = itemDataSO.EquipSlotType;
+                playerEquipSlotData.EquippedItemID = itemDataSO.ItemID;
+
+                PlayerEquipDTO.PlayerEquipSlots.Add(playerEquipSlotData);
+            }
+            else // 이미 같은 타입의 장비를 끼고 있었다면
+            {
+                // 슬롯 데이터만 갱신
+                sameEquipSlotData.EquipedItemDataSO = itemDataSO;
+                sameEquipSlotData.SlotType = itemDataSO.EquipSlotType;
+                sameEquipSlotData.EquippedItemID = itemDataSO.ItemID;
+            }
+        }
+        public void UneqiupItem(ItemDataSO itemDataSO) 
+        {
+            // 해제할 장비 슬롯의 데이터를 가져옴
+            PlayerEquipSlotData sameEquipSlotData = GetSameSlotEquip(itemDataSO.EquipSlotType);
+            
+            PlayerEquipDTO.PlayerEquipSlots.Remove(sameEquipSlotData); // 해당 장비 슬롯의 데이터를 리스트에서 삭제
+        }
+
+
     }
 }

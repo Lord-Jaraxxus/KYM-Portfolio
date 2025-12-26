@@ -7,34 +7,156 @@ namespace KYM
 {
     public class CharacterInfoUI : UIBase
     {
-        [SerializeField] private Image EquipIcon_Head;
-        [SerializeField] private Image EquipIcon_Body;
-        [SerializeField] private Image EquipIcon_Legs;
-        [SerializeField] private Image EquipIcon_Weapon;
-        [SerializeField] private Image EquipIcon_Shield;
+        // 콘텍스트 팝업 관련
+        [SerializeField] private Button modalButton;
+        [SerializeField] private GameObject panel;
+        [SerializeField] private Button unequipButton;
+        [SerializeField] private Button dropButton;
+        private ItemDataSO selectedEquipData = null;
 
-        public void SetIcon(ItemDataSO itemDataSO)
+        // 장비 슬롯 버튼들
+        [SerializeField] private Button button_Head;
+        [SerializeField] private Button button_Body;
+        [SerializeField] private Button button_Legs;
+        [SerializeField] private Button button_Weapon;
+        [SerializeField] private Button button_Shield;
+
+        // 장비 슬롯에 들어갈 아이콘들
+        [SerializeField] private Image icon_Head;
+        [SerializeField] private Image icon_Body;
+        [SerializeField] private Image icon_Legs;
+        [SerializeField] private Image icon_Weapon;
+        [SerializeField] private Image icon_Shield;
+
+
+
+        private void Awake()
         {
-            switch (itemDataSO.EquipSlotType)
+            modalButton.onClick.AddListener(OnClickModalButton);
+            unequipButton.onClick.AddListener(OnClickUnequipButton);
+            dropButton.onClick.AddListener(OnClickDropButton);
+
+            button_Head.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Head));
+            button_Body.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Body));
+            button_Legs.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Legs));
+            button_Weapon.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Weapon));
+            button_Shield.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Shield));
+        }
+
+
+        private void OnEnable()
+        {
+            panel.SetActive(false); // 버튼 패널 꺼두기
+            modalButton.gameObject.SetActive(false); // 모달도 꺼두기
+        }
+
+        public void SetIcon(EquipSlotType equipSlotType, ItemDataSO itemDataSO)
+        {
+            if (itemDataSO != null) // 장비 해제가 아니라면 (장착, 교체)
             {
-                case EquipSlotType.Head:
-                    EquipIcon_Head.sprite = itemDataSO.Icon;
-                    break;
-                case EquipSlotType.Body:
-                    EquipIcon_Body.sprite = itemDataSO.Icon;
-                    break;
-                case EquipSlotType.Legs:
-                    EquipIcon_Legs.sprite = itemDataSO.Icon;
-                    break;
-                case EquipSlotType.Weapon:
-                    EquipIcon_Weapon.sprite = itemDataSO.Icon;
-                    break;
-                case EquipSlotType.Shield:
-                    EquipIcon_Shield.sprite = itemDataSO.Icon;
-                    break;
-                default:
-                    break;
+                switch (equipSlotType)
+                {
+                    case EquipSlotType.Head:
+                        icon_Head.sprite = itemDataSO.Icon;
+                        icon_Head.enabled = true;
+                        break;
+                    case EquipSlotType.Body:
+                        icon_Body.sprite = itemDataSO.Icon;
+                        icon_Body.enabled = true;
+                        break;
+                    case EquipSlotType.Legs:
+                        icon_Legs.sprite = itemDataSO.Icon;
+                        icon_Legs.enabled = true;
+                        break;
+                    case EquipSlotType.Weapon:
+                        icon_Weapon.sprite = itemDataSO.Icon;
+                        icon_Weapon.enabled = true;
+                        break;
+                    case EquipSlotType.Shield:
+                        icon_Shield.sprite = itemDataSO.Icon;
+                        icon_Shield.enabled = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (equipSlotType)
+                {
+                    case EquipSlotType.Head:
+                        icon_Head.enabled = false;
+                        break;
+                    case EquipSlotType.Body:
+                        icon_Body.enabled = false;
+                        break;
+                    case EquipSlotType.Legs:
+                        icon_Legs.enabled = false;
+                        break;
+                    case EquipSlotType.Weapon:
+                        icon_Weapon.enabled = false;
+                        break;
+                    case EquipSlotType.Shield:
+                        icon_Shield.enabled = false;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+
+        private void SetPopupActive(bool isActive) 
+        {
+            panel.SetActive(isActive);
+            modalButton.gameObject.SetActive(isActive);
+        } 
+
+        private void OnClickEquipSlotButton(EquipSlotType slotType) 
+        {
+            PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(slotType);
+            if (sameSlotEquip != null) // 해당 슬롯에 장비가 있을 경우에만
+            {
+                selectedEquipData = sameSlotEquip.EquipedItemDataSO;
+
+                SetPopupActive(true);
+            }
+
+            // 팝업 위치 조정 (마우스 근처로 뜨게)
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);     //Screen 좌표계
+            mousePos.z = 0;
+
+            RectTransform panelRect = panel.GetComponent<RectTransform>();
+            RectTransform canvasRect = panel.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+
+            Vector2 localPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect,
+                Input.mousePosition,
+                null, // Screen Space - Overlay니까 null
+                out localPos
+            );
+
+            panelRect.anchoredPosition = localPos;
+        }
+
+        private void OnClickModalButton() 
+        {
+            SetPopupActive(false);
+        }
+
+        private void OnClickUnequipButton() 
+        {
+            // TODO : 장비를 해제하고 인벤토리에 돌려놓기.
+            CharacterBase playerCharacter = PlayerCharacterContext.Singleton.CurrentPlayerCharacter; // 현재 플레이어 캐릭터 가져옴
+            playerCharacter.UneqipItem(selectedEquipData);
+
+            SetPopupActive(false);
+        }
+
+        private void OnClickDropButton() 
+        {
+            SetPopupActive(false);
+        }
+
     }
 }

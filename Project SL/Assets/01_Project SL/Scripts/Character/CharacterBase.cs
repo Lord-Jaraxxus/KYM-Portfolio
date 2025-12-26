@@ -30,6 +30,7 @@ namespace KYM
         public event System.Action<float, float> OnHpChanged; // 체력 변경 이벤트 (CallBack), (현재 체력, 최대 체력)
         public event System.Action<float, float> OnSpChanged; // 스태미나 변경 이벤트 (CallBack), (현재 스태미나, 최대 스태미나)
         public event System.Action OnCharacterDeath; // 사망 이벤트 (CallBack)
+        public event System.Action<EquipSlotType ,ItemDataSO> OnEquipChanged; // 장비 변경 이벤트
 
         // 캐릭터 상태 관련 변수들
         [SerializeField] public CharacterState CurrentState { get; set; } = CharacterState.Idle;
@@ -328,7 +329,7 @@ namespace KYM
             animator.SetTrigger("AttackTrigger");
 
             // animator.SetInteger("AttackIndex", 0);
-            Debug.Log("Attack!");
+            // Debug.Log("Attack!");
         }
         public void Attack2()
         {
@@ -396,19 +397,48 @@ namespace KYM
             TakeDamage(damage);
         }
 
-        public void EquipItem(ItemDataSO itemDataSO) 
+        public void EquipItem(ItemDataSO itemDataSO)
         {
             // TODO : 장비템 착용 후 필요한 동작들
-            UserDataModel.Singleton.PlayerEquipDTO.EquipItem(itemDataSO);
 
-            // 여기서 이벤트를 보내는 게 맞는 것 같기는 한데?????? 일단 그냥 UI를 가져와서?
-            CharacterInfoUI characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
-            if (characterInfoUI != null) { characterInfoUI.SetIcon(itemDataSO); }
+
+            // 같은 슬롯의 장비를 이미 장착하고 있다면, 변수로 가져옴.       
+            PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(itemDataSO.EquipSlotType);
+            // 이미 같은 슬롯의 장비를 장착하고 있다면
+            if (sameSlotEquip != null)
+            {
+                UserDataModel.Singleton.AddItem(sameSlotEquip.EquippedItemID, 1); // 지금 장착한 장비를 다시 인벤토리로 보냄
+                UserDataModel.Singleton.UpdateEquipedItemData(itemDataSO); // 유저데이터에 장비템 바뀌었다고 갱신하기
+                Debug.Log("장비 교체!");
+            }
+            else // 해당 슬롯이 비어있었다면
+            {
+                UserDataModel.Singleton.UpdateEquipedItemData(itemDataSO);
+                Debug.Log("새 장비!");
+            }
+
+            // TODO : 실제로 아이템이 장착된 효과를 구현해야함
+
+            // 장착 아이템 변경 이벤트를 보냄, 일단 지금은 UI만 받고있음
+            OnEquipChanged?.Invoke(itemDataSO.EquipSlotType, itemDataSO);
         }
 
-        public void UneqipItem(ItemDataSO itemDataSO) 
+        public void UneqipItem(ItemDataSO itemDataSO)
         {
             // TODO : 장비탬 해제 후 필요한 동작들
+
+            // 선택된 슬롯의 장비를 변수로 가져옴. 없으면 리턴
+            PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(itemDataSO.EquipSlotType);
+            if (sameSlotEquip == null) 
+                return;
+
+            UserDataModel.Singleton.AddItem(sameSlotEquip.EquippedItemID, 1); // 지금 장착한 장비를 다시 인벤토리로 보냄
+            UserDataModel.Singleton.UneqiupItem(itemDataSO); // 그 다음에 UDM의 장비 슬롯 데이터를 갱신(삭제)
+
+            // 장착 아이템 변경 이벤트를 보냄, 일단 지금은 UI만 받고있음
+            OnEquipChanged?.Invoke(itemDataSO.EquipSlotType, null);
+
+            // TODO : 실제로 아이템이 해제됐을 때 효과를 구현해야함
         }
     }
 }

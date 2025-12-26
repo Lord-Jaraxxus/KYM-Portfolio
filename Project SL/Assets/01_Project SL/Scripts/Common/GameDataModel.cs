@@ -37,5 +37,14 @@ namespace KYM
 
             PlayerStatDto.initailize(playerStatSo); // 플레이어 스탯 데이터 초기화
         }
+
+        public ItemDataSO GetItemDataSO(string itemID)
+        {
+            // 받아온 PlayerItemData에서 ID를 가져와 Itembase에서 ID로 검색해서 해당 아이템의 itemDataSO를 가져옴, itemDataSO변수에 담김, 해당 ID의 아이템SO가 없으면 null 리턴
+            if (!ItemDatabase.ItemDatas.TryGetValue(itemID, out ItemDataSO itemDataSO))
+                return null;
+            else
+                return itemDataSO;
+        }
     }
 }

@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 namespace KYM
 {
     public class InventoryUI : UIBase
     {
+        // 콘텍스트 팝업 관련
         [SerializeField] private Button modalButton;
         [SerializeField] private GameObject panel;
         [SerializeField] private Button useButton;
@@ -55,6 +57,26 @@ namespace KYM
             Initiialize();
         }
 
+        private void AddInventoryItem(PlayerItemDTO.PlayerItemData item)
+        {
+            // 받아온 PlayerItemData에서 ID를 가져와 Itembase에서 ID로 검색해서 해당 아이템의 itemDataSO를 가져옴, itemDataSO변수에 담김, 해당 아이템의 SO가 없으면 리턴
+            if (!GameDataModel.Singleton.ItemDatabase.ItemDatas.TryGetValue(item.ItemID, out ItemDataSO itemDataSO))
+                return;
+
+            InfiniteUI_ListData newData = new InfiniteUI_ListData();
+            newData.itemID = itemDataSO.ItemID;
+            newData.color = Random.ColorHSV(); // 색은.. 아직 ㅎ; 굳이인가 싶기도 하고
+            newData.itemName = itemDataSO.ItemName;
+            newData.icon = itemDataSO.Icon;
+            newData.itemPrice = itemDataSO.Price;
+
+            // 얘는 따로 관리해야 하니까 PlayerItems에서 정보를 가져옴
+            newData.itemCount = item.ItemCount;
+
+            infiniteScroll.InsertData(newData);
+            infiniteDataContainer.Add(item.ItemID, newData);
+        }
+
         private void Initiialize()
         {
             infiniteScroll.ClearData();
@@ -62,22 +84,7 @@ namespace KYM
 
             foreach (PlayerItemDTO.PlayerItemData item in UserDataModel.Singleton.PlayerItemDto.PlayerItems)
             {
-                // 받아온 PlayerItemData에서 ID를 가져와 Itembase에서 ID로 검색해서 해당 아이템의 itemDataSO를 가져옴, itemDataSO변수에 담김, 해당 아이템의 SO가 없으면 리턴
-                if (!GameDataModel.Singleton.ItemDatabase.ItemDatas.TryGetValue(item.ItemID, out ItemDataSO itemDataSO))
-                    return;
-
-                InfiniteUI_ListData newData = new InfiniteUI_ListData();
-                newData.itemID = itemDataSO.ItemID;
-                newData.color = Random.ColorHSV(); // 색은.. 아직 ㅎ; 굳이인가 싶기도 하고
-                newData.itemName = itemDataSO.ItemName;
-                newData.icon = itemDataSO.Icon;
-                newData.itemPrice = itemDataSO.Price;
-
-                // 얘는 따로 관리해야 하니까 PlayerItems에서 정보를 가져옴
-                newData.itemCount = item.ItemCount;
-
-                infiniteScroll.InsertData(newData);
-                infiniteDataContainer.Add(item.ItemID, newData);
+                AddInventoryItem(item);
             }
         }
 
@@ -103,29 +110,24 @@ namespace KYM
             }
             else // 새로 인벤토리에 추가된 템인 경우
             {
-                // TODO : 새로운 Infinite Data 생성 후, infinite scroll 에 추가
-                InfiniteUI_ListData newData = new InfiniteUI_ListData();
-                newData.itemID = changedData.ItemID;
-                newData.color = Random.ColorHSV();
-                newData.itemName = changedData.ItemID;
-                newData.icon = null; // 어....? 맞다 아이콘은 PlayerItemData에는 없지; ItemSO 연결해야하나
-                newData.itemCount = changedData.ItemCount;
-                newData.itemPrice = 0; // 인벤토리에선 안쓰니까, 나중에 필요하면 뭐 바꾸지
-
-                infiniteScroll.InsertData(newData);
-                infiniteDataContainer.Add(changedData.ItemID, newData);
+                AddInventoryItem(changedData);
             }
+        }
+
+
+        private void SetPopupActive(bool isActive)
+        {
+            panel.SetActive(isActive);
+            modalButton.gameObject.SetActive(isActive);
         }
 
         // 아이템 버튼을 눌렀을 때, InfiniteUI_ListItem에서 이벤트가 날아오면 실행
         public void OnClickItemButton(InfiniteUI_ListData data)
         {
-            panel.SetActive(true); // 팝업 패널 활성화
-            modalButton.gameObject.SetActive(true); // 모달도 같이 활성화
+            SetPopupActive(true); // 팝업 활성화
 
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);     //Screen 좌표계
             mousePos.z = 0;
-
 
             RectTransform panelRect = panel.GetComponent<RectTransform>();
             RectTransform canvasRect = panel.GetComponentInParent<Canvas>().GetComponent<RectTransform>();
@@ -145,20 +147,18 @@ namespace KYM
 
         private void OnclickModalButton()
         {
-            panel.SetActive(false); // 팝업 패널 비활성화
-            modalButton.gameObject.SetActive(false); // 모달도 같이 비활성화
+            SetPopupActive(false); // 팝업 비활성화
 
             selectedItemData = null;
         }
 
         private void OnClickUseButton()
         {
-            panel.SetActive(false); // 팝업 패널 비활성화
-            modalButton.gameObject.SetActive(false); // 모달도 같이 비활성화
+            SetPopupActive(false); // 팝업 비활성화
 
             // TODO : 아이템 사용, 즉 아이템 갯수를 1개 줄이고 0개가 되면 인벤토리에서 없애기 + 장비면 장착, 소모품이면 효과 적용 해야함...;
 
-            ItemDataSO itemDataSO = GameDataModel.Singleton.ItemDatabase.GetItemDataSO(selectedItemData.itemID); // ID를 통해 아이템데이터베이스에서 ItemSO를 가져옴
+            ItemDataSO itemDataSO = GameDataModel.Singleton.GetItemDataSO(selectedItemData.itemID); // ID를 통해 아이템데이터베이스에서 ItemSO를 가져옴
             IItemAction itemAction = ItemActionFactory.Create(itemDataSO); // 아이템 액션 인스턴스 생성
             CharacterBase playerCharacter = PlayerCharacterContext.Singleton.CurrentPlayerCharacter; // 현재 플레이어 캐릭터 가져옴
 
