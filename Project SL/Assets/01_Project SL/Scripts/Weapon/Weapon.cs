@@ -23,7 +23,9 @@ namespace KYM
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.gameObject.layer == weaponOwner.gameObject.layer) return; // 아군 피격 방지
+            if (other.transform.root == weaponOwner.transform.root) return; // 자기 자신 피격 방지
+
+            // if (other.gameObject.layer == weaponOwner.gameObject.layer) return; // 아군 피격 방지 <- 이건 레이어를 아끼기 위해서 빼는게 좋다 하심
 
             HitboxPart part = other.GetComponent<HitboxPart>();
             if (part == null) return; 

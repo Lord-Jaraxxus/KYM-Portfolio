@@ -322,11 +322,6 @@ namespace KYM
             // Debug.Log("Attack!");
         }
 
-        public void Root()
-        {
-            animator.SetTrigger("RootTrigger");
-        }
-
         public void Die()
         {
             if (CurrentState == CharacterState.Dead) return; // 이미 사망 상태이면 종료
