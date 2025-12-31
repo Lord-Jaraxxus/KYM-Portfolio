@@ -9,6 +9,9 @@ namespace KYM
 {
     public class PlayerController : MonoBehaviour
     {
+        public static PlayerController Instance { get; private set; }
+        public CharacterBase LinkedCharacter => linkedCharacter;
+
         [field: SerializeField] public Transform CinemachineCameraTarget { get; private set; }
 
         private CharacterBase linkedCharacter;
@@ -29,6 +32,8 @@ namespace KYM
 
         private void Awake()
         {
+            Instance = this;
+
             linkedCharacter = GetComponent<CharacterBase>();
             PlayerCharacterContext.Singleton.Register(linkedCharacter); // 플레이어 캐릭터 등록
             mainCamera = Camera.main;
@@ -80,6 +85,8 @@ namespace KYM
 
         private void OnDestroy()
         {
+            Instance = null;
+
             if (linkedCharacter != null) // 연결된 캐릭터가 존재한다면
             {
                 var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);

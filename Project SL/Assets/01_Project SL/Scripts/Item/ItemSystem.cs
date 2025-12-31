@@ -12,7 +12,8 @@ namespace KYM
 
             ItemDataSO itemDataSO = GameDataModel.Singleton.GetItemDataSO(itemID); // ID를 통해 아이템데이터베이스에서 ItemSO를 가져옴
             IItemAction itemAction = ItemActionFactory.Create(itemDataSO); // 아이템 액션 인스턴스 생성
-            CharacterBase playerCharacter = PlayerCharacterContext.Singleton.CurrentPlayerCharacter; // 현재 플레이어 캐릭터 가져옴
+            CharacterBase playerCharacter = PlayerController.Instance.LinkedCharacter; // 현재 플레이어 캐릭터 가져옴
+
 
             if (itemAction is IUsableItem usable) // 사용한 아이템이 소모품일 경우
             {
