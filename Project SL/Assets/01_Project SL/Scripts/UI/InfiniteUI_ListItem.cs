@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace KYM
 {
-    public class InfiniteUI_ListData : Gpm.Ui.InfiniteScrollData 
+    public class InfiniteUI_ListData : Gpm.Ui.InfiniteScrollData
     {
         public Color color;
         public Sprite icon;
@@ -59,7 +59,23 @@ namespace KYM
             itemNameText.text = listData.itemName;
             itemCountText.text = $"x {listData.itemCount}";
 
-            if (itemPriceText != null) { itemPriceText.text = $"{listData.itemPrice}G"; }  // itemPriceText가 없다면 ㄴㄴ. 인벤토리엔 가격표시가 없으니까 따로 빼둠
+            if (itemPriceText != null) // itemPriceText가 있다면 (상점이라면). 인벤토리엔 가격표시가 없으니까 따로 빼둠
+            {
+                itemPriceText.text = $"{listData.itemPrice}G";
+
+                if (listData.itemCount <= 0) // 아이템이 0개 이하라면. 
+                {
+                    itemButton.interactable = false; // 구매 버튼 비활성화
+                }
+                else if (listData.itemPrice > UserDataModel.Singleton.PlayerEconomyDTO.Gold) // 플레이어가 가진 골드보다 아이템 가격이 더 비싸다면
+                {
+                    itemButton.interactable = false; // 구매 버튼 비활성화
+                }
+                else // 둘 다 아니라면
+                {
+                    itemButton.interactable = true; // 구매 버튼 활성화
+                }
+            }  
         }
 
         private void OnClickItemButton()

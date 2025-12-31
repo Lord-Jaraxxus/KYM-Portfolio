@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 namespace KYM
 {
@@ -78,6 +79,23 @@ namespace KYM
             }
         }
 
+        private void InsertShopItem(ItemDataSO item) 
+        {
+            InfiniteUI_ListData newData = new InfiniteUI_ListData();
+            newData.itemID = item.ItemID;
+            newData.icon = item.Icon;
+            newData.itemName = item.ItemName;
+            newData.itemPrice = item.Price;
+            newData.color = Color.gray; // Default color for shop items
+
+            // 재고 수량은 UserDataModel에서 따로 관리중인걸 가져와서 반영
+            PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
+            newData.itemCount = itemStock.ItemCount;
+
+            infiniteScroll.InsertData(newData);
+            infiniteDataContainer.Add(item.ItemID, newData);
+        }
+
         private void Initiialize()  // 초기화 함수, 상점UI 맨 처음 부를때만 호출되도록 -> 근데 상점 여러개 만들면 어떡함?;;
         {
             infiniteScroll.ClearData();
@@ -96,21 +114,9 @@ namespace KYM
             }
 
             // GameDataModel에서 상점 재고 데이터 불러와서 인피니티 스크롤에 데이터 삽입
-            foreach (var item in shopDataSO.ItemsForSale)
+            foreach (ItemDataSO item in shopDataSO.ItemsForSale)
             {
-                InfiniteUI_ListData newData = new InfiniteUI_ListData();
-                newData.itemID = item.ItemID;
-                newData.icon = item.Icon;
-                newData.itemName = item.ItemName;
-                newData.itemPrice = item.Price;
-                newData.color = Color.gray; // Default color for shop items
-
-                // 재고 수량은 UserDataModel에서 따로 관리중인걸 가져와서 반영
-                PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
-                newData.itemCount = itemStock.ItemCount;
-
-                infiniteScroll.InsertData(newData);
-                infiniteDataContainer.Add(item.ItemID, newData);
+                InsertShopItem(item);
             }
         }
 
@@ -119,25 +125,14 @@ namespace KYM
             infiniteScroll.ClearData();
             infiniteDataContainer.Clear();
 
-            foreach (var item in shopDataSO.ItemsForSale)
+            foreach (ItemDataSO item in shopDataSO.ItemsForSale)
             {
                 if (item.ItemCategory != Currentcategory && Currentcategory != ItemCategory.All)
                 {
                     continue;// 현재 카테고리에 해당하지 않는 아이템은 건너뜀
                 }
 
-                InfiniteUI_ListData newData = new InfiniteUI_ListData();
-                newData.itemID = item.ItemID;
-                newData.icon = item.Icon;
-                newData.itemName = item.ItemName;
-                newData.itemPrice = item.Price;
-                newData.color = Color.gray; // Default color for shop items
-
-                PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
-                newData.itemCount = itemStock.ItemCount; // 재고 수량은 유저 데이터에서 따로 관리중인걸 가져와서 반영
-
-                infiniteScroll.InsertData(newData);
-                infiniteDataContainer.Add(item.ItemID, newData);
+                InsertShopItem(item);
             }
         }
 
@@ -179,7 +174,7 @@ namespace KYM
                 Debug.LogError("구매한 아이템이 존재하지 않습니다. 아이템 이름: " + data.itemName);
             }
 
-            // TODO : 수량 0 이하로 내려갔을때 처리 필요 (상점에서 제거 등)
+            RefreshShopList(); // 플레이어 소지 골드보다 비싼 아이템들은 구매 불가 처리 위해 상점 리스트 새로고침
         }
 
         private void OnClickExitButton()
