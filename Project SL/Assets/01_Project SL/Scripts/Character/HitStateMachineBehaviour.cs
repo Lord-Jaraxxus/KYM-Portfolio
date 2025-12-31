@@ -15,12 +15,12 @@ namespace KYM
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            this.linkedCharacter.CurrentState = CharacterState.Hit;
+            this.linkedCharacter.SetCharacterState(CharacterState.Hit);
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            this.linkedCharacter.CurrentState = CharacterState.Idle;
+            this.linkedCharacter.SetCharacterState(CharacterState.Idle);
         }
     }
 }

@@ -125,6 +125,7 @@ namespace KYM
         public class ShopData // 상점 하나의 재고 데이터
         {
             public string ShopID { get; private set; } // 상점 ID
+            // public List<(string /* Item ID */, int /* Item Count */)> ItemStocks;  // 아이템 재고 초기 데이터용 튜플 리스트, 이런 구조로 써도 된다
             public List<ItemStock> ItemStocks { get; private set; } = new List<ItemStock>(); // 아이템 재고 리스트
 
             public ShopData(string shopID)

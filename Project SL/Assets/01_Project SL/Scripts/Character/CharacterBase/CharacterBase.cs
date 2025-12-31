@@ -33,7 +33,7 @@ namespace KYM
         public event System.Action<EquipSlotType ,ItemDataSO> OnEquipChanged; // 장비 변경 이벤트
 
         // 캐릭터 상태 관련 변수들
-        [SerializeField] public CharacterState CurrentState { get; set; } = CharacterState.Idle;
+        [field:SerializeField] public CharacterState CurrentState { get; private set; } = CharacterState.Idle;
         CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Move 동작 진입이 불가한 상태들
         CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Attack 동작 진입이 불가한 상태들
         CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack, CharacterState.Hit, CharacterState.Dead }; // 상호작용 동작 진입이 불가 상태들
@@ -282,7 +282,7 @@ namespace KYM
         }
 
 
-        public void SetCharacterState(CharacterState state) // 캐릭터 상태를 내부적으로 변경하기 위한 함수
+        public void SetCharacterState(CharacterState state) // 캐릭터 상태를 외부에서 변경하기 위한 함수
         {
             CurrentState = state;
         }
