@@ -1977,6 +1977,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: KYM.Character
       objectReference: {fileID: 0}
+    - target: {fileID: 5875796034332653162, guid: b78374036e6477343b3cda32a63da078, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8566497838619086728, guid: b78374036e6477343b3cda32a63da078, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

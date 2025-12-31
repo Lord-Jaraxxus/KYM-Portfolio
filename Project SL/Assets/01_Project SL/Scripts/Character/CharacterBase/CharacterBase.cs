@@ -24,7 +24,7 @@ namespace KYM
         public AnimationEventListener AnimationEventListener => animationEventListener;
         private AnimationEventListener animationEventListener { get; set; }
 
-        [SerializeField] private Weapon weapon; // 일단 인스펙터에서 연결, 나중에 자동으로 바꿔도?
+        [SerializeField] private Weapon weapon; // Awake에서 GetComponentInChildren으로 가져옴
 
         // 이벤트들
         public event System.Action<float, float> OnHpChanged; // 체력 변경 이벤트 (CallBack), (현재 체력, 최대 체력)
@@ -76,6 +76,7 @@ namespace KYM
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
             animationEventListener = GetComponent<AnimationEventListener>();
+            weapon = GetComponentInChildren<Weapon>();
 
             // State Machine Behaviour에 이 캐릭터 인스턴스 연결
             var attackState = animator.GetBehaviour<AttackStateMachineBehaviour>();
@@ -359,13 +360,15 @@ namespace KYM
         {
             if (hitBlockedStates.Contains(CurrentState)) { return; }   // 죽었는데 피격되면 안되니까
 
-            // 현재 실행중일 수도 있는 애니메이션 트리거 초기화
-            animator.ResetTrigger("AttackTrigger");
-            animator.ResetTrigger("RootTrigger");
-            animator.ResetTrigger("HitTrigger");
+            //// 현재 실행중일 수도 있는 애니메이션 트리거 초기화 <- 필요없을지도?
+            //animator.ResetTrigger("AttackTrigger");
+            //animator.ResetTrigger("RootTrigger");
+            //animator.ResetTrigger("HitTrigger");
 
             // TODO : 피격 시 애니메이션 재생 -> StateMachineBehaviour에서 캐릭터 상태 피격상태로 전환
             animator.SetTrigger("HitTrigger");
+
+            weapon?.DisableHitbox(); // 피격 시 무기 히트박스 비활성화
 
             TakeDamage(damage);
         }
