@@ -18,19 +18,23 @@ namespace KYM
 
     public partial class CharacterBase : MonoBehaviour, IHittable
     {
-        // Third Party...? 아무튼 뭐 애니메이터, 캐릭터 컨트롤러, 애니메이션 이벤트 리스너, 무기 등등 그런것들
+        // Third Party...? 아무튼 뭐 애니메이터, 캐릭터 컨트롤러, 애니메이션 이벤트 리스너 등등 그런것들
         [SerializeField] private Animator animator;
         [SerializeField] private CharacterController characterController;
         public AnimationEventListener AnimationEventListener => animationEventListener;
         private AnimationEventListener animationEventListener { get; set; }
 
-        [SerializeField] private Weapon weapon; // Awake에서 GetComponentInChildren으로 가져옴
+        // 무기 & 장비들
+        [SerializeField] private WeaponHitbox weapon; // Awake에서 GetComponentInChildren으로 가져옴
+        public List<CharacterEquipment> CharacterEquipments => characterEquipments;
+        [SerializeField] private List<CharacterEquipment> characterEquipments = new List<CharacterEquipment>();
+
 
         // 이벤트들
         public event System.Action<float, float> OnHpChanged; // 체력 변경 이벤트 (CallBack), (현재 체력, 최대 체력)
         public event System.Action<float, float> OnSpChanged; // 스태미나 변경 이벤트 (CallBack), (현재 스태미나, 최대 스태미나)
         public event System.Action OnCharacterDeath; // 사망 이벤트 (CallBack)
-        public event System.Action<EquipSlotType ,ItemDataSO> OnEquipChanged; // 장비 변경 이벤트
+        public event System.Action<ItemDataSO /*Before*/, ItemDataSO /*After*/> OnEquipChanged; // 장비 변경 이벤트
 
         // 캐릭터 상태 관련 변수들
         [field:SerializeField] public CharacterState CurrentState { get; private set; } = CharacterState.Idle;
@@ -76,7 +80,7 @@ namespace KYM
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
             animationEventListener = GetComponent<AnimationEventListener>();
-            weapon = GetComponentInChildren<Weapon>();
+            weapon = GetComponentInChildren<WeaponHitbox>();
 
             // State Machine Behaviour에 이 캐릭터 인스턴스 연결
             var attackState = animator.GetBehaviour<AttackStateMachineBehaviour>();
@@ -373,46 +377,45 @@ namespace KYM
             TakeDamage(damage);
         }
 
-        public void EquipItem(ItemDataSO itemDataSO)
+        public void EquipItem(ItemDataSO newEquipSO)
         {
             // TODO : 장비템 착용 후 필요한 동작들
 
+            // TODO : 캐릭터의 저기 장비 리스트에 우겨넣어야함
 
-            // 같은 슬롯의 장비를 이미 장착하고 있다면, 변수로 가져옴.       
-            PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(itemDataSO.EquipSlotType);
-            // 이미 같은 슬롯의 장비를 장착하고 있다면
-            if (sameSlotEquip != null)
+            // 같은 슬롯의 장비를 이미 장착하고 있다면, 변수로 가져옴.
+            CharacterEquipment beforeEquip = characterEquipments.Find(e => e.equipSlotType == newEquipSO.EquipSlotType);
+            ItemDataSO beforeEquipSO = beforeEquip?.itemDataSO;
+
+            if (beforeEquip == null) // 해당 슬롯에 새로 장착하는 거라면
             {
-                UserDataModel.Singleton.AddItem(sameSlotEquip.EquippedItemID, 1); // 지금 장착한 장비를 다시 인벤토리로 보냄
-                UserDataModel.Singleton.UpdateEquipedItemData(itemDataSO); // 유저데이터에 장비템 바뀌었다고 갱신하기
-                Debug.Log("장비 교체!");
+                CharacterEquipment newEquip = gameObject.AddComponent<CharacterEquipment>(); // 장비 클래스를 새로 만듬
+                newEquip.equipSlotType = newEquipSO.EquipSlotType; // 슬롯 타입 설정
+                newEquip.ChangeEquipment(null, newEquipSO); // 장비 변경 메서드 호출 (이전 장비는 없으니 null)
+                characterEquipments.Add(newEquip); // 캐릭터 장비 리스트에 추가
             }
-            else // 해당 슬롯이 비어있었다면
+            else // 변경이라면
             {
-                UserDataModel.Singleton.UpdateEquipedItemData(itemDataSO);
-                Debug.Log("새 장비!");
+                beforeEquip.ChangeEquipment(beforeEquip.itemDataSO, newEquipSO); // 장비 변경 메서드 호출
             }
 
-            // TODO : 실제로 아이템이 장착된 효과를 구현해야함
+            // TODO : 실제로 아이템이 장착된 효과를 구현해야함 (ex - 장비에 따른 외형 변경, 능력치 변경 등)
 
             // 장착 아이템 변경 이벤트를 보냄, 일단 지금은 UI만 받고있음
-            OnEquipChanged?.Invoke(itemDataSO.EquipSlotType, itemDataSO);
+            OnEquipChanged?.Invoke(beforeEquipSO, newEquipSO);
         }
 
         public void UneqipItem(ItemDataSO itemDataSO)
         {
             // TODO : 장비탬 해제 후 필요한 동작들
 
-            // 선택된 슬롯의 장비를 변수로 가져옴. 없으면 리턴
-            PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(itemDataSO.EquipSlotType);
-            if (sameSlotEquip == null) 
-                return;
-
-            UserDataModel.Singleton.AddItem(sameSlotEquip.EquippedItemID, 1); // 지금 장착한 장비를 다시 인벤토리로 보냄
-            UserDataModel.Singleton.UneqiupItem(itemDataSO); // 그 다음에 UDM의 장비 슬롯 데이터를 갱신(삭제)
+            // 선택된 슬롯의 장비를 가져옴.
+            CharacterEquipment beforeEquip = characterEquipments.Find(e => e.equipSlotType == itemDataSO.EquipSlotType);
+            ItemDataSO beforeEquipSO = beforeEquip?.itemDataSO;
+            beforeEquip.ChangeEquipment(beforeEquip.itemDataSO, null); // 장비 변경 메서드 호출
 
             // 장착 아이템 변경 이벤트를 보냄, 일단 지금은 UI만 받고있음
-            OnEquipChanged?.Invoke(itemDataSO.EquipSlotType, null);
+            OnEquipChanged?.Invoke(beforeEquipSO, null);
 
             // TODO : 실제로 아이템이 해제됐을 때 효과를 구현해야함
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class Weapon : MonoBehaviour
+    public class WeaponHitbox : MonoBehaviour
     {
         [SerializeField] private CharacterBase weaponOwner; // 이 무기의 주인 캐릭터
         public CharacterBase HittedCharacter => hittedCharacter;

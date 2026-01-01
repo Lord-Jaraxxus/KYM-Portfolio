@@ -68,6 +68,7 @@ namespace KYM
             UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
             shopUI.OnShopClosed += linkedCharacter.SetCharacterState; // 상점 닫기 버튼 클릭시 (상점 닫힐시) 플레이어 상태 변경
             linkedCharacter.OnEquipChanged += characterInfoUI.SetIcon; // 장착 아이템 변경시 장비창의 아이콘 갱신
+            linkedCharacter.OnEquipChanged += OnEquipChanged; // 장착 아이템 변경시 콜백 추가
 
             // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
@@ -265,6 +266,38 @@ namespace KYM
             if (angle < -360f) angle += 360f;
             if (angle > 360f) angle -= 360f;
             return Mathf.Clamp(angle, min, max);
+        }
+
+        // 플레이어 캐릭터의 장착 아이템 변경시 호출되는 콜백
+        private void OnEquipChanged(ItemDataSO beforeEquipSO, ItemDataSO newEquipSO) 
+        {
+            if (newEquipSO != null) // 장비 해제가 아니라면 (새로 장착 or 교체)
+            {
+                // 같은 슬롯의 장비를 이미 장착하고 있다면, 변수로 가져옴.
+                PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(newEquipSO.EquipSlotType);
+                // 이미 같은 슬롯의 장비를 장착하고 있다면
+                if (sameSlotEquip != null)
+                {
+                    UserDataModel.Singleton.AddItem(sameSlotEquip.EquippedItemID, 1); // 지금 장착한 장비를 다시 인벤토리로 보냄
+                    UserDataModel.Singleton.UpdateEquipedItemData(newEquipSO); // 유저데이터에 장비템 바뀌었다고 갱신하기
+                    Debug.Log("장비 교체!");
+                }
+                else // 해당 슬롯이 비어있었다면
+                {
+                    UserDataModel.Singleton.UpdateEquipedItemData(newEquipSO);
+                    Debug.Log("새 장비!");
+                }
+            }
+            else // 장비 해제라면
+            {
+                // 선택된 슬롯의 장비를 변수로 가져옴. 없으면 리턴
+                PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(beforeEquipSO.EquipSlotType);
+                if (sameSlotEquip == null)
+                    return;
+
+                UserDataModel.Singleton.AddItem(sameSlotEquip.EquippedItemID, 1); // 지금 장착한 장비를 다시 인벤토리로 보냄
+                UserDataModel.Singleton.UneqiupItem(beforeEquipSO); // 그 다음에 UDM의 장비 슬롯 데이터를 갱신(삭제)
+            }
         }
     }
 }

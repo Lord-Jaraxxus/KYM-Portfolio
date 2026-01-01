@@ -36,13 +36,12 @@ namespace KYM
             unequipButton.onClick.AddListener(OnClickUnequipButton);
             dropButton.onClick.AddListener(OnClickDropButton);
 
-            button_Head.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Head));
-            button_Body.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Body));
-            button_Legs.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Legs));
-            button_Weapon.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Weapon));
-            button_Shield.onClick.AddListener(() => OnClickEquipSlotButton(EquipSlotType.Shield));
+            button_Head.onClick.AddListener(OnClickSlotButton_Head);
+            button_Body.onClick.AddListener(OnClickSlotButton_Body);
+            button_Legs.onClick.AddListener(OnClickSlotButton_Legs);
+            button_Weapon.onClick.AddListener(OnClickSlotButton_Weapon);
+            button_Shield.onClick.AddListener(OnClickSlotButton_Shield);
         }
-
 
         private void OnEnable()
         {
@@ -50,39 +49,46 @@ namespace KYM
             modalButton.gameObject.SetActive(false); // 모달도 꺼두기
         }
 
-        public void SetIcon(EquipSlotType equipSlotType, ItemDataSO itemDataSO)
+        public void OnClickSlotButton(EquipSlotType type) => OnClickEquipSlotButton(type);
+        public void OnClickSlotButton_Head() => OnClickEquipSlotButton(EquipSlotType.Head);
+        public void OnClickSlotButton_Body() => OnClickEquipSlotButton(EquipSlotType.Body);
+        public void OnClickSlotButton_Legs() => OnClickEquipSlotButton(EquipSlotType.Legs);
+        public void OnClickSlotButton_Weapon() => OnClickEquipSlotButton(EquipSlotType.Weapon);
+        public void OnClickSlotButton_Shield() => OnClickEquipSlotButton(EquipSlotType.Shield);
+
+        public void SetIcon(ItemDataSO beforeEquipSO, ItemDataSO newEquipSO)
         {
-            if (itemDataSO != null) // 장비 해제가 아니라면 (장착, 교체)
+            if (newEquipSO != null) // 장비 해제가 아니라면 (장착, 교체)
             {
-                switch (equipSlotType)
+                switch (newEquipSO.EquipSlotType)
                 {
                     case EquipSlotType.Head:
-                        icon_Head.sprite = itemDataSO.Icon;
+                        icon_Head.sprite = newEquipSO.Icon;
                         icon_Head.enabled = true;
                         break;
                     case EquipSlotType.Body:
-                        icon_Body.sprite = itemDataSO.Icon;
+                        icon_Body.sprite = newEquipSO.Icon;
                         icon_Body.enabled = true;
                         break;
                     case EquipSlotType.Legs:
-                        icon_Legs.sprite = itemDataSO.Icon;
+                        icon_Legs.sprite = newEquipSO.Icon;
                         icon_Legs.enabled = true;
                         break;
                     case EquipSlotType.Weapon:
-                        icon_Weapon.sprite = itemDataSO.Icon;
+                        icon_Weapon.sprite = newEquipSO.Icon;
                         icon_Weapon.enabled = true;
                         break;
                     case EquipSlotType.Shield:
-                        icon_Shield.sprite = itemDataSO.Icon;
+                        icon_Shield.sprite = newEquipSO.Icon;
                         icon_Shield.enabled = true;
                         break;
                     default:
                         break;
                 }
             }
-            else
+            else // 장비 해제라면
             {
-                switch (equipSlotType)
+                switch (beforeEquipSO.EquipSlotType)
                 {
                     case EquipSlotType.Head:
                         icon_Head.enabled = false;
