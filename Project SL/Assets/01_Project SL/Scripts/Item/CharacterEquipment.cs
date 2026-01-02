@@ -12,8 +12,7 @@ namespace KYM
 
         // 나중에 모델링 갈아끼울때를 위한 변수
         public GameObject equipModeling; // 모델링? 프리펩?
-        public Transform equipPoint; // 장비가 장착될 위치
-        // public Rotate rotate; // 회전도 있어야 할 것 같은데
+        public Transform equipPoint; // 장비가 장착될 트랜스폼
 
         public void ChangeEquipment(ItemDataSO beforeEquipSO, ItemDataSO newEqiupSO) 
         {

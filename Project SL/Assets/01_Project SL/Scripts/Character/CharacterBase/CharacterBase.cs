@@ -25,7 +25,7 @@ namespace KYM
         private AnimationEventListener animationEventListener { get; set; }
 
         // 무기 & 장비들
-        [SerializeField] private WeaponHitbox weapon; // Awake에서 GetComponentInChildren으로 가져옴
+        [SerializeField] private WeaponHitbox weaponHitBox; // Awake에서 GetComponentInChildren으로 가져옴
         public List<CharacterEquipment> CharacterEquipments => characterEquipments;
         [SerializeField] private List<CharacterEquipment> characterEquipments = new List<CharacterEquipment>();
 
@@ -80,7 +80,7 @@ namespace KYM
             animator = GetComponent<Animator>();
             characterController = GetComponent<CharacterController>();
             animationEventListener = GetComponent<AnimationEventListener>();
-            weapon = GetComponentInChildren<WeaponHitbox>();
+            weaponHitBox = GetComponentInChildren<WeaponHitbox>();
 
             // State Machine Behaviour에 이 캐릭터 인스턴스 연결
             var attackState = animator.GetBehaviour<AttackStateMachineBehaviour>();
@@ -157,11 +157,11 @@ namespace KYM
             switch (eventName)
             {
                 case "EnableHitbox":
-                    weapon?.EnableHitbox(); // 무기가 없으면 ?로 일단 거름
+                    weaponHitBox?.EnableHitbox(); // 무기가 없으면 ?로 일단 거름
                     // Debug.Log("Enable Hitbox");
                     break;
                 case "DisableHitbox":
-                    weapon?.DisableHitbox();
+                    weaponHitBox?.DisableHitbox();
                     // Debug.Log("Disable Hitbox");
                     break;
                 case "EndCombo":
@@ -372,7 +372,7 @@ namespace KYM
             // TODO : 피격 시 애니메이션 재생 -> StateMachineBehaviour에서 캐릭터 상태 피격상태로 전환
             animator.SetTrigger("HitTrigger");
 
-            weapon?.DisableHitbox(); // 피격 시 무기 히트박스 비활성화
+            weaponHitBox?.DisableHitbox(); // 피격 시 무기 히트박스 비활성화
 
             TakeDamage(damage);
         }
