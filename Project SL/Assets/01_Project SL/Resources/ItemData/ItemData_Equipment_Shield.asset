@@ -21,3 +21,7 @@ MonoBehaviour:
   Price: 1200
   ItemActionType: 1
   EquipSlotType: 5
+  EquipmentStat:
+    Attack: 0
+    Defense: 10
+  ItemVisualPrefab: {fileID: 0}

@@ -12,6 +12,8 @@ namespace KYM
         Consumable = 3,
         Quest = 4,
     }
+
+    [System.Serializable]
     public struct EquipmentStat 
     {
         public int Attack;
@@ -33,5 +35,7 @@ namespace KYM
         public ItemActionType ItemActionType;
         public EquipSlotType EquipSlotType;
         public EquipmentStat EquipmentStat;
+
+        public GameObject ItemVisualPrefab; // æ∆¿Ã≈€ ∫Ò¡ÍæÛ(∏µ®∏µ) «¡∏Æ∆’
     }
 }

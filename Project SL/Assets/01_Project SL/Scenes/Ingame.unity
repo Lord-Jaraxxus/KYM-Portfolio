@@ -223,6 +223,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 39557888d0596ba46b3da183e1e229a1, type: 2}
+  quantity: 1
 --- !u!65 &76045591
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -342,6 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 64de9aa4c6d1f764b95d4ef6cd088d67, type: 2}
+  quantity: 1
 --- !u!65 &260658259
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -630,6 +632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 6b76ae64b7815904c97cc8ea30808268, type: 2}
+  quantity: 1
 --- !u!65 &509688110
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -863,6 +866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 27df3ec96655eb04b93289e07fe876ab, type: 2}
+  quantity: 1
 --- !u!65 &784692353
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1189,6 +1193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: fa7e7216b06b5d043b882d0e4aa9a147, type: 2}
+  quantity: 1
 --- !u!65 &1501052002
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1308,6 +1313,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 2e633700e2bb7b347b0dc434eb56c0c3, type: 2}
+  quantity: 1
 --- !u!65 &1503236353
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1521,6 +1527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 328fab10cfc90df408c1b9174932440d, type: 2}
+  quantity: 1
 --- !u!65 &1690083871
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1976,6 +1983,14 @@ PrefabInstance:
     - target: {fileID: 4048850845184244662, guid: b78374036e6477343b3cda32a63da078, type: 3}
       propertyPath: m_Name
       value: KYM.Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 5875796034332653162, guid: b78374036e6477343b3cda32a63da078, type: 3}
+      propertyPath: attack
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5875796034332653162, guid: b78374036e6477343b3cda32a63da078, type: 3}
+      propertyPath: defense
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8272958226977094326, guid: b78374036e6477343b3cda32a63da078, type: 3}
       propertyPath: m_IsActive

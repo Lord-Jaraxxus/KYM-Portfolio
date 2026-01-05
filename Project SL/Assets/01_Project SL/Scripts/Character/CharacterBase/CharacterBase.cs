@@ -36,13 +36,6 @@ namespace KYM
         public event System.Action OnCharacterDeath; // 사망 이벤트 (CallBack)
         public event System.Action<ItemDataSO /*Before*/, ItemDataSO /*After*/> OnEquipChanged; // 장비 변경 이벤트
 
-        // 캐릭터 상태 관련 변수들
-        [field:SerializeField] public CharacterState CurrentState { get; private set; } = CharacterState.Idle;
-        CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Move 동작 진입이 불가한 상태들
-        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Attack 동작 진입이 불가한 상태들
-        CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack, CharacterState.Hit, CharacterState.Dead }; // 상호작용 동작 진입이 불가 상태들
-        CharacterState[] hitBlockedStates = { CharacterState.Dead }; // 피격 동작 진입이 불가한 상태들
-
         // 캐릭터 스텟 관련 변수들
         private CharacterStatDataSO characterStat; // 캐릭터 스탯 데이터 (ScriptableObject)
         public float MaxHP => maxHP;
@@ -56,6 +49,20 @@ namespace KYM
         [SerializeField] private float maxSP; // 최대 스태미나
         [SerializeField] private float curSP; // 현재 스태미나
         [SerializeField] private float moveSpeed; // 이동 속도
+
+        // 장비와 관련되는 스텟 관련 변수들
+        public float Attack => attack;
+        public float Defense => defense;
+        [SerializeField] private float attack; // 공격력
+        [SerializeField] private float defense; // 방어력
+
+
+        // 캐릭터 상태 관련 변수들
+        [field: SerializeField] public CharacterState CurrentState { get; private set; } = CharacterState.Idle;
+        CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Move 동작 진입이 불가한 상태들
+        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Attack 동작 진입이 불가한 상태들
+        CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack, CharacterState.Hit, CharacterState.Dead }; // 상호작용 동작 진입이 불가 상태들
+        CharacterState[] hitBlockedStates = { CharacterState.Dead }; // 피격 동작 진입이 불가한 상태들
 
         // 캐릭터 이동 + 카메라 관련 변수들
         public bool IsWalk { get; set; } = false;
@@ -340,7 +347,10 @@ namespace KYM
 
         public float TakeDamage(float damage)
         {
-            curHP -= damage;
+            // 방어력 계산, 일단 방어력만큼 고정값으로 데미지 깎이도록, 나중에 퍼센트 계산으로 갈수도?
+            float finalDamage = Mathf.Max(0f, damage - Defense); // 0보다 작아지면 안되니까 방어력 뺀 값이 음수면 0으로 처리
+
+            curHP -= finalDamage;
             curHP = Mathf.Clamp(curHP, 0f, MaxHP); // 체력 0 ~ 최대 체력 사이로 제한
             OnHpChanged?.Invoke(CurHP, MaxHP); // 체력 변경 이벤트 호출
 
@@ -377,6 +387,27 @@ namespace KYM
             TakeDamage(damage);
         }
 
+
+        private void ApplyEquipStat(ItemDataSO beforeEqiupSO, ItemDataSO newEquipSO)
+        {
+            // TODO : 장비에 따른 스텟 변경 로직 구현
+            if (beforeEqiupSO == null) // 해당 슬롯에 새로 장착하는 거라면
+            {
+                attack += newEquipSO.EquipmentStat.Attack;
+                defense += newEquipSO.EquipmentStat.Defense;
+            }
+            else if (newEquipSO == null) // 해당 슬롯의 장비를 해제하는 거라면
+            {
+                attack -= beforeEqiupSO.EquipmentStat.Attack;
+                defense -= beforeEqiupSO.EquipmentStat.Defense;
+            }
+            else // 해당 슬롯의 장비를 변경하는 거라면
+            {
+                attack += newEquipSO.EquipmentStat.Attack - beforeEqiupSO.EquipmentStat.Attack;
+                defense += newEquipSO.EquipmentStat.Defense - beforeEqiupSO.EquipmentStat.Defense;
+            }
+        }
+
         public void EquipItem(ItemDataSO newEquipSO)
         {
             // TODO : 장비템 착용 후 필요한 동작들
@@ -400,8 +431,9 @@ namespace KYM
             }
 
             // TODO : 실제로 아이템이 장착된 효과를 구현해야함 (ex - 장비에 따른 외형 변경, 능력치 변경 등)
+            ApplyEquipStat(beforeEquipSO, newEquipSO);
 
-            // 장착 아이템 변경 이벤트를 보냄, 일단 지금은 UI만 받고있음
+            // 장착 아이템 변경 이벤트를 보냄, 지금은 UI와 플레이어컨트롤러가 받고있음
             OnEquipChanged?.Invoke(beforeEquipSO, newEquipSO);
         }
 
@@ -418,6 +450,7 @@ namespace KYM
             OnEquipChanged?.Invoke(beforeEquipSO, null);
 
             // TODO : 실제로 아이템이 해제됐을 때 효과를 구현해야함
+            ApplyEquipStat(beforeEquipSO, null);
         }
     }
 }
