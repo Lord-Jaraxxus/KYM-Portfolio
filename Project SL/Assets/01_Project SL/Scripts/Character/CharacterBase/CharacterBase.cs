@@ -406,6 +406,8 @@ namespace KYM
                 attack += newEquipSO.EquipmentStat.Attack - beforeEqiupSO.EquipmentStat.Attack;
                 defense += newEquipSO.EquipmentStat.Defense - beforeEqiupSO.EquipmentStat.Defense;
             }
+
+            weaponHitBox.damage = attack; // 무기 데미지 갱신, 일단 여기서 이렇게 간단하게만 해놓고 나중에 콤보/스킬 확장되면... 그때 다시 생각!
         }
 
         public void EquipItem(ItemDataSO newEquipSO)
