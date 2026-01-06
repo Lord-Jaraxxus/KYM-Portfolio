@@ -20,6 +20,12 @@ namespace KYM
             UserDataModel.Singleton.AddItem(itemData.ItemID, quantity);
         }
 
+        public void Initialize(ItemDataSO itemDataSO, int quantity) 
+        {
+            this.itemData = itemDataSO;
+            this.quantity = quantity;
+        }
+
         public Transform GetTransform() => this.transform;
     }
 }

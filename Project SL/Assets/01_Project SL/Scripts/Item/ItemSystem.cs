@@ -30,5 +30,27 @@ namespace KYM
                 Debug.Log("사용 불가 아이템을 사용하셨습니다!");
             }
         }
+
+        public static void DropItem(string itemID)
+        {
+            // TODO : 아이템 버리기, 즉 아이템 갯수를 1개 줄이고 0개가 되면 인벤토리에서 없애기 + 버려진 아이템을 월드에 드랍하기;
+            ItemDataSO itemDataSO = GameDataModel.Singleton.GetItemDataSO(itemID); // ID를 통해 아이템데이터베이스에서 ItemSO를 가져옴
+            int quantity = UserDataModel.Singleton.PlayerItemDto.PlayerItems.Find(item => item.ItemID == itemID).ItemCount;
+
+            UserDataModel.Singleton.RemoveItem(itemID, quantity); // UDM에서 모든 갯수 줄임 (일단은 전부 버리는걸로)
+
+            // 1. 플레이어 위치 가져오기
+            Vector3 dropPosition = PlayerController.Instance.LinkedCharacter.transform.position;
+
+            // 2. 프리팹 소환
+            GameObject itemVisual = GameObject.Instantiate(
+                itemDataSO.ItemVisualPrefab,
+                dropPosition,
+                Quaternion.identity);
+
+            // 3. DropItem 컴포넌트 초기화
+            DropItem dropItemComp = itemVisual.AddComponent<DropItem>();
+            dropItemComp.Initialize(itemDataSO, quantity);
+        }
     }
 }

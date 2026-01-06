@@ -161,10 +161,9 @@ namespace KYM
 
         private void OnClickDropButton()
         {
-            panel.SetActive(false); // 팝업 패널 비활성화
-            modalButton.gameObject.SetActive(false); // 모달도 같이 비활성화
+            SetPopupActive(false); // 팝업 비활성화
 
-            // TODO : 이건 진짜 빡센데? 모든 아이템 프리펩 들고있을 수도 없고 ㅋㅋㅋㅋ
+            ItemSystem.DropItem(selectedItemData.itemID); // 일단 통으로 다 버리기로...
         }
 
     }

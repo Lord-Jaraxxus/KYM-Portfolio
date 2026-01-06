@@ -24,4 +24,4 @@ MonoBehaviour:
   EquipmentStat:
     Attack: 0
     Defense: 15
-  ItemVisualPrefab: {fileID: 0}
+  ItemVisualPrefab: {fileID: 1829930459921960931, guid: 0eb3e0176a4c3364ca666c0aa6895d7e, type: 3}
