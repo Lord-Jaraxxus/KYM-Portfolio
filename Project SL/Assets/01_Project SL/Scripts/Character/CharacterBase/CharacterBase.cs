@@ -171,6 +171,7 @@ namespace KYM
             switch (eventName)
             {
                 case "EnableHitbox":
+                    if (CurrentState != CharacterState.Attack) { return; } // 공격 상태가 아닐 때는 히트박스 활성화 안함, 중간에 피격 등으로 끊겼을 경우 등
                     weaponHitBox?.EnableHitbox(); // 무기가 없으면 ?로 일단 거름
                     // Debug.Log("Enable Hitbox");
                     break;
@@ -393,6 +394,7 @@ namespace KYM
 
             // TODO : 피격 시 애니메이션 재생 -> StateMachineBehaviour에서 캐릭터 상태 피격상태로 전환
             animator.SetTrigger("HitTrigger");
+            CurrentState = CharacterState.Hit; // 피격 상태로 변경, 사실 위에 Hit 애니메이션 재생하면서 StateMachineBehaviour에서 바꿔주긴 하는데, 살짝 딜레이 있으니까..
 
             weaponHitBox?.DisableHitbox(); // 피격 시 무기 히트박스 비활성화
 
