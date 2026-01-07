@@ -67,7 +67,7 @@ namespace KYM
                 {
                     itemButton.interactable = false; // 구매 버튼 비활성화
                 }
-                else if (listData.itemPrice > UserDataModel.Singleton.PlayerEconomyDTO.Gold) // 플레이어가 가진 골드보다 아이템 가격이 더 비싸다면
+                else if (listData.itemPrice > UserDataModel.Singleton.PlayerEconomyDto.Gold) // 플레이어가 가진 골드보다 아이템 가격이 더 비싸다면
                 {
                     itemButton.interactable = false; // 구매 버튼 비활성화
                 }

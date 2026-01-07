@@ -14,7 +14,7 @@ namespace KYM
         ShopDataSO shopDataSO; // 상점 데이터 (품목, 수량, 가격)
         bool initialized = false;
         // 여기에 들고있는게 편하겠다, 유저데이터 출신임
-        PlayerShopDTO.ShopData shopData;
+        PlayerShopDto.ShopData shopData;
 
         // 인피니티 스크롤 관련 
         public Gpm.Ui.InfiniteScroll infiniteScroll;
@@ -89,7 +89,7 @@ namespace KYM
             newData.color = Color.gray; // Default color for shop items
 
             // 재고 수량은 UserDataModel에서 따로 관리중인걸 가져와서 반영
-            PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
+            PlayerShopDto.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == item.ItemID);
             newData.itemCount = itemStock.ItemCount;
 
             infiniteScroll.InsertData(newData);
@@ -102,9 +102,9 @@ namespace KYM
             infiniteDataContainer.Clear();
             // 토글도 맨 앞엣놈으로 초기화 시켜야대는데
 
-            shopData = UserDataModel.Singleton.PlayerShopDTO.ShopDatas.Find(shop => shop.ShopID == shopID); // 유저 데이터에서 이 상점의 재고 데이터 찾아서 연결
+            shopData = UserDataModel.Singleton.PlayerShopDto.ShopDatas.Find(shop => shop.ShopID == shopID); // 유저 데이터에서 이 상점의 재고 데이터 찾아서 연결
 
-            foreach (ShopDataSO so in GameDataModel.Singleton.ShopDataDTO.ShopDatas) // 상점 ID에 맞는 상점 데이터 불러오기
+            foreach (ShopDataSO so in GameDataModel.Singleton.ShopDataDto.ShopDatas) // 상점 ID에 맞는 상점 데이터 불러오기
             {
                 if (so.ShopID.Equals(shopID))   // SO의 ShopID가 이 UI의 shopID와 같다면
                 {
@@ -155,9 +155,9 @@ namespace KYM
             if (isExistItem)
             {
                 // TODO : 이미 존재하는 Infinite Data 이므로, 수량만 갱신하여 infinite scroll 에 반영
-                PlayerShopDTO.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == data.itemID);
+                PlayerShopDto.ItemStock itemStock = shopData.ItemStocks.Find(shopData => shopData.ItemID == data.itemID);
                 if (itemStock.ItemCount <= 0) { return; } // 아이템 재고 수량이 0 이하면 구매 불가
-                if (UserDataModel.Singleton.PlayerEconomyDTO.Gold < data.itemPrice) { return; } // 소지 골드가 부족하면 구매 불가
+                if (UserDataModel.Singleton.PlayerEconomyDto.Gold < data.itemPrice) { return; } // 소지 골드가 부족하면 구매 불가
 
                 itemStock.DecreaseStock(1); // 아이템 재고 수량 감소
 

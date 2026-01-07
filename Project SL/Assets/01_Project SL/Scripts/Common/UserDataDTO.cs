@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class UserDataDTO { }
+    public class UserDataDto { }
 
 
     [System.Serializable]
-    public class PlayerInfoDto : UserDataDTO
+    public class PlayerInfoDto : UserDataDto
     {
         [field: SerializeField] public Vector3 LastPosition { get; private set; }
         [field: SerializeField] public Vector3 LastRotation { get; private set; }
@@ -30,7 +30,7 @@ namespace KYM
     }
 
     [System.Serializable]
-    public class PlayerItemDTO : UserDataDTO
+    public class PlayerItemDto : UserDataDto
     {
         [System.Serializable]
         public class PlayerItemData
@@ -94,7 +94,7 @@ namespace KYM
     }
 
     [System.Serializable]
-    public class PlayerShopDTO : UserDataDTO // 상점들의 아이템 재고 데이터를 담는 DTO
+    public class PlayerShopDto : UserDataDto // 상점들의 아이템 재고 데이터를 담는 DTO
     {
         [System.Serializable]
         public class ItemStock // 아이템 한 종류의 재고 데이터
@@ -138,7 +138,7 @@ namespace KYM
     }
 
     [System.Serializable]
-    public class PlayerEconomyDTO : UserDataDTO
+    public class PlayerEconomyDto : UserDataDto
     {
         [field: SerializeField] public int Gold { get; private set; } = 0; // 시작할때는 0골드
 
@@ -155,7 +155,7 @@ namespace KYM
     }
 
     [System.Serializable]
-    public class PlayerEquipDTO : UserDataDTO
+    public class PlayerEquipDto : UserDataDto
     {
         public class PlayerEquipSlotData
         {

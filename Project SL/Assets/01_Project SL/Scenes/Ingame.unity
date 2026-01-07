@@ -1462,7 +1462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 328fab10cfc90df408c1b9174932440d, type: 2}
-  quantity: 1
+  quantity: 5
 --- !u!65 &1690083871
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2416,6 +2416,10 @@ PrefabInstance:
     - target: {fileID: 912454913873721321, guid: 6248a5004455dab44bec4312cdf62fee, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908099504502299594, guid: 6248a5004455dab44bec4312cdf62fee, type: 3}
+      propertyPath: quantity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7136606288104831891, guid: 6248a5004455dab44bec4312cdf62fee, type: 3}
       propertyPath: m_Name

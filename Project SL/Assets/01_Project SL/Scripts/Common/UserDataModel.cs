@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using static KYM.PlayerEquipDTO;
+using static KYM.PlayerEquipDto;
 
 namespace KYM
 {
@@ -12,12 +12,12 @@ namespace KYM
     {
         public const string EditorUserDataPath = "Assets/01_Project KYM/Anothers/UserData/";
         [field: SerializeField] public PlayerInfoDto PlayerInfoDto { get; private set; } = new();
-        [field: SerializeField] public PlayerItemDTO PlayerItemDto { get; private set; } = new();
-        [field: SerializeField] public PlayerEconomyDTO PlayerEconomyDTO { get; private set; } = new();
-        [field: SerializeField] public PlayerShopDTO PlayerShopDTO { get; private set; } = new();
-        [field: SerializeField] public PlayerEquipDTO PlayerEquipDTO { get; private set; } = new();
+        [field: SerializeField] public PlayerItemDto PlayerItemDto { get; private set; } = new();
+        [field: SerializeField] public PlayerEconomyDto PlayerEconomyDto { get; private set; } = new();
+        [field: SerializeField] public PlayerShopDto PlayerShopDto { get; private set; } = new();
+        [field: SerializeField] public PlayerEquipDto PlayerEquipDto { get; private set; } = new();
 
-        public event Action<PlayerItemDTO.PlayerItemData> OnInventoryUpdated; 
+        public event Action<PlayerItemDto.PlayerItemData> OnInventoryUpdated; 
         public event Action<int> OnEconomyUpdated; // 골드 등 재화 정보 변경시 이벤트
 
         public void Initialize()
@@ -29,21 +29,21 @@ namespace KYM
             AddGold(5000); // 일단 이렇게 골드 초기화, 나중에 세이브데이터로 바꾸기
 
             // 상점 데이터 초기화, 일단 GameDataModel에 있는 상점 데이터로 초기화 (SO 그대로)
-            foreach (ShopDataSO shopData in GameDataModel.Singleton.ShopDataDTO.ShopDatas) 
+            foreach (ShopDataSO shopData in GameDataModel.Singleton.ShopDataDto.ShopDatas) 
             {
-                PlayerShopDTO.ShopData newShopData = new PlayerShopDTO.ShopData(shopData.ShopID); // 생성자로 초기화 
+                PlayerShopDto.ShopData newShopData = new PlayerShopDto.ShopData(shopData.ShopID); // 생성자로 초기화 
 
                 foreach (ItemDataSO itemData in shopData.ItemsForSale)
                 {
-                    PlayerShopDTO.ItemStock newItemStock = new PlayerShopDTO.ItemStock(itemData.ItemID, itemData.ItemCount); // 생성자로 초기화
+                    PlayerShopDto.ItemStock newItemStock = new PlayerShopDto.ItemStock(itemData.ItemID, itemData.ItemCount); // 생성자로 초기화
                     newShopData.ItemStocks.Add(newItemStock);
                 }
 
-                PlayerShopDTO.ShopDatas.Add(newShopData);
+                PlayerShopDto.ShopDatas.Add(newShopData);
             }
         }
 
-        public void LoadData<T>(out T loadData) where T : UserDataDTO, new()
+        public void LoadData<T>(out T loadData) where T : UserDataDto, new()
         {
             string loadpath = $"{EditorUserDataPath}/{typeof(T)}.json";
             if (FileManager.ReadFileData(loadpath, out string receiveData))
@@ -56,7 +56,7 @@ namespace KYM
             }
         }
 
-        public void SaveData<T>(T data) where T : UserDataDTO
+        public void SaveData<T>(T data) where T : UserDataDto
         {
             string jsonFormat = JsonUtility.ToJson(data, true);
             string savePath = $"{EditorUserDataPath}/{typeof(T)}.json";
@@ -66,13 +66,13 @@ namespace KYM
 
         public void AddItem(string itemID, int itemCount)
         {
-            PlayerItemDTO.PlayerItemData changedData = PlayerItemDto.AddItem(itemID, itemCount);
+            PlayerItemDto.PlayerItemData changedData = PlayerItemDto.AddItem(itemID, itemCount);
             OnInventoryUpdated?.Invoke(changedData);
         }
 
         public void RemoveItem(string itemID, int itemCount) 
         {
-            PlayerItemDTO.PlayerItemData changedData = PlayerItemDto.RemoveItem(itemID, itemCount);
+            PlayerItemDto.PlayerItemData changedData = PlayerItemDto.RemoveItem(itemID, itemCount);
 
             if (changedData != null)
             {
@@ -86,24 +86,24 @@ namespace KYM
 
         public void AddGold(int amount)
         {
-            PlayerEconomyDTO.AddGold(amount);
+            PlayerEconomyDto.AddGold(amount);
 
-            int playerGoldAmount = PlayerEconomyDTO.Gold;
+            int playerGoldAmount = PlayerEconomyDto.Gold;
             OnEconomyUpdated?.Invoke(playerGoldAmount);
 
             Debug.Log($"[UserDataModel] Added {amount} Gold. New Balance: {playerGoldAmount}");
         }
         public void SubtractGold(int amount)
         {
-            PlayerEconomyDTO.SubtractGold(amount);
+            PlayerEconomyDto.SubtractGold(amount);
 
-            int playerGoldAmount = PlayerEconomyDTO.Gold;
+            int playerGoldAmount = PlayerEconomyDto.Gold;
             OnEconomyUpdated?.Invoke(playerGoldAmount);
         }
 
         public PlayerEquipSlotData GetSameSlotEquip(EquipSlotType equipSlotType) 
         {
-            PlayerEquipSlotData sameEquipSlotData = PlayerEquipDTO.PlayerEquipSlots.FirstOrDefault(i => i.SlotType == equipSlotType);
+            PlayerEquipSlotData sameEquipSlotData = PlayerEquipDto.PlayerEquipSlots.FirstOrDefault(i => i.SlotType == equipSlotType);
 
             return sameEquipSlotData;
         }
@@ -119,7 +119,7 @@ namespace KYM
                 playerEquipSlotData.SlotType = itemDataSO.EquipSlotType;
                 playerEquipSlotData.EquippedItemID = itemDataSO.ItemID;
 
-                PlayerEquipDTO.PlayerEquipSlots.Add(playerEquipSlotData);
+                PlayerEquipDto.PlayerEquipSlots.Add(playerEquipSlotData);
             }
             else // 이미 같은 타입의 장비를 끼고 있었다면
             {
@@ -134,7 +134,7 @@ namespace KYM
             // 해제할 장비 슬롯의 데이터를 가져옴
             PlayerEquipSlotData sameEquipSlotData = GetSameSlotEquip(itemDataSO.EquipSlotType);
             
-            PlayerEquipDTO.PlayerEquipSlots.Remove(sameEquipSlotData); // 해당 장비 슬롯의 데이터를 리스트에서 삭제
+            PlayerEquipDto.PlayerEquipSlots.Remove(sameEquipSlotData); // 해당 장비 슬롯의 데이터를 리스트에서 삭제
         }
 
 

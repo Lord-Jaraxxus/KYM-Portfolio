@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class GameDataDTO { }
+    public class GameDataDto { }
 
     [System.Serializable]
-    public class PlayerStatDto : GameDataDTO
+    public class PlayerStatDto : GameDataDto
     {
         [field: SerializeField] public CharacterStatDataSO playerCharacterStatSO { get; private set; } // 플레이어 캐릭터 스탯 데이터 (ScriptableObject)
 
@@ -18,10 +18,10 @@ namespace KYM
     }
 
     [System.Serializable]
-    public class EnemyStatDto : GameDataDTO
+    public class EnemyStatDto : GameDataDto
     {
         [System.Serializable]
-        public class EnemyStatData 
+        public class EnemyStatData
         {
             public EnemyStatData(string enemyID, CharacterStatDataSO enemyStat)
             {
@@ -50,13 +50,20 @@ namespace KYM
     }
 
     [System.Serializable]
-    public class ShopDataDTO : GameDataDTO
+    public class EnemyDataDto : GameDataDto
+    {
+        [field: SerializeField] public List<EnemyDataSO> EnemyDatas { get; private set; } = new(); // 적 데이터 리스트
+    }
+
+
+    [System.Serializable]
+    public class ShopDataDto : GameDataDto
     {
         [field: SerializeField] public List<ShopDataSO> ShopDatas { get; private set; } = new(); // 상점 데이터 리스트
     }
 
     [System.Serializable]
-    public class ItemDatabase : GameDataDTO // 아이템 정보 검색을 위해 ItemDataSO들을 로딩해서 들고있는 데이터베이스
+    public class ItemDatabase : GameDataDto // 아이템 정보 검색을 위해 ItemDataSO들을 로딩해서 들고있는 데이터베이스
     {
         [field: SerializeField] public Dictionary<string, ItemDataSO> ItemDatas { get; private set; } = new();
     }

@@ -56,7 +56,7 @@ namespace KYM
             var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
             playerHUD.RefreshHpUI(linkedCharacter.CurHP, linkedCharacter.MaxHP);
             playerHUD.RefreshSpUI(linkedCharacter.CurSP, linkedCharacter.MaxSP);
-            playerHUD.RefreshGoldUI(UserDataModel.Singleton.PlayerEconomyDTO.Gold);
+            playerHUD.RefreshGoldUI(UserDataModel.Singleton.PlayerEconomyDto.Gold);
             // UI - 상점 UI 초기화
             var shopUI = UIManager.Singleton.GetUI<ShopUI> (UIList.ShopUI);
             // UI - 캐릭터 정보창 UI 초기화
@@ -274,7 +274,7 @@ namespace KYM
             if (newEquipSO != null) // 장비 해제가 아니라면 (새로 장착 or 교체)
             {
                 // 같은 슬롯의 장비를 이미 장착하고 있다면, 변수로 가져옴.
-                PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(newEquipSO.EquipSlotType);
+                PlayerEquipDto.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(newEquipSO.EquipSlotType);
                 // 이미 같은 슬롯의 장비를 장착하고 있다면
                 if (sameSlotEquip != null)
                 {
@@ -291,7 +291,7 @@ namespace KYM
             else // 장비 해제라면
             {
                 // 선택된 슬롯의 장비를 변수로 가져옴. 없으면 리턴
-                PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(beforeEquipSO.EquipSlotType);
+                PlayerEquipDto.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(beforeEquipSO.EquipSlotType);
                 if (sameSlotEquip == null)
                     return;
 

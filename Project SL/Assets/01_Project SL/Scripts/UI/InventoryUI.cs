@@ -57,7 +57,7 @@ namespace KYM
             Initiialize();
         }
 
-        private void AddInventoryItem(PlayerItemDTO.PlayerItemData item)
+        private void AddInventoryItem(PlayerItemDto.PlayerItemData item)
         {
             // 받아온 PlayerItemData에서 ID를 가져와 Itembase에서 ID로 검색해서 해당 아이템의 itemDataSO를 가져옴, itemDataSO변수에 담김, 해당 아이템의 SO가 없으면 리턴
             if (!GameDataModel.Singleton.ItemDatabase.ItemDatas.TryGetValue(item.ItemID, out ItemDataSO itemDataSO))
@@ -82,13 +82,13 @@ namespace KYM
             infiniteScroll.ClearData();
             infiniteDataContainer.Clear();
 
-            foreach (PlayerItemDTO.PlayerItemData item in UserDataModel.Singleton.PlayerItemDto.PlayerItems)
+            foreach (PlayerItemDto.PlayerItemData item in UserDataModel.Singleton.PlayerItemDto.PlayerItems)
             {
                 AddInventoryItem(item);
             }
         }
 
-        private void OnReceiveInventoryUpdated(PlayerItemDTO.PlayerItemData changedData)
+        private void OnReceiveInventoryUpdated(PlayerItemDto.PlayerItemData changedData)
         {
             bool isExistItem = infiniteDataContainer.ContainsKey(changedData.ItemID);
 

@@ -119,7 +119,7 @@ namespace KYM
 
         private void OnClickEquipSlotButton(EquipSlotType slotType) 
         {
-            PlayerEquipDTO.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(slotType);
+            PlayerEquipDto.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(slotType);
             if (sameSlotEquip != null) // 해당 슬롯에 장비가 있을 경우에만
             {
                 selectedEquipData = sameSlotEquip.EquipedItemDataSO;

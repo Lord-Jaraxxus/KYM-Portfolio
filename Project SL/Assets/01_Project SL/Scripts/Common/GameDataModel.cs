@@ -8,7 +8,8 @@ namespace KYM
     {
         [field: SerializeField] public PlayerStatDto PlayerStatDto { get; private set; } = new(); // 플레이어 스탯 DTO
         [field: SerializeField] public EnemyStatDto EnemyStatDto { get; private set; } = new(); // 적 스탯 DTO
-        [field: SerializeField] public ShopDataDTO ShopDataDTO { get; private set; } = new(); // 상점 데이터 DTO
+        [field: SerializeField] public EnemyDataDto EnemyDataDto { get; private set; } = new(); // 적 데이터 SO
+        [field: SerializeField] public ShopDataDto ShopDataDto { get; private set; } = new(); // 상점 데이터 DTO
         [field: SerializeField] public ItemDatabase ItemDatabase { get; private set; } = new(); // 아이템 데이터베이스 
 
         public void Initialize()
@@ -23,10 +24,18 @@ namespace KYM
                 Debug.Log($"[GameDataModel] Enemy Stat Data Loaded: ID = {enemyData.EnemyID}");
             }
 
+            EnemyDataSO[] arrEnemyDataSO = Resources.LoadAll<EnemyDataSO>("Character/EnemyData/");
+            foreach (EnemyDataSO enemyDataSO in arrEnemyDataSO) 
+            {
+                EnemyDataDto.EnemyDatas.Add(enemyDataSO);
+                Debug.Log($"[GameDataModel] Enemy Data SO Loaded: ID = {enemyDataSO.EnemyID}");
+            }
+
+
             ShopDataSO[] arrShopDataSO = Resources.LoadAll<ShopDataSO>("Shop/");
             foreach (ShopDataSO shopDataSO in arrShopDataSO) 
             {
-                ShopDataDTO.ShopDatas.Add(shopDataSO);
+                ShopDataDto.ShopDatas.Add(shopDataSO);
             }
 
             ItemDataSO[] arrItemDataSO = Resources.LoadAll<ItemDataSO>("ItemData/");
