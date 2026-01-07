@@ -33,7 +33,7 @@ namespace KYM
         // 이벤트들
         public event System.Action<float, float> OnHpChanged; // 체력 변경 이벤트 (CallBack), (현재 체력, 최대 체력)
         public event System.Action<float, float> OnSpChanged; // 스태미나 변경 이벤트 (CallBack), (현재 스태미나, 최대 스태미나)
-        public event System.Action OnCharacterDeath; // 사망 이벤트 (CallBack)
+        public event System.Action <bool /*isPlayerCharacter*/, string /*CharacterID*/, Transform /*CharacterTransform*/> OnCharacterDeath; // 사망 이벤트 (CallBack)
         public event System.Action<ItemDataSO /*Before*/, ItemDataSO /*After*/> OnEquipChanged; // 장비 변경 이벤트
 
         // 캐릭터 스텟 관련 변수들
@@ -103,6 +103,8 @@ namespace KYM
         {
             animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent; // 애니메이션 이벤트 리스너 콜백 등록
 
+            OnCharacterDeath += DeathEventHandler.Singleton.OnReceiveDeathEvent; // 사망 이벤트 핸들러 콜백 등록
+
             SetActiveRagdoll(false);
 
             curHP = MaxHP; // 초기 체력 설정
@@ -111,6 +113,11 @@ namespace KYM
             InitializeLockOnPoint();
 
             if (lockOnPointData != null) CameraSystem.Instance.RegisterCharacter(this);
+        }
+
+        private void OnDestroy()
+        {
+            OnCharacterDeath -= DeathEventHandler.Singleton.OnReceiveDeathEvent; // 사망 이벤트 핸들러 콜백 해제
         }
 
         private void InitializeLockOnPoint()
@@ -337,11 +344,16 @@ namespace KYM
         public void Die()
         {
             if (CurrentState == CharacterState.Dead) return; // 이미 사망 상태이면 종료
-            CurrentState = CharacterState.Dead; // 사망 상태로 변경, 이건 굳이 애니메이션 연동 안해도 괜찮을듯?
+            CurrentState = CharacterState.Dead; // 사망 상태로 변경, 이건 굳이 애니메이션 스테이트머신비헤이비어 연동 안해도 괜찮을듯?
 
             SetActiveRagdoll(true);
 
             animator.SetTrigger("DeathTrigger");
+
+            // 사망 이벤트 호출
+            bool isPlayerCharacter = (characterStat.CharType == CharacterType.Player); // 플레이어 캐릭터인지 여부
+            OnCharacterDeath(isPlayerCharacter, characterStat.ID, this.transform); // 사망 이벤트 호출
+
             Debug.Log($"{gameObject.name} is dead!");
         }
 

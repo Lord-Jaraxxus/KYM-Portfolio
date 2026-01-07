@@ -28,7 +28,7 @@ namespace KYM
             foreach (EnemyDataSO enemyDataSO in arrEnemyDataSO) 
             {
                 EnemyDataDto.EnemyDatas.Add(enemyDataSO);
-                Debug.Log($"[GameDataModel] Enemy Data SO Loaded: ID = {enemyDataSO.EnemyID}");
+                Debug.Log($"[GameDataModel] Enemy Data SO Loaded: ID = {enemyDataSO.StatData.ID}");
             }
 
 

@@ -36,7 +36,7 @@ namespace KYM
             navAgent.updateRotation = false;
             navAgent.stoppingDistance = stoppingDistance;
 
-            EnemyDataSO enemyData = GameDataModel.Singleton.EnemyDataDto.EnemyDatas.Find(EnemyDataDto => EnemyDataDto.EnemyID == EnemyID);
+            EnemyDataSO enemyData = GameDataModel.Singleton.EnemyDataDto.EnemyDatas.Find(EnemyDataDto => EnemyDataDto.StatData.ID == EnemyID);
             character.Initialize(enemyData.StatData, false);
         }
 

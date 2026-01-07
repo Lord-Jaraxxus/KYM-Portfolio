@@ -6,9 +6,9 @@ namespace KYM
 {
     public class DeathEventHandler : SingletonBase<DeathEventHandler>
     {
-        public void OnReceiveDeathEvent(bool isPlayerCharacter, string characterID) 
+        public void OnReceiveDeathEvent(bool isPlayerCharacter, string characterID, Transform characterTransform)
         {
-            if(isPlayerCharacter) // 플레이어 캐릭터일 경우
+            if (isPlayerCharacter) // 플레이어 캐릭터일 경우
             {
                 Debug.Log("Player character has died. Character ID: " + characterID);
             }
@@ -28,14 +28,20 @@ namespace KYM
                 {
                     float roll = Random.value; // 0 ~ 1
 
-                    if (roll <= dropData.DropChance)
+                    if (dropData.DropChance <= roll)
                     {
-                        int count = Random.Range(dropData.MinCount, dropData.MaxCount + 1);
+                        int count = Random.Range(dropData.MinCount, dropData.MaxCount + 1); // 아이템 드랍 개수 결정
 
-                        for (int i = 0; i < count; i++)
-                        {
-                            ItemSystem.DropItem(dropData.Item.ItemID);
-                        }
+                        // TODO : 아이템 드랍 구현
+                        // 1. 프리팹 소환
+                        GameObject itemVisual = GameObject.Instantiate(
+                            dropData.ItemDataSO.ItemVisualPrefab,
+                            characterTransform.position,
+                            Quaternion.identity);
+
+                        // 2. DropItem 컴포넌트 초기화
+                        DropItem dropItemComp = itemVisual.AddComponent<DropItem>();
+                        dropItemComp.Initialize(dropData.ItemDataSO, count);
                     }
                 }
 
