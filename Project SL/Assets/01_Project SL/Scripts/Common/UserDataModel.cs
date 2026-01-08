@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using static KYM.PlayerEquipDto;
 
@@ -25,6 +26,8 @@ namespace KYM
             // 아직 플레이어 위치라던가, 아무튼 세이브 데이터가 없으니 주석처리
             // LoadData<PlayerInfoDto>(out PlayerInfoDto loadPlayerInfoDto);
             // PlayerInfoDto = loadPlayerInfoDto;
+
+            PlayerInfoDto.SetLevelAndExp(1, 0, 100); // 일단 레벨 1, 경험치 0, 요구 exp는 100으로 초기화 
 
             AddGold(5000); // 일단 이렇게 골드 초기화, 나중에 세이브데이터로 바꾸기
 
@@ -62,6 +65,21 @@ namespace KYM
             string savePath = $"{EditorUserDataPath}/{typeof(T)}.json";
 
             FileManager.WriteFileFromString(savePath, jsonFormat);
+        }
+
+        public void AddExp(int exp)
+        {
+            int currentExp = PlayerInfoDto.CurrentExp + exp;
+            int requiredExp = PlayerInfoDto.RequiredExp;
+            int level = PlayerInfoDto.Level;
+            while (currentExp >= requiredExp)
+            {
+                currentExp -= requiredExp;
+                level++;
+                requiredExp = level * 100; // 요구 경험치 변경, 예시로 레벨 * 100으로 설정
+            }
+            PlayerInfoDto.SetLevelAndExp(level, currentExp, requiredExp);
+            Debug.Log($"[UserDataModel] Added {exp} EXP. New Level: {level}, Current EXP: {currentExp}/{requiredExp}");
         }
 
         public void AddItem(string itemID, int itemCount)
@@ -107,7 +125,7 @@ namespace KYM
 
             return sameEquipSlotData;
         }
-        public void UpdateEquipedItemData(ItemDataSO itemDataSO) // 이게 맞나.... 일단 임시로라도. 나중에 장비 갈아끼울때 고쳐야할듯
+        public void UpdateEquipedItemData(ItemDataSO itemDataSO)
         {
             // 같은 슬롯의 장비를 이미 장착하고 있다면, 변수로 가져옴.
             PlayerEquipSlotData sameEquipSlotData = GetSameSlotEquip(itemDataSO.EquipSlotType);

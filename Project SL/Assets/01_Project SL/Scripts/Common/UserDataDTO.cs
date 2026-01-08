@@ -14,6 +14,9 @@ namespace KYM
         [field: SerializeField] public Vector3 LastRotation { get; private set; }
         [field: SerializeField] public float LastCurHP { get; private set; }
         [field: SerializeField] public float LastCurSP { get; private set; }
+        [field: SerializeField] public int Level { get; private set; }
+        [field: SerializeField] public int CurrentExp { get; private set; }
+        [field: SerializeField] public int RequiredExp { get; private set; }
 
         public void SetPositionAndRotation(Vector3 pos, Quaternion rot)
         {
@@ -24,6 +27,12 @@ namespace KYM
         {
             this.LastCurHP = hp;
             this.LastCurSP = sp;
+        }
+        public void SetLevelAndExp(int level, int curExp, int reqExp)
+        {
+            this.Level = level;
+            this.CurrentExp = curExp;
+            this.RequiredExp = reqExp;
         }
 
         public void SaveData() => UserDataModel.Singleton.SaveData<PlayerInfoDto>(this);
