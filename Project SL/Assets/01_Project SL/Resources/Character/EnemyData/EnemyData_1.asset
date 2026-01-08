@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyData_1
   m_EditorClassIdentifier: 
   <StatData>k__BackingField: {fileID: 11400000, guid: 22ab82fd48c0cf344bcd31716a600999, type: 2}
-  <ExpReward>k__BackingField: 100
+  <ExpReward>k__BackingField: 120
   <GoldRewardRange>k__BackingField: {x: 50, y: 100}
   <DropTable>k__BackingField:
   - ItemDataSO: {fileID: 11400000, guid: 328fab10cfc90df408c1b9174932440d, type: 2}

@@ -21,7 +21,7 @@ namespace KYM
                 int goldReward = Random.Range(enemyDataSO.GoldRewardRange.x, enemyDataSO.GoldRewardRange.y + 1); // 골드 보상 (최소~최대 사이 랜덤 지급)
                 UserDataModel.Singleton.AddGold(goldReward); // 골드 보상 지급
 
-                // UserDataModel.Singleton.AddExp(enemyDataSO.ExpReward); // 경험치 보상 지급
+                UserDataModel.Singleton.AddExp(enemyDataSO.ExpReward); // 경험치 보상 지급
 
                 // 아이템 드랍 처리
                 foreach (DropItemData dropData in enemyDataSO.DropTable)
