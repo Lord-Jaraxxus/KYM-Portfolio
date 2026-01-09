@@ -147,7 +147,7 @@ namespace KYM
 
         private void SetActiveRagdoll(bool isActive)
         {
-            animator.enabled = !isActive; // 랙돌이 제대로 일을 안해서 일단 킵..
+            animator.enabled = !isActive;
             Rigidbody[] ragdollRigidbodies = GetComponentsInChildren<Rigidbody>();
             foreach (var rigid in ragdollRigidbodies)
             {
@@ -354,6 +354,7 @@ namespace KYM
             // 사망 이벤트 호출
             bool isPlayerCharacter = (characterStat.CharType == CharacterType.Player); // 플레이어 캐릭터인지 여부
             OnCharacterDeath(isPlayerCharacter, characterStat.ID, this.transform); // 사망 이벤트 호출
+            characterController.enabled = false; // 사망 시 캐릭터 컨트롤러 비활성화 (충돌 판정 사라지게 하기 위해)
 
             Debug.Log($"{gameObject.name} is dead!");
         }
