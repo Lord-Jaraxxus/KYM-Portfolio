@@ -18,7 +18,9 @@ namespace KYM
         [field: SerializeField] public PlayerShopDto PlayerShopDto { get; private set; } = new();
         [field: SerializeField] public PlayerEquipDto PlayerEquipDto { get; private set; } = new();
 
-        public event Action<PlayerItemDto.PlayerItemData> OnInventoryUpdated; 
+        public event Action<PlayerItemDto.PlayerItemData> OnInventoryUpdated;
+        public event Action<int /*CurExp*/, int /*ReqExp*/> OnExpUpdated; // 경험치 정보 변경시 이벤트
+        public event Action<int /*level*/> OnLevelUpdated; // 레벨 변경(레벨업)시 이벤트
         public event Action<int> OnEconomyUpdated; // 골드 등 재화 정보 변경시 이벤트
 
         public void Initialize()
@@ -27,7 +29,7 @@ namespace KYM
             // LoadData<PlayerInfoDto>(out PlayerInfoDto loadPlayerInfoDto);
             // PlayerInfoDto = loadPlayerInfoDto;
 
-            PlayerInfoDto.SetLevelAndExp(1, 0, 100); // 일단 레벨 1, 경험치 0, 요구 exp는 100으로 초기화 
+            PlayerInfoDto.SetLevelAndExp(1, 0, 100); // 일단 레벨 1, 경험치 0, 요구 exp는 100으로 초기화
 
             AddGold(5000); // 일단 이렇게 골드 초기화, 나중에 세이브데이터로 바꾸기
 
@@ -79,6 +81,11 @@ namespace KYM
                 requiredExp = level * 100; // 요구 경험치 변경, 예시로 레벨 * 100으로 설정
             }
             PlayerInfoDto.SetLevelAndExp(level, currentExp, requiredExp);
+
+            // 레벨업 및 경험치 변경 이벤트 호출
+            OnLevelUpdated?.Invoke(level);
+            OnExpUpdated?.Invoke(currentExp, requiredExp);
+
             Debug.Log($"[UserDataModel] Added {exp} EXP. New Level: {level}, Current EXP: {currentExp}/{requiredExp}");
         }
 

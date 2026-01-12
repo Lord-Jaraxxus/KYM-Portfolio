@@ -59,6 +59,8 @@ namespace KYM
             playerHUD.RefreshGoldUI(UserDataModel.Singleton.PlayerEconomyDto.Gold);
             // UI - 상점 UI 초기화
             var shopUI = UIManager.Singleton.GetUI<ShopUI> (UIList.ShopUI);
+            // UI - 캐릭터 장비창 UI 초기화
+            var characterEquipUI = UIManager.Singleton.GetUI<CharacterEquipUI>(UIList.CharacterEquipUI);
             // UI - 캐릭터 정보창 UI 초기화
             var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
 
@@ -67,7 +69,7 @@ namespace KYM
             linkedCharacter.OnSpChanged += playerHUD.RefreshSpUI;   // 플레이어 캐릭터 SP 변경시 HUD 갱신
             UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
             shopUI.OnShopClosed += linkedCharacter.SetCharacterState; // 상점 닫기 버튼 클릭시 (상점 닫힐시) 플레이어 상태 변경
-            linkedCharacter.OnEquipChanged += characterInfoUI.SetIcon; // 장착 아이템 변경시 장비창의 아이콘 갱신
+            linkedCharacter.OnEquipChanged += characterEquipUI.SetIcon; // 장착 아이템 변경시 장비창의 아이콘 갱신
             linkedCharacter.OnEquipChanged += OnEquipChanged; // 장착 아이템 변경시 콜백 추가
 
             // Input 이벤트 구독
@@ -77,7 +79,7 @@ namespace KYM
             InputManager.Singleton.onInputF += OnReceiveInputF;
             InputManager.Singleton.onInputI += OnReceiveInputI;
             InputManager.Singleton.onInputP += OnReceiveInputP;
-
+            InputManager.Singleton.onInputU += OnReceiveInputU;
 
             // 콤보용 뭐시기들 초기화 예정
             commandInvoker = new CommandInvoker(linkedCharacter.AnimationEventListener);
@@ -92,14 +94,14 @@ namespace KYM
             {
                 var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
                 var shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
-                var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
+                var characterEquipUI = UIManager.Singleton.GetUI<CharacterEquipUI>(UIList.CharacterEquipUI);
 
                 // UI 이벤트 구독 해제
                 linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;
                 linkedCharacter.OnSpChanged -= playerHUD.RefreshSpUI;
                 UserDataModel.Singleton.OnEconomyUpdated -= playerHUD.RefreshGoldUI;
                 shopUI.OnShopClosed -= linkedCharacter.SetCharacterState;
-                linkedCharacter.OnEquipChanged -= characterInfoUI.SetIcon; // 장착 아이템 변경시 장비창의 아이콘 갱신
+                linkedCharacter.OnEquipChanged -= characterEquipUI.SetIcon;
             }
 
             // Input 이벤트 구독 해제
@@ -109,6 +111,7 @@ namespace KYM
             InputManager.Singleton.onInputTab   -= OnReceiveInputTab;
             InputManager.Singleton.onInputESC   -= OnReceiveInputESC;
             InputManager.Singleton.onInputP     -= OnReceiveInputP;
+            InputManager.Singleton.onInputU     -= OnReceiveInputU;
 
             PlayerCharacterContext.Singleton.Unregister(); // 등록된 캐릭터 해제
         }
@@ -209,7 +212,7 @@ namespace KYM
             }
         }
 
-        void OnReceiveInputI()
+        void OnReceiveInputI()  // I키로 인벤토리 UI 토글
         {
             var inventoryUI = UIManager.Singleton.GetUI<InventoryUI>(UIList.InventoryUI);
 
@@ -224,11 +227,25 @@ namespace KYM
 
             // Debug.Log("인벤토리 토글");
         }
-        private void OnReceiveInputP()
+        private void OnReceiveInputP() // P키로 캐릭터 장비창 UI 토글
         {
-            var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
+            var characterEquipUI = UIManager.Singleton.GetUI<CharacterEquipUI>(UIList.CharacterEquipUI);
 
-            if (characterInfoUI.gameObject.activeSelf)
+            if (characterEquipUI.gameObject.activeSelf)
+            {
+                UIManager.Hide<CharacterEquipUI>(UIList.CharacterEquipUI);
+            }
+            else
+            {
+                UIManager.Show<CharacterEquipUI>(UIList.CharacterEquipUI);
+            }
+        }
+
+        private void OnReceiveInputU() // U키로 캐릭터 정보창 UI 토글
+        {
+            var CharacterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
+
+            if(CharacterInfoUI.gameObject.activeSelf)
             {
                 UIManager.Hide<CharacterInfoUI>(UIList.CharacterInfoUI);
             }
