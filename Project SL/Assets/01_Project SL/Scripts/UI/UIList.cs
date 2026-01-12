@@ -6,6 +6,7 @@ namespace KYM
         POPUP_START, 
 
         CharacterInfoUI,
+        CharacterEquipUI,
         MenuUI,
         DepthUI,
         BulletinBoardUI,
