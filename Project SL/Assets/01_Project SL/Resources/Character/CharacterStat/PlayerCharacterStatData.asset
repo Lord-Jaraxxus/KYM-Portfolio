@@ -18,3 +18,5 @@ MonoBehaviour:
   <MaxSP>k__BackingField: 100
   <SpConsumeRate>k__BackingField: 10
   <SpRecoveryRate>k__BackingField: 5
+  <MoveSpeed>k__BackingField: 2
+  <SprintSpeed>k__BackingField: 4

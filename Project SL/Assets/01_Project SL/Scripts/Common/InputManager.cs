@@ -13,7 +13,7 @@ namespace KYM
         public event System.Action OnInputLmc; // 좌클릭 입력 이벤트
         public event System.Action onInputRmc; // 우클릭 입력 이벤트 
         public event System.Action onInputSpace; // 스페이스바 입력 이벤트
-        public event System.Action onInputShift; // 쉬프트키 입력 이벤트
+        public event System.Action onInputLShift; // 쉬프트키 입력 이벤트
         public event System.Action onInputCtrl; // 컨트롤키 입력 이벤트
         public event System.Action onInputTab; // 탭키 입력 이벤트
         public event System.Action onInputESC; // ESC키 입력 이벤트
@@ -89,7 +89,7 @@ namespace KYM
             }
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                onInputShift?.Invoke(); // 쉬프트키 입력 이벤트 발생
+                onInputLShift?.Invoke(); // 쉬프트키 입력 이벤트 발생
             }
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {

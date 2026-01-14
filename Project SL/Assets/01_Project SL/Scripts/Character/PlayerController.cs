@@ -122,7 +122,7 @@ namespace KYM
 
             // 입력
             Vector2 inputMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            bool isWalk = Input.GetKey(KeyCode.LeftShift);
+            bool wantsSprint = Input.GetKey(KeyCode.LeftShift);
 
             // 이동 기준 전방: 시네머신 타깃의 수평 투영 forward 사용
             Vector3 camForwardFlat = Vector3.ProjectOnPlane(
@@ -131,7 +131,7 @@ namespace KYM
             ).normalized;
 
             // 상태 전달
-            linkedCharacter.IsWalk = isWalk;
+            linkedCharacter.wantsSprint = wantsSprint;
             linkedCharacter.SetMovementForward(camForwardFlat);
             linkedCharacter.Move(inputMove);
 

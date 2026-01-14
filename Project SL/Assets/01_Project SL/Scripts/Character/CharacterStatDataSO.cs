@@ -20,6 +20,7 @@ namespace KYM
         [field: SerializeField] public float MaxSP { get; set; } = 100f;  // 최대 스태미나
         [field: SerializeField] public float SpConsumeRate { get; set; } = 10f; // 스태미나 소모 속도 
         [field: SerializeField] public float SpRecoveryRate { get; set; } = 5f; // 스태미너 회복 속도
-        [field: SerializeField] public float MoveSpeed { get; set; } = 3f; // 걷기 속도
+        [field: SerializeField] public float MoveSpeed { get; set; } = 2f; // 걷기 속도
+        [field: SerializeField] public float SprintSpeed { get; set; } = 4f; // 달리기 속도
     }
 }

@@ -33,7 +33,7 @@ namespace KYM
         // 이벤트들
         public event System.Action<float, float> OnHpChanged; // 체력 변경 이벤트 (CallBack), (현재 체력, 최대 체력)
         public event System.Action<float, float> OnSpChanged; // 스태미나 변경 이벤트 (CallBack), (현재 스태미나, 최대 스태미나)
-        public event System.Action <bool /*isPlayerCharacter*/, string /*CharacterID*/, Transform /*CharacterTransform*/> OnCharacterDeath; // 사망 이벤트 (CallBack)
+        public event System.Action<bool /*isPlayerCharacter*/, string /*CharacterID*/, Transform /*CharacterTransform*/> OnCharacterDeath; // 사망 이벤트 (CallBack)
         public event System.Action<ItemDataSO /*Before*/, ItemDataSO /*After*/> OnEquipChanged; // 장비 변경 이벤트
 
         // 캐릭터 스텟 관련 변수들
@@ -65,7 +65,9 @@ namespace KYM
         CharacterState[] hitBlockedStates = { CharacterState.Dead }; // 피격 동작 진입이 불가한 상태들
 
         // 캐릭터 이동 + 카메라 관련 변수들
-        public bool IsWalk { get; set; } = false;
+        public bool wantsSprint { get; set; } = false;
+        public bool isSprinting { get; set; } = false;
+        public bool isSprintLocked { get; private set; } = false;
         private float walkBlend;
 
         private Vector3 movementForward;
@@ -141,7 +143,7 @@ namespace KYM
 
         private void Update()
         {
-            walkBlend = Mathf.Lerp(walkBlend, IsWalk ? 1f : 0f, Time.deltaTime);
+            walkBlend = Mathf.Lerp(walkBlend, isSprinting ? 1f : 0f, Time.deltaTime * 2.0f);
             animator.SetFloat("Running", walkBlend);
         }
 
@@ -236,9 +238,19 @@ namespace KYM
             }
 
             // 4) 이동 (중력 없음) — 입력 크기에 따라 속도 보간을 원하면 곱해도 됨
-            float speed = moveSpeed; // 필요 시: moveSpeed * Mathf.Clamp01(input.magnitude);
-            Vector3 displacement = moveDir * speed * dt;
+            isSprinting = wantsSprint && hasInput && !isSprintLocked && CurSP > 0f; // 달리기 상태 결정
+            moveSpeed = isSprinting ? characterStat.SprintSpeed : characterStat.MoveSpeed; // 달리기 중인지에 따라 속도 결정
+            Vector3 displacement = moveDir * moveSpeed * dt;
             characterController.Move(displacement);
+
+            if (isSprinting) // 달리기 중일때 
+            {
+                ConsumeSp(characterStat.SpConsumeRate * dt);
+            }
+            else // 달리기 중이 아닐 때
+            {
+                RecoverySp(characterStat.SpRecoveryRate * dt);
+            }
 
             // 5) 애니메이터 파라미터 (Strafe 블렌딩/스틱 감 보정)
             smoothHorizontal = Mathf.Lerp(smoothHorizontal, input.x, dt * 10f);
@@ -402,6 +414,34 @@ namespace KYM
             TakeDamage(damage);
         }
 
+        private void ConsumeSp(float amount)
+        {
+            if (curSP <= 0 || isSprintLocked == true) { return; } // 현재 스태미너가 0 이하인 경우 소비하지 않음
+
+            curSP -= amount;
+            curSP = Mathf.Clamp(curSP, 0f, MaxSP); // 스태미나 0 ~ 최대 스태미나 사이로 제한
+
+            if (curSP <= 0)
+            {
+                isSprintLocked = true; // 스태미너가 0 이하일 때 달리기 잠금 상태 설정
+            }
+
+            OnSpChanged?.Invoke(CurSP, MaxSP); // 스태미나 변경 이벤트 호출
+        }
+        private void RecoverySp(float amount)
+        {
+            if (curSP >= MaxSP) return; // 이미 풀일 땐 회복 X
+            curSP += amount;
+            curSP = Mathf.Clamp(curSP, 0, MaxSP); // 스태미너를 0과 최대 스태미너 사이로 제한
+
+            float sprintUnlockSp = 20.0f; // 나중에 스텟으로 뺄 수도 있으니?
+            if (curSP >= sprintUnlockSp)
+            {
+                isSprintLocked = false; // 스태미너가 일정 이상으로 올라가면 달리기 잠금 상태 해제, 지금은 20
+            }
+
+            OnSpChanged?.Invoke(curSP, MaxSP); // 스태미너 변경 이벤트 호출
+        }
 
         private void ApplyEquipStat(ItemDataSO beforeEqiupSO, ItemDataSO newEquipSO)
         {
