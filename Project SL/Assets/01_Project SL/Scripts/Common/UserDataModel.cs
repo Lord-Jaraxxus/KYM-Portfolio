@@ -38,9 +38,9 @@ namespace KYM
             {
                 PlayerShopDto.ShopData newShopData = new PlayerShopDto.ShopData(shopData.ShopID); // 생성자로 초기화 
 
-                foreach (ItemDataSO itemData in shopData.ItemsForSale)
+                foreach (ShopItemEntry itemEntry in shopData.ItemEntries)
                 {
-                    PlayerShopDto.ItemStock newItemStock = new PlayerShopDto.ItemStock(itemData.ItemID, itemData.ItemCount); // 생성자로 초기화
+                    PlayerShopDto.ItemStock newItemStock = new PlayerShopDto.ItemStock(itemEntry.itemDataSO.ItemID, itemEntry.initialStock); // 생성자로 초기화
                     newShopData.ItemStocks.Add(newItemStock);
                 }
 

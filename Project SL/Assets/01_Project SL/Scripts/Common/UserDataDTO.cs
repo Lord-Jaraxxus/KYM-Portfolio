@@ -108,8 +108,8 @@ namespace KYM
         [System.Serializable]
         public class ItemStock // 아이템 한 종류의 재고 데이터
         {
-            public string ItemID { get; private set; }
-            public int ItemCount { get; private set; }
+            [field: SerializeField] public string ItemID { get; private set; }
+            [field: SerializeField] public int ItemCount { get; private set; }
 
             public ItemStock(string itemID, int itemCount)
             {
@@ -133,9 +133,9 @@ namespace KYM
         [System.Serializable]
         public class ShopData // 상점 하나의 재고 데이터
         {
-            public string ShopID { get; private set; } // 상점 ID
+            [field: SerializeField] public string ShopID { get; private set; } // 상점 ID
             // public List<(string /* Item ID */, int /* Item Count */)> ItemStocks;  // 아이템 재고 초기 데이터용 튜플 리스트, 이런 구조로 써도 된다
-            public List<ItemStock> ItemStocks { get; private set; } = new List<ItemStock>(); // 아이템 재고 리스트
+            [field: SerializeField] public List<ItemStock> ItemStocks { get; private set; } = new List<ItemStock>(); // 아이템 재고 리스트
 
             public ShopData(string shopID)
             {

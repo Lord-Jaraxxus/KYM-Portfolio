@@ -19,3 +19,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fa7e7216b06b5d043b882d0e4aa9a147, type: 2}
   - {fileID: 11400000, guid: a914ea47a0de5b74ea8a4c192bd4ceb9, type: 2}
   - {fileID: 11400000, guid: 2e633700e2bb7b347b0dc434eb56c0c3, type: 2}
+  ItemEntries:
+  - itemDataSO: {fileID: 11400000, guid: 39557888d0596ba46b3da183e1e229a1, type: 2}
+    initialStock: 1
+  - itemDataSO: {fileID: 11400000, guid: fa7e7216b06b5d043b882d0e4aa9a147, type: 2}
+    initialStock: 1
+  - itemDataSO: {fileID: 11400000, guid: a914ea47a0de5b74ea8a4c192bd4ceb9, type: 2}
+    initialStock: 1
+  - itemDataSO: {fileID: 11400000, guid: 2e633700e2bb7b347b0dc434eb56c0c3, type: 2}
+    initialStock: 1

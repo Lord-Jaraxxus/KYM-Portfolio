@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 namespace KYM
 {
@@ -79,7 +78,7 @@ namespace KYM
             }
         }
 
-        private void InsertShopItem(ItemDataSO item) 
+        private void InsertShopItem(ItemDataSO item)
         {
             InfiniteUI_ListData newData = new InfiniteUI_ListData();
             newData.itemID = item.ItemID;
@@ -113,10 +112,10 @@ namespace KYM
                 }
             }
 
-            // GameDataModel에서 상점 재고 데이터 불러와서 인피니티 스크롤에 데이터 삽입
-            foreach (ItemDataSO item in shopDataSO.ItemsForSale)
+            // GameDataModel에서 상점 데이터 불러와서 인피니티 스크롤에 데이터 삽입
+            foreach (ShopItemEntry itemEntry in shopDataSO.ItemEntries)
             {
-                InsertShopItem(item);
+                InsertShopItem(itemEntry.itemDataSO);
             }
         }
 
@@ -125,14 +124,14 @@ namespace KYM
             infiniteScroll.ClearData();
             infiniteDataContainer.Clear();
 
-            foreach (ItemDataSO item in shopDataSO.ItemsForSale)
+            foreach (ShopItemEntry itemEntry in shopDataSO.ItemEntries)
             {
-                if (item.ItemCategory != Currentcategory && Currentcategory != ItemCategory.All)
+                if (itemEntry.itemDataSO.ItemCategory != Currentcategory && Currentcategory != ItemCategory.All)
                 {
                     continue;// 현재 카테고리에 해당하지 않는 아이템은 건너뜀
                 }
 
-                InsertShopItem(item);
+                InsertShopItem(itemEntry.itemDataSO);
             }
         }
 
@@ -144,7 +143,7 @@ namespace KYM
         }
 
         // 구매 버튼을 눌렀을 때, InfiniteUI_ListItem에서 이벤트가 날아오면 실행
-        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data) 
+        public void OnClickPurchaseButtonFromList(InfiniteUI_ListData data)
         {
             // TODO : 구매 버튼 클릭 시 처리 로직
             Debug.Log(data.itemID);

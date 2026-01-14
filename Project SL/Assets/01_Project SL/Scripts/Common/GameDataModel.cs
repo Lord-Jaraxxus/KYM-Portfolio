@@ -16,6 +16,7 @@ namespace KYM
         {
             CharacterStatDataSO playerStatSo = Resources.Load<CharacterStatDataSO>("Character/CharacterStat/PlayerCharacterStatData");
 
+            // 적 캐릭터 스탯 데이터 로드
             CharacterStatDataSO[] arrEneyStatSO = Resources.LoadAll<CharacterStatDataSO>("Character/EnemyStat/");
             foreach (CharacterStatDataSO enemyStatSO in arrEneyStatSO) 
             {
@@ -24,6 +25,7 @@ namespace KYM
                 Debug.Log($"[GameDataModel] Enemy Stat Data Loaded: ID = {enemyData.EnemyID}");
             }
 
+            // 적 캐릭터 데이터 로드
             EnemyDataSO[] arrEnemyDataSO = Resources.LoadAll<EnemyDataSO>("Character/EnemyData/");
             foreach (EnemyDataSO enemyDataSO in arrEnemyDataSO) 
             {
@@ -31,13 +33,14 @@ namespace KYM
                 Debug.Log($"[GameDataModel] Enemy Data SO Loaded: ID = {enemyDataSO.StatData.ID}");
             }
 
-
+            // 상점 데이터 로드
             ShopDataSO[] arrShopDataSO = Resources.LoadAll<ShopDataSO>("Shop/");
             foreach (ShopDataSO shopDataSO in arrShopDataSO) 
             {
                 ShopDataDto.ShopDatas.Add(shopDataSO);
             }
 
+            // 아이템 데이터 로드
             ItemDataSO[] arrItemDataSO = Resources.LoadAll<ItemDataSO>("ItemData/");
             foreach (ItemDataSO itemDataSO in arrItemDataSO) 
             {

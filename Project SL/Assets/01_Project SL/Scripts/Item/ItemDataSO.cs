@@ -24,7 +24,6 @@ namespace KYM
     public class ItemDataSO : ScriptableObject
     {
         public string ItemID;
-        public int ItemCount;   // 얘는 여기선 좀 빠져야;
 
         public string ItemName;
         public ItemCategory ItemCategory;
