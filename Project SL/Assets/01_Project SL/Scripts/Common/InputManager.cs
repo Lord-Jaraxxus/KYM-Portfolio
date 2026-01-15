@@ -20,6 +20,7 @@ namespace KYM
         public event System.Action onInputF; // F키 입력 이벤트
         public event System.Action onInputI; // I키 입력 이벤트
         public event System.Action onInputP; // P키 입력 이벤트
+        public event System.Action onInputQ; // Q키 입력 이벤트
         public event System.Action onInputU; // U키 입력 이벤트
 
         public event System.Action<float> onInputMouseScroll; // 마우스 스크롤 입력 이벤트
@@ -114,6 +115,10 @@ namespace KYM
             if (Input.GetKeyDown(KeyCode.P)) 
             {
                 onInputP?.Invoke();
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                onInputQ?.Invoke(); // Q키 입력 이벤트 발생
             }
             if (Input.GetKeyDown(KeyCode.U))
             {

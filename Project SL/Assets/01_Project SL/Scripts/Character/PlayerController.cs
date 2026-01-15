@@ -79,6 +79,7 @@ namespace KYM
             InputManager.Singleton.onInputF += OnReceiveInputF;
             InputManager.Singleton.onInputI += OnReceiveInputI;
             InputManager.Singleton.onInputP += OnReceiveInputP;
+            InputManager.Singleton.onInputQ += OnReceiveInputQ;
             InputManager.Singleton.onInputU += OnReceiveInputU;
 
             // 콤보용 뭐시기들 초기화 예정
@@ -106,11 +107,12 @@ namespace KYM
 
             // Input 이벤트 구독 해제
             InputManager.Singleton.OnInputLmc   -= OnReceiveInputLmc;
-            InputManager.Singleton.onInputF     -= OnReceiveInputF;
-            InputManager.Singleton.onInputI     -= OnReceiveInputI;
             InputManager.Singleton.onInputTab   -= OnReceiveInputTab;
             InputManager.Singleton.onInputESC   -= OnReceiveInputESC;
+            InputManager.Singleton.onInputF     -= OnReceiveInputF;
+            InputManager.Singleton.onInputI     -= OnReceiveInputI;
             InputManager.Singleton.onInputP     -= OnReceiveInputP;
+            InputManager.Singleton.onInputQ     -= OnReceiveInputQ;
             InputManager.Singleton.onInputU     -= OnReceiveInputU;
 
             PlayerCharacterContext.Singleton.Unregister(); // 등록된 캐릭터 해제
@@ -239,6 +241,12 @@ namespace KYM
             {
                 UIManager.Show<CharacterEquipUI>(UIList.CharacterEquipUI);
             }
+        }
+
+        private void OnReceiveInputQ() // Q키로 캐릭터 스킬 사용 (아마 첫번째 스킬?)
+        {
+            float projectileSpeed = 3.0f; // 투사체 속도 설정, 이것도 나중에 스킬DTO에서 가져오도록 해야징
+            linkedCharacter.LaunchProjectile(linkedCharacter.skillProjectile, projectileSpeed);
         }
 
         private void OnReceiveInputU() // U키로 캐릭터 정보창 UI 토글

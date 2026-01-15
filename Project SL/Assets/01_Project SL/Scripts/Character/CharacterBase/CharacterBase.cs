@@ -82,6 +82,8 @@ namespace KYM
         [SerializeField] private LockOnPointSO lockOnPointData;
         private List<Transform> lockOnPointContainer = new();
 
+        [SerializeField] public GameObject skillProjectile; // 투사체 프리팹 임시 저장용, 나중에는 스킬DTO 만들어서 게임데이터모델에서 로딩하게 해야지!
+
 
         private void Awake()
         {
@@ -508,6 +510,13 @@ namespace KYM
 
             // TODO : 실제로 아이템이 해제됐을 때 효과를 구현해야함
             ApplyEquipStat(beforeEquipSO, null);
+        }
+
+        public void LaunchProjectile(GameObject projectilePrefab, float speed) 
+        {
+            // TODO : 투사체 발사 로직 구현 (나중에 스킬 시스템 만들 때 다시 생각해보기)
+
+
         }
     }
 }
