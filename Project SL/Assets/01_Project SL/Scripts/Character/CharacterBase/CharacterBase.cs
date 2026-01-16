@@ -194,6 +194,10 @@ namespace KYM
                     break;
                 case "EndCombo":
                     break;
+                case "QSkillCast":
+                    float projectileSpeed = 3.0f; // 지금은 하드코딩, 나중에 스킬데이터 SO로 뺄듯?
+                    LaunchProjectile(skillProjectile, projectileSpeed, projectileSpawnPoint);
+                    break;
             }
         }
 
@@ -533,9 +537,6 @@ namespace KYM
             }
 
             qNextReadyTime = Time.time + qSkillCooldown;    // 다음 사용 가능 시간 갱신
-
-            float projectileSpeed = 3.0f; // 지금은 하드코딩, 나중에 스킬데이터 SO로 뺄듯?
-            LaunchProjectile(skillProjectile, projectileSpeed, projectileSpawnPoint);
 
             animator.SetTrigger("CastTrigger"); // 스킬 시전 애니메이션 재생 트리거 설정
             SetCharacterState(CharacterState.Cast); // 캐릭터 상태를 스킬 시전 상태로 변경
