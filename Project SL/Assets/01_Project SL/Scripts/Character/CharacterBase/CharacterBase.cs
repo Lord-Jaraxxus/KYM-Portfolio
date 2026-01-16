@@ -517,22 +517,22 @@ namespace KYM
             ApplyEquipStat(beforeEquipSO, null);
         }
 
-        //public bool TryUseQSkill() 
-        //{
-        //    // 쿨타임 체크, 사용 불가 상태라면 false 반환
-        //    if (Time.time < qNextReadyTime) 
-        //    {
-        //        Debug.Log("Q Skill is on Cooldown.");
-        //        return false;
-        //    }
+        public bool TryUseQSkill()
+        {
+            // 쿨타임 체크, 사용 불가 상태라면 false 반환
+            if (Time.time < qNextReadyTime)
+            {
+                Debug.Log("Q Skill is on Cooldown.");
+                return false;
+            }
 
-        //    qNextReadyTime = Time.time + qSkillCooldown;    // 다음 사용 가능 시간 갱신
+            qNextReadyTime = Time.time + qSkillCooldown;    // 다음 사용 가능 시간 갱신
 
-        //    float projectileSpeed = 3.0f; // 지금은 하드코딩, 나중에 스킬데이터 SO로 뺄듯?
-        //    LaunchProjectile(skillProjectile, projectileSpeed, projectileSpawnPoint);
+            float projectileSpeed = 3.0f; // 지금은 하드코딩, 나중에 스킬데이터 SO로 뺄듯?
+            LaunchProjectile(skillProjectile, projectileSpeed, projectileSpawnPoint);
 
-        //    return true;
-        //}
+            return true;
+        }
 
 
         public void LaunchProjectile(Projectile projectilePrefab, float speed, Transform spawnPoint) 

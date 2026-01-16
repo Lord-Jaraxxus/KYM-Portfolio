@@ -11,7 +11,7 @@ namespace KYM
 
         public float speed = 10f; // 투사체 속도
         public float lifeTime = 5f; // 투사체 수명
-        public float damage = 10f; // 투사체가 입히는 피해량
+        public float damage = 9f; // 투사체가 입히는 피해량
 
         void Start()
         {
