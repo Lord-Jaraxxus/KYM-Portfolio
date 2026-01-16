@@ -11,6 +11,7 @@ namespace KYM
         Idle,
         Move,
         Attack,
+        Cast,
         Interact,
         Hit,
         Dead
@@ -59,9 +60,10 @@ namespace KYM
 
         // 캐릭터 상태 관련 변수들
         [field: SerializeField] public CharacterState CurrentState { get; private set; } = CharacterState.Idle;
-        CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Move 동작 진입이 불가한 상태들
-        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Attack 동작 진입이 불가한 상태들
-        CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack, CharacterState.Hit, CharacterState.Dead }; // 상호작용 동작 진입이 불가 상태들
+        CharacterState[] moveBlockedStates = { CharacterState.Attack, CharacterState.Cast, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Move 동작 진입이 불가한 상태들
+        CharacterState[] attackBlockedStates = { CharacterState.Attack, CharacterState.Cast, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead };  // Attack 동작 진입이 불가한 상태들
+        CharacterState[] castBlockedStates = { CharacterState.Attack, CharacterState.Cast, CharacterState.Interact, CharacterState.Hit, CharacterState.Dead }; // 스킬 시전 동작 진입이 불가 상태들
+        CharacterState[] interactBlockedState = { CharacterState.Interact, CharacterState.Attack, CharacterState.Cast, CharacterState.Hit, CharacterState.Dead }; // 상호작용 동작 진입이 불가 상태들
         CharacterState[] hitBlockedStates = { CharacterState.Dead }; // 피격 동작 진입이 불가한 상태들
 
         // 캐릭터 이동 + 카메라 관련 변수들
@@ -105,6 +107,8 @@ namespace KYM
             interactState?.setCharacter(this);
             var hitState = animator.GetBehaviour<HitStateMachineBehaviour>();
             hitState?.setCharacter(this);
+            var castState = animator.GetBehaviour<CastStateMachineBehaviour>();
+            castState?.setCharacter(this);
         }
 
 
@@ -519,6 +523,8 @@ namespace KYM
 
         public bool TryUseQSkill()
         {
+            if (castBlockedStates.Contains(CurrentState)) { return false; }  // 스킬 시전 불가 상태라면 false 반환
+
             // 쿨타임 체크, 사용 불가 상태라면 false 반환
             if (Time.time < qNextReadyTime)
             {
@@ -530,6 +536,9 @@ namespace KYM
 
             float projectileSpeed = 3.0f; // 지금은 하드코딩, 나중에 스킬데이터 SO로 뺄듯?
             LaunchProjectile(skillProjectile, projectileSpeed, projectileSpawnPoint);
+
+            animator.SetTrigger("CastTrigger"); // 스킬 시전 애니메이션 재생 트리거 설정
+            SetCharacterState(CharacterState.Cast); // 캐릭터 상태를 스킬 시전 상태로 변경
 
             return true;
         }

@@ -26,7 +26,7 @@ namespace KYM
                 this.linkedCharacter.SetCharacterState(CharacterState.Idle);
                 Debug.Log("Attack ended naturally → Idle");
             }
-            else
+            else // 중간에 방해받았다면
             {
                 Debug.Log("Attack interrupted → state preserved");
             }
