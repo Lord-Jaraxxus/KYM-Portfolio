@@ -195,6 +195,7 @@ namespace KYM
                 case "EndCombo":
                     break;
                 case "QSkillCast":
+                    if (CurrentState != CharacterState.Cast) { return; } // 시전 상태가 아닐 때는 스킬 시전 안함, 중간에 피격 등으로 끊겼을 경우 등
                     float projectileSpeed = 3.0f; // 지금은 하드코딩, 나중에 스킬데이터 SO로 뺄듯?
                     LaunchProjectile(skillProjectile, projectileSpeed, projectileSpawnPoint);
                     break;

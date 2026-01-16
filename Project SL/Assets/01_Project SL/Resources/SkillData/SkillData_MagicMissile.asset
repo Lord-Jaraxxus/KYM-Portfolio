@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31cd40c049d5a6e4285bb88e95bd9373, type: 3}
+  m_Name: SkillData_MagicMissile
+  m_EditorClassIdentifier: 
+  SkillID: 1
+  SkillName: 'Magic Missile '
+  SkillType: 0
+  Cooldown: 3
+  SkillCost: 10
+  AnimationTriggerName: CastTrigger
+  ProjectileData:
+    projectilePrefab: {fileID: 2245804519561719387, guid: c57bc8a68fd6f2240a14a6a7a3c2c214, type: 3}
+    speed: 5
+    damage: 9
+    lifeTime: 5
+  HealData:
+    healAmount: 0
