@@ -11,6 +11,7 @@ namespace KYM
         [field: SerializeField] public EnemyDataDto EnemyDataDto { get; private set; } = new(); // 적 데이터 SO
         [field: SerializeField] public ShopDataDto ShopDataDto { get; private set; } = new(); // 상점 데이터 DTO
         [field: SerializeField] public ItemDatabase ItemDatabase { get; private set; } = new(); // 아이템 데이터베이스 
+        [field: SerializeField] public SkillDatabase SkillDatabase { get; private set; } = new(); // 스킬 데이터베이스
 
         public void Initialize()
         {
@@ -45,6 +46,13 @@ namespace KYM
             foreach (ItemDataSO itemDataSO in arrItemDataSO) 
             {
                 ItemDatabase.ItemDatas.Add(itemDataSO.ItemID, itemDataSO); // ID로 검색 가능하도록 딕셔너리에 저장
+            }
+
+            // 스킬 데이터 로드
+            SkillDataSO[] arrSkillDataSO = Resources.LoadAll<SkillDataSO>("SkillData/");
+            foreach (SkillDataSO skillDataSO in arrSkillDataSO)
+            {
+                SkillDatabase.SkillDatas.Add(skillDataSO.SkillID, skillDataSO); // ID로 검색 가능하도록 딕셔너리에 저장
             }
 
             PlayerStatDto.initailize(playerStatSo); // 플레이어 스탯 데이터 초기화

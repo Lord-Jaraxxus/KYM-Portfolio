@@ -67,4 +67,10 @@ namespace KYM
     {
         [field: SerializeField] public Dictionary<string, ItemDataSO> ItemDatas { get; private set; } = new();
     }
+
+    [System.Serializable]
+    public class SkillDatabase : GameDataDto // 스킬 정보 검색을 위해 SkillDataSO들을 로딩해서 들고있는 데이터베이스
+    {
+        [field: SerializeField] public Dictionary<string, SkillDataSO> SkillDatas { get; private set; } = new();
+    }
 }
