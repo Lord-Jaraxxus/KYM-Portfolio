@@ -245,8 +245,7 @@ namespace KYM
 
         private void OnReceiveInputQ() // Q키로 캐릭터 스킬 사용 (아마 첫번째 스킬?)
         {
-            float projectileSpeed = 3.0f; // 투사체 속도 설정, 이것도 나중에 스킬DTO에서 가져오도록 해야징
-            linkedCharacter.LaunchProjectile(linkedCharacter.skillProjectile, projectileSpeed);
+            linkedCharacter.TryUseQSkill();
         }
 
         private void OnReceiveInputU() // U키로 캐릭터 정보창 UI 토글

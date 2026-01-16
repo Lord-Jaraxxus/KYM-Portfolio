@@ -82,8 +82,13 @@ namespace KYM
         [SerializeField] private LockOnPointSO lockOnPointData;
         private List<Transform> lockOnPointContainer = new();
 
-        [SerializeField] public GameObject skillProjectile; // 투사체 프리팹 임시 저장용, 나중에는 스킬DTO 만들어서 게임데이터모델에서 로딩하게 해야지!
 
+        // 스킬(투사체?) 관련 변수들
+        [SerializeField] public Projectile skillProjectile; // 투사체 프리팹 임시 저장용, 나중에는 스킬DTO 만들어서 게임데이터모델에서 로딩하게 해야지!
+        [SerializeField] public Transform projectileSpawnPoint; // 투사체 생성 위치
+        [SerializeField] public float qSkillCooldown = 3f; // Q 스킬 쿨타임, 나중에 스킬데이터 SO 안에 들어갈듯?
+        private float qNextReadyTime = 0f;
+        // [SerializeField] private SkillDataSO skillDataSO; // 나중에 추가할 스킬 데이터 SO
 
         private void Awake()
         {
@@ -512,11 +517,33 @@ namespace KYM
             ApplyEquipStat(beforeEquipSO, null);
         }
 
-        public void LaunchProjectile(GameObject projectilePrefab, float speed) 
+        //public bool TryUseQSkill() 
+        //{
+        //    // 쿨타임 체크, 사용 불가 상태라면 false 반환
+        //    if (Time.time < qNextReadyTime) 
+        //    {
+        //        Debug.Log("Q Skill is on Cooldown.");
+        //        return false;
+        //    }
+
+        //    qNextReadyTime = Time.time + qSkillCooldown;    // 다음 사용 가능 시간 갱신
+
+        //    float projectileSpeed = 3.0f; // 지금은 하드코딩, 나중에 스킬데이터 SO로 뺄듯?
+        //    LaunchProjectile(skillProjectile, projectileSpeed, projectileSpawnPoint);
+
+        //    return true;
+        //}
+
+
+        public void LaunchProjectile(Projectile projectilePrefab, float speed, Transform spawnPoint) 
         {
-            // TODO : 투사체 발사 로직 구현 (나중에 스킬 시스템 만들 때 다시 생각해보기)
+            // TODO : 투사체 발사 로직 구현 (나중에 스킬 시스템 만들 때 다시 봐야할듯)
 
-
+            Projectile projectile = Instantiate(projectilePrefab); // 투사체 프리팹 인스턴스화
+            projectile.gameObject.SetActive(true); // 투사체 프리팹 활성화
+            projectile.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation); // 투사체 초기 생성 위치 및 회전 설정
+            projectile.Initialize(this); // 투사체 초기화 (투사체의 소유자를 현재 캐릭터로 설정)
+            projectile.speed = speed; // 투사체 속도 설정 (나중에 스킬데이터SO로 퉁칠듯?)
         }
     }
 }
