@@ -7,6 +7,7 @@ namespace KYM
 
         CharacterInfoUI,
         CharacterEquipUI,
+        CharacterSkillUI,
         MenuUI,
         DepthUI,
         BulletinBoardUI,
