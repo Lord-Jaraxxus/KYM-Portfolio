@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -86,7 +87,6 @@ namespace KYM
 
 
         // 스킬(투사체?) 관련 변수들
-        [SerializeField] private SkillDataSO skillDataSO; // 스킬 데이터 SO
         [SerializeField] public Transform projectileSpawnPoint; // 투사체 생성 위치
         private float qNextReadyTime = 0f;
 
@@ -195,7 +195,7 @@ namespace KYM
                     break;
                 case "QSkillCast":
                     if (CurrentState != CharacterState.Cast) { return; } // 시전 상태가 아닐 때는 스킬 시전 안함, 중간에 피격 등으로 끊겼을 경우 등
-                    LaunchProjectile(skillDataSO); 
+                    LaunchProjectile(UserDataModel.Singleton.PlayerSkillDto.QSkillID); 
                     break;
             }
         }
@@ -535,6 +535,8 @@ namespace KYM
                 return false;
             }
 
+            string qSkillID = UserDataModel.Singleton.PlayerSkillDto.QSkillID;
+            SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(qSkillID);
             qNextReadyTime = Time.time + skillDataSO.Cooldown;    // 다음 사용 가능 시간 갱신
 
             animator.SetTrigger("CastTrigger"); // 스킬 시전 애니메이션 재생 트리거 설정
@@ -544,9 +546,10 @@ namespace KYM
         }
 
 
-        public void LaunchProjectile(SkillDataSO skillDataSO) 
+        public void LaunchProjectile(string skillID) 
         {
             // TODO : 투사체 발사 로직 구현 (나중에 스킬 시스템 만들 때 다시 봐야할듯)
+            SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(skillID); // 스킬 데이터 SO 가져오기
 
             Projectile projectile = Instantiate(skillDataSO.ProjectileData.projectilePrefab); // 투사체 프리팹 인스턴스화
             projectile.gameObject.SetActive(true); // 투사체 프리팹 활성화

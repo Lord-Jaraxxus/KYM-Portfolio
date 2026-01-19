@@ -47,6 +47,13 @@ namespace KYM
 
                 PlayerShopDto.ShopDatas.Add(newShopData);
             }
+
+            // 플레이어 스킬 초기화, 일단 매직미사일 하나만 1레벨로 들고있도록
+            PlayerSkillDto.PlayerSkillData playerSkillData = new PlayerSkillDto.PlayerSkillData();
+            playerSkillData.SkillID = "1";
+            playerSkillData.SkillLevel = 1;
+            PlayerSkillDto.PlayerSkills.Add(playerSkillData);
+            PlayerSkillDto.SetQSkillID(playerSkillData.SkillID); // 일단 Q스킬에 장착
         }
 
         public void LoadData<T>(out T loadData) where T : UserDataDto, new()
@@ -161,6 +168,21 @@ namespace KYM
             PlayerEquipSlotData sameEquipSlotData = GetSameSlotEquip(itemDataSO.EquipSlotType);
             
             PlayerEquipDto.PlayerEquipSlots.Remove(sameEquipSlotData); // 해당 장비 슬롯의 데이터를 리스트에서 삭제
+        }
+
+        public int GetSkillLevel(string skillID) 
+        {
+            PlayerSkillDto.PlayerSkillData playerSkillData = PlayerSkillDto.PlayerSkills.FirstOrDefault(i => i.SkillID == skillID);
+            
+            if(playerSkillData != null) 
+            {
+                return playerSkillData.SkillLevel;
+            }
+            else 
+            {
+                Debug.LogWarning($"[UserDataModel] Skill ID {skillID} not found in PlayerSkillDto.");
+                return 0; // 스킬을 가지고 있지 않다면 레벨 0 반환
+            }
         }
     }
 }

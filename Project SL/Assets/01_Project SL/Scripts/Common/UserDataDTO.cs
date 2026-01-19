@@ -174,7 +174,7 @@ namespace KYM
             public string EquippedItemID; // 장착된 아이템 ID
             public ItemDataSO EquipedItemDataSO; // 장착된 아이템 데이터 SO
         }
-        [field: SerializeField] public List<PlayerEquipSlotData> PlayerEquipSlots = new List<PlayerEquipSlotData>();
+        [SerializeField] public List<PlayerEquipSlotData> PlayerEquipSlots = new List<PlayerEquipSlotData>();
     }
 
     [System.Serializable]
@@ -186,6 +186,17 @@ namespace KYM
             public string SkillID;
             public int SkillLevel;
         }
-        [field: SerializeField] public List<PlayerSkillData> PlayerSkills = new List<PlayerSkillData>();
+        [SerializeField] public List<PlayerSkillData> PlayerSkills = new List<PlayerSkillData>(); // 현재 플레이어가 가진 스킬들에 대한 정보 리스트
+        [field: SerializeField] public string QSkillID { get; private set; }
+        [field: SerializeField] public string ESkillID { get; private set; }
+
+        public void SetQSkillID(string skillID)
+        {
+            QSkillID = skillID;
+        }
+        public void SetESkillID(string skillID)
+        {
+            ESkillID = skillID;
+        }
     }
 }
