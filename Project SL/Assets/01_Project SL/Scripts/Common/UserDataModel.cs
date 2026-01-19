@@ -17,6 +17,7 @@ namespace KYM
         [field: SerializeField] public PlayerEconomyDto PlayerEconomyDto { get; private set; } = new();
         [field: SerializeField] public PlayerShopDto PlayerShopDto { get; private set; } = new();
         [field: SerializeField] public PlayerEquipDto PlayerEquipDto { get; private set; } = new();
+        [field: SerializeField] public PlayerSkillDto PlayerSkillDto { get; private set; } = new();
 
         public event Action<PlayerItemDto.PlayerItemData> OnInventoryUpdated;
         public event Action<int /*CurExp*/, int /*ReqExp*/> OnExpUpdated; // 경험치 정보 변경시 이벤트

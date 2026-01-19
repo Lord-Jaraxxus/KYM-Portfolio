@@ -12,19 +12,25 @@ namespace KYM
         Buff,
         Heal, 
     }
+
     [Serializable]
     public struct ProjectileSkillData
     {
         public Projectile projectilePrefab;
         public float speed;
-        public float damage;
+        public int baseProjectileCount;
+        public int extraProjectilePerLevel;
+        public float baseDamage;
+        public float extraDamagePerLevel;
         public float lifeTime;
     }
+
     [Serializable]
     public struct HealSkillData
     {
         public float healAmount;
     }
+
 
     [CreateAssetMenu(fileName = "SkillData", menuName = "PROJECT KYM/SkillData")]
 

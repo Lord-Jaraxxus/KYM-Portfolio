@@ -174,4 +174,11 @@ namespace KYM
         }
         public List<PlayerEquipSlotData> PlayerEquipSlots = new List<PlayerEquipSlotData>();  // 이거 그냥 5개만 따로 변수로 만들어놓으면 안댐? 괜히 나중에 헷갈릴수도 잇는데
     }
+
+    [System.Serializable]
+    public class PlayerSkillDto : UserDataDto
+    {
+        public string SkillID;
+        public int SkillLevel;
+    }
 }
