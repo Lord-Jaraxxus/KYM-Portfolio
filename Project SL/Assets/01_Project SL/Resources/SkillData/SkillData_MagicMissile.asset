@@ -21,7 +21,10 @@ MonoBehaviour:
   ProjectileData:
     projectilePrefab: {fileID: 2245804519561719387, guid: c57bc8a68fd6f2240a14a6a7a3c2c214, type: 3}
     speed: 5
-    damage: 9
+    baseProjectileCount: 1
+    extraProjectilePerLevel: 1
+    baseDamage: 10
+    extraDamagePerLevel: 5
     lifeTime: 5
   HealData:
     healAmount: 0

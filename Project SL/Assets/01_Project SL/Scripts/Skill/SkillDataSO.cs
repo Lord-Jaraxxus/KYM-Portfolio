@@ -18,11 +18,11 @@ namespace KYM
     {
         public Projectile projectilePrefab;
         public float speed;
-        public int baseProjectileCount;
-        public int extraProjectilePerLevel;
-        public float baseDamage;
-        public float extraDamagePerLevel;
-        public float lifeTime;
+        public int baseProjectileCount; // 기본 발사체 개수
+        public int extraProjectilePerLevel; // 레벨당 추가 발사체 개수
+        public float baseDamage; // 기본 데미지
+        public float extraDamagePerLevel; // 레벨당 추가 데미지
+        public float lifeTime; // 발사체 지속 시간
     }
 
     [Serializable]

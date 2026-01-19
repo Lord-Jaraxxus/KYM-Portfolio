@@ -162,7 +162,5 @@ namespace KYM
             
             PlayerEquipDto.PlayerEquipSlots.Remove(sameEquipSlotData); // 해당 장비 슬롯의 데이터를 리스트에서 삭제
         }
-
-
     }
 }

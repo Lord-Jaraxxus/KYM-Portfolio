@@ -166,19 +166,26 @@ namespace KYM
     [System.Serializable]
     public class PlayerEquipDto : UserDataDto
     {
+        [System.Serializable]
+
         public class PlayerEquipSlotData
         {
             public EquipSlotType SlotType;
             public string EquippedItemID; // 장착된 아이템 ID
             public ItemDataSO EquipedItemDataSO; // 장착된 아이템 데이터 SO
         }
-        public List<PlayerEquipSlotData> PlayerEquipSlots = new List<PlayerEquipSlotData>();  // 이거 그냥 5개만 따로 변수로 만들어놓으면 안댐? 괜히 나중에 헷갈릴수도 잇는데
+        [field: SerializeField] public List<PlayerEquipSlotData> PlayerEquipSlots = new List<PlayerEquipSlotData>();
     }
 
     [System.Serializable]
     public class PlayerSkillDto : UserDataDto
     {
-        public string SkillID;
-        public int SkillLevel;
+        [System.Serializable]
+        public class PlayerSkillData
+        {
+            public string SkillID;
+            public int SkillLevel;
+        }
+        [field: SerializeField] public List<PlayerSkillData> PlayerSkills = new List<PlayerSkillData>();
     }
 }

@@ -66,5 +66,14 @@ namespace KYM
             else
                 return itemDataSO;
         }
+
+        public SkillDataSO GetSkillDataSO(string skillID)
+        {
+            // 받아온 SkillID로 SkillDatabase에서 ID로 검색해서 해당 스킬의 SkillDataSO를 가져옴, skillDataSO변수에 담김, 해당 ID의 스킬SO가 없으면 null 리턴
+            if (!SkillDatabase.SkillDatas.TryGetValue(skillID, out SkillDataSO skillDataSO))
+                return null;
+            else
+                return skillDataSO;
+        }
     }
 }
