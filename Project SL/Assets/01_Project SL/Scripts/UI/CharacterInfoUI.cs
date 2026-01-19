@@ -39,7 +39,7 @@ namespace KYM
             expText.text = $"{curExp} / {reqExp}";
         }
 
-        public void RefreshLevelUI(int level)
+        public void RefreshLevelUI(int level, int levelupCount)
         {
             levelText.text = $"Lv.{level}";
         }

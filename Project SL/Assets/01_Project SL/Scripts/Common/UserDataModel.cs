@@ -21,7 +21,7 @@ namespace KYM
 
         public event Action<PlayerItemDto.PlayerItemData> OnInventoryUpdated;
         public event Action<int /*CurExp*/, int /*ReqExp*/> OnExpUpdated; // 경험치 정보 변경시 이벤트
-        public event Action<int /*level*/> OnLevelUpdated; // 레벨 변경(레벨업)시 이벤트
+        public event Action<int /*level*/, int /*levelUpCount*/> OnLevelUpdated; // 레벨 변경(레벨업)시 이벤트
         public event Action<int> OnEconomyUpdated; // 골드 등 재화 정보 변경시 이벤트
 
         public void Initialize()
@@ -82,17 +82,21 @@ namespace KYM
             int currentExp = PlayerInfoDto.CurrentExp + exp;
             int requiredExp = PlayerInfoDto.RequiredExp;
             int level = PlayerInfoDto.Level;
+            int levelUpCount = 0;
+
             while (currentExp >= requiredExp)
             {
                 currentExp -= requiredExp;
                 level++;
+                levelUpCount++;
                 requiredExp = level * 100; // 요구 경험치 변경, 예시로 레벨 * 100으로 설정
             }
             PlayerInfoDto.SetLevelAndExp(level, currentExp, requiredExp);
 
             // 레벨업 및 경험치 변경 이벤트 호출
-            OnLevelUpdated?.Invoke(level);
+            OnLevelUpdated?.Invoke(level, levelUpCount);
             OnExpUpdated?.Invoke(currentExp, requiredExp);
+            PlayerSkillDto.AddSkillPoint(levelUpCount); // 레벨업 횟수만큼 스킬 포인트 추가
 
             Debug.Log($"[UserDataModel] Added {exp} EXP. New Level: {level}, Current EXP: {currentExp}/{requiredExp}");
         }

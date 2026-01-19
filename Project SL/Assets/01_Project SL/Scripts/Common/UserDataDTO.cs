@@ -189,6 +189,7 @@ namespace KYM
         [SerializeField] public List<PlayerSkillData> PlayerSkills = new List<PlayerSkillData>(); // 현재 플레이어가 가진 스킬들에 대한 정보 리스트
         [field: SerializeField] public string QSkillID { get; private set; }
         [field: SerializeField] public string ESkillID { get; private set; }
+        [field: SerializeField] public int SkillPoints { get; private set; }
 
         public void SetQSkillID(string skillID)
         {
@@ -197,6 +198,16 @@ namespace KYM
         public void SetESkillID(string skillID)
         {
             ESkillID = skillID;
+        }
+        public void AddSkillPoint(int amount)
+        {
+            SkillPoints += amount;
+        }
+        public bool TrySpendSkillPoint(int amount = 1)
+        {
+            if (SkillPoints < amount) return false;
+            SkillPoints -= amount;
+            return true;
         }
     }
 }

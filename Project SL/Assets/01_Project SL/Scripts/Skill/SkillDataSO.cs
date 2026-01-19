@@ -39,6 +39,8 @@ namespace KYM
         [Header("Common")]
         public string SkillID;
         public string SkillName;
+        public Sprite SkillIcon;
+
         public SkillType SkillType;
         public float Cooldown;
         public float SkillCost; // ¾Æ¸¶ SP cost
