@@ -89,6 +89,9 @@ namespace KYM
         // 스킬(투사체?) 관련 변수들
         [SerializeField] public Transform projectileSpawnPoint; // 투사체 생성 위치
         private float qNextReadyTime = 0f;
+        [SerializeField] private float burstInterval = 0.12f; // 연사 간격. 나중에 SkillDataSO에 넣고 싶으면 필드로 빼면 됨.
+        private Coroutine launchRoutine;
+
 
 
         private void Awake()
@@ -195,7 +198,7 @@ namespace KYM
                     break;
                 case "QSkillCast":
                     if (CurrentState != CharacterState.Cast) { return; } // 시전 상태가 아닐 때는 스킬 시전 안함, 중간에 피격 등으로 끊겼을 경우 등
-                    LaunchProjectile(UserDataModel.Singleton.PlayerSkillDto.QSkillID); 
+                    LaunchProjectile(UserDataModel.Singleton.PlayerSkillDto.QSkillID);
                     break;
             }
         }
@@ -524,6 +527,7 @@ namespace KYM
             ApplyEquipStat(beforeEquipSO, null);
         }
 
+        // 밑으로는 스킬 관련 메소드들
         public bool TryUseQSkill()
         {
             if (castBlockedStates.Contains(CurrentState)) { return false; }  // 스킬 시전 불가 상태라면 false 반환
@@ -539,23 +543,70 @@ namespace KYM
             SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(qSkillID);
             qNextReadyTime = Time.time + skillDataSO.Cooldown;    // 다음 사용 가능 시간 갱신
 
-            animator.SetTrigger("CastTrigger"); // 스킬 시전 애니메이션 재생 트리거 설정
+            // 밑에 얘들도 사실 지금은 좀 하드코딩이라 나중에 스킬 다양해지면 다시 손봐야 함
+            animator.SetTrigger("CastTrigger"); // 스킬 시전 애니메이션 재생 트리거 설정 
             SetCharacterState(CharacterState.Cast); // 캐릭터 상태를 스킬 시전 상태로 변경
 
             return true;
         }
 
-
-        public void LaunchProjectile(string skillID) 
+        public void LaunchProjectile(string skillID)
         {
-            // TODO : 투사체 발사 로직 구현 (나중에 스킬 시스템 만들 때 다시 봐야할듯)
+            // TODO : 투사체 발사 로직 구현 
+
             SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(skillID); // 스킬 데이터 SO 가져오기
+
+            // SkillDataSO가 null이거나, 스킬 타입이 투사체가 아니거나, 투사체 생성 위치가 null일 경우 경고 로그 출력 후 함수 종료
+            if (skillDataSO == null || skillDataSO.SkillType != SkillType.Projectile || projectileSpawnPoint == null)
+            {
+                Debug.LogWarning($"[CharacterBase] Skill ID {skillID} is invalid or not a projectile skill.");
+                return;
+            }
+
+            int skillLevel = UserDataModel.Singleton.GetSkillLevel(skillID); // 스킬 레벨 가져오기
+
+            // 같은 스킬을 연속으로 쓸 때 이전 연사 루틴을 끊고 싶으면 이렇게
+            if (launchRoutine != null) StopCoroutine(launchRoutine);
+            launchRoutine = StartCoroutine(LaunchProjectileRoutine(skillDataSO, skillLevel));
 
             Projectile projectile = Instantiate(skillDataSO.ProjectileData.projectilePrefab); // 투사체 프리팹 인스턴스화
             projectile.gameObject.SetActive(true); // 투사체 프리팹 활성화
             projectile.transform.SetPositionAndRotation(projectileSpawnPoint.position, projectileSpawnPoint.rotation); // 투사체 초기 생성 위치 및 회전 설정
             projectile.Initialize(this); // 투사체 초기화 (투사체의 소유자를 현재 캐릭터로 설정)
             projectile.speed = skillDataSO.ProjectileData.speed; // 투사체 속도 설정 (나중에 스킬데이터SO로 퉁칠듯?)
+        }
+
+        private IEnumerator LaunchProjectileRoutine(SkillDataSO skillDataSO, int skillLevel)
+        {
+            ProjectileSkillData projectilelData = skillDataSO.ProjectileData;
+
+            int count = projectilelData.baseProjectileCount + projectilelData.extraProjectilePerLevel * (skillLevel - 1); // 발사체 개수 계산
+
+            float damage = projectilelData.baseDamage + projectilelData.extraDamagePerLevel * (skillLevel - 1); // 투사체 데미지 계산
+            float speed = projectilelData.speed;
+            float lifeTime = projectilelData.lifeTime;
+
+            for (int i = 0; i < count; i++)
+            {
+                SpawnOneProjectile(projectilelData.projectilePrefab, speed, damage, lifeTime);
+
+                // 마지막 발 뒤엔 대기할 필요 없으니
+                if (i < count - 1)
+                    yield return new WaitForSeconds(burstInterval);
+            }
+            launchRoutine = null;
+        }
+        private void SpawnOneProjectile(Projectile prefab, float speed, float damage, float lifeTime)
+        {
+            if (prefab == null) return;
+
+            // Instantiate할 때 위치/회전 바로 넣는 게 깔끔함
+            Projectile projectile = Instantiate(prefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+
+            projectile.Initialize(this);
+            projectile.speed = speed;
+            projectile.damage = damage;
+            projectile.lifeTime = lifeTime;
         }
     }
 }
