@@ -89,7 +89,7 @@ namespace KYM
         // 스킬(투사체?) 관련 변수들
         [SerializeField] public Transform projectileSpawnPoint; // 투사체 생성 위치
         private float qNextReadyTime = 0f;
-        [SerializeField] private float burstInterval = 0.12f; // 연사 간격. 나중에 SkillDataSO에 넣고 싶으면 필드로 빼면 됨.
+        [SerializeField] private float burstInterval = 0.2f; // 연사 간격. 나중에 SkillDataSO에 넣고 싶으면 필드로 빼면 됨.
         private Coroutine launchRoutine;
 
 

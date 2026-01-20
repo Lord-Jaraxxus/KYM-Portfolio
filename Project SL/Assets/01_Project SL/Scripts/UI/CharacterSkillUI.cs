@@ -65,7 +65,7 @@ namespace KYM
         {
             int skillIndex = 0;
 
-            // 게임데이터에 로딩해놓은 스킬 정보들을 순서대로 가져와서 초기화
+            // 유저데이터에 로딩해놓은 스킬 정보들을 순서대로 가져와서 초기화
             foreach (var skillData in UserDataModel.Singleton.PlayerSkillDto.PlayerSkills)
             {
                 SkillDataSO skillDataSO = GameDataModel.Singleton.SkillDatabase.SkillDatas[skillData.SkillID];
