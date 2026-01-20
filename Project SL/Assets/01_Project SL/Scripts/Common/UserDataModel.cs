@@ -48,12 +48,19 @@ namespace KYM
                 PlayerShopDto.ShopDatas.Add(newShopData);
             }
 
-            // 플레이어 스킬 초기화, 일단 매직미사일 하나만 1레벨로 들고있도록
-            PlayerSkillDto.PlayerSkillData playerSkillData = new PlayerSkillDto.PlayerSkillData();
-            playerSkillData.SkillID = "1";
-            playerSkillData.SkillLevel = 1;
-            PlayerSkillDto.PlayerSkills.Add(playerSkillData);
-            PlayerSkillDto.SetQSkillID(playerSkillData.SkillID); // 일단 Q스킬에 장착
+            // 플레이어 스킬 초기화, 게임데이터에서 로딩한 모든 스킬들을 일단 0레벨로 들고있도록 함
+            foreach (var keyValuePair in GameDataModel.Singleton.SkillDatabase.SkillDatas) 
+            {
+                PlayerSkillDto.PlayerSkillData playerSkillData = new PlayerSkillDto.PlayerSkillData();
+                playerSkillData.SkillID = keyValuePair.Key;
+                playerSkillData.SkillLevel = 0; // 처음에는 모든 스킬 레벨 0
+                PlayerSkillDto.PlayerSkills.Add(playerSkillData);
+            }
+
+            // 테스트용으로 일단 스킬 하나는 레벨 1로 시작하고 Q스킬에 장착
+            PlayerSkillDto.PlayerSkillData playerSkillData1 = PlayerSkillDto.PlayerSkills.Find(playerSkillData1 => playerSkillData1.SkillID == "1");
+            playerSkillData1.SkillLevel = 1; // 일단 1번 스킬(매직 미사일)은 레벨 1로 시작
+            PlayerSkillDto.SetQSkillID(playerSkillData1.SkillID); // 일단 Q스킬에 장착
         }
 
         public void LoadData<T>(out T loadData) where T : UserDataDto, new()
@@ -94,9 +101,9 @@ namespace KYM
             PlayerInfoDto.SetLevelAndExp(level, currentExp, requiredExp);
 
             // 레벨업 및 경험치 변경 이벤트 호출
+            PlayerSkillDto.AddSkillPoint(levelUpCount); // 레벨업 횟수만큼 스킬 포인트 추가, 서순때문에 OnLevelUpdated 호출 전에 실행해야함
             OnLevelUpdated?.Invoke(level, levelUpCount);
             OnExpUpdated?.Invoke(currentExp, requiredExp);
-            PlayerSkillDto.AddSkillPoint(levelUpCount); // 레벨업 횟수만큼 스킬 포인트 추가
 
             Debug.Log($"[UserDataModel] Added {exp} EXP. New Level: {level}, Current EXP: {currentExp}/{requiredExp}");
         }

@@ -78,6 +78,7 @@ namespace KYM
             InputManager.Singleton.onInputESC += OnReceiveInputESC;
             InputManager.Singleton.onInputF += OnReceiveInputF;
             InputManager.Singleton.onInputI += OnReceiveInputI;
+            InputManager.Singleton.onInputK += OnReceiveInputK;
             InputManager.Singleton.onInputP += OnReceiveInputP;
             InputManager.Singleton.onInputQ += OnReceiveInputQ;
             InputManager.Singleton.onInputU += OnReceiveInputU;
@@ -111,6 +112,7 @@ namespace KYM
             InputManager.Singleton.onInputESC   -= OnReceiveInputESC;
             InputManager.Singleton.onInputF     -= OnReceiveInputF;
             InputManager.Singleton.onInputI     -= OnReceiveInputI;
+            InputManager.Singleton.onInputK     -= OnReceiveInputK;
             InputManager.Singleton.onInputP     -= OnReceiveInputP;
             InputManager.Singleton.onInputQ     -= OnReceiveInputQ;
             InputManager.Singleton.onInputU     -= OnReceiveInputU;
@@ -228,6 +230,19 @@ namespace KYM
             }
 
             // Debug.Log("인벤토리 토글");
+        }
+        private void OnReceiveInputK() // K키로 스킬창 UI 토글
+        {
+            var characterSkillUI = UIManager.Singleton.GetUI<CharacterSkillUI>(UIList.CharacterSkillUI);
+
+            if (characterSkillUI.gameObject.activeSelf)
+            {
+                UIManager.Hide<CharacterSkillUI>(UIList.CharacterSkillUI);
+            }
+            else
+            {
+                UIManager.Show<CharacterSkillUI>(UIList.CharacterSkillUI);
+            }
         }
         private void OnReceiveInputP() // P키로 캐릭터 장비창 UI 토글
         {

@@ -49,12 +49,12 @@ namespace KYM
             modalButton.gameObject.SetActive(false); // 모달도 꺼두기
         }
 
-        public void OnClickSlotButton(EquipSlotType type) => OnClickEquipSlotButton(type);
-        public void OnClickSlotButton_Head() => OnClickEquipSlotButton(EquipSlotType.Head);
-        public void OnClickSlotButton_Body() => OnClickEquipSlotButton(EquipSlotType.Body);
-        public void OnClickSlotButton_Legs() => OnClickEquipSlotButton(EquipSlotType.Legs);
-        public void OnClickSlotButton_Weapon() => OnClickEquipSlotButton(EquipSlotType.Weapon);
-        public void OnClickSlotButton_Shield() => OnClickEquipSlotButton(EquipSlotType.Shield);
+        private void OnClickSlotButton(EquipSlotType type) => OnClickEquipSlotButton(type);
+        private void OnClickSlotButton_Head() => OnClickEquipSlotButton(EquipSlotType.Head);
+        private void OnClickSlotButton_Body() => OnClickEquipSlotButton(EquipSlotType.Body);
+        private void OnClickSlotButton_Legs() => OnClickEquipSlotButton(EquipSlotType.Legs);
+        private void OnClickSlotButton_Weapon() => OnClickEquipSlotButton(EquipSlotType.Weapon);
+        private void OnClickSlotButton_Shield() => OnClickEquipSlotButton(EquipSlotType.Shield);
 
         public void SetIcon(ItemDataSO beforeEquipSO, ItemDataSO newEquipSO)
         {
