@@ -80,24 +80,24 @@ namespace KYM
             {
                 impactKey = "DirtImpact";
             }
-            if (other.material.name.Contains("Wood"))
+            else if (other.material.name.Contains("Wood"))
             {
                 impactKey = "WoodImpact";
             }
-            if (other.material.name.Contains("Metal"))
+            else if (other.material.name.Contains("Metal"))
             {
                 impactKey = "MetalImpact";
             }
-            if (other.material.name.Contains("Leaf"))
+            else if (other.material.name.Contains("Leaf"))
             {
                 impactKey = "LeafImpact";
             }
-            if (other.material.name.Contains("Water"))
+            else if (other.material.name.Contains("Water"))
             {
                 impactKey = "WaterImpact";
             }
 
-            // EffectManager.Instance.SpawnEffect(impactKey, hitPoint, hitNormal); 아직 이펙트매니저가 업슴!
+            EffectManager.Instance.SpawnEffect(impactKey, hitPoint, hitNormal); 
         }
 
         private void OnHitCharacter(IHittable hittable)
@@ -110,7 +110,7 @@ namespace KYM
 
 
             hittable.OnHit(damage); // IHittable 인터페이스를 통해 피해를 입힙니다.
-            // EffectManager.Instance.SpawnEffect("WaterImpact", hitPoint, hitNormal); // 투사체가 적중했을 때의 효과 생성, 일단 임시로 물! -> 아직 이펙트매니저가 업슴
+            EffectManager.Instance.SpawnEffect("WaterImpact", hitPoint, hitNormal); // 투사체가 적중했을 때의 효과 생성, 일단 임시로 물!
         }
     }
 }

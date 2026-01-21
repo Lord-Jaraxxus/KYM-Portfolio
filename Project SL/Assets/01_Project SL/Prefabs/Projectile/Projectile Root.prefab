@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 513
   owner: {fileID: 0}
   speed: 10
   lifeTime: 5

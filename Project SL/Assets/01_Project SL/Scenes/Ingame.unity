@@ -599,6 +599,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &508832460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 508832462}
+  - component: {fileID: 508832461}
+  m_Layer: 0
+  m_Name: KYM.EffectSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &508832461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508832460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf3c7092979ba4e44ac8f844b305c34b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectList:
+  - key: WoodImpact
+    lifeTIme: 5
+    prefab: {fileID: 138412, guid: 5c4d1a294362a054bbb5525993d027d5, type: 3}
+  - key: MetalImpact
+    lifeTIme: 5
+    prefab: {fileID: 180772, guid: 013b3ac64cbf77c4da069708c17cc3d3, type: 3}
+  - key: DirtImpact
+    lifeTIme: 5
+    prefab: {fileID: 186004, guid: 3d01d3fc86fb2c843b56cfbacb87e37d, type: 3}
+--- !u!4 &508832462
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508832460}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &509688113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 795811827468607469, guid: 0eb3e0176a4c3364ca666c0aa6895d7e, type: 3}
@@ -1631,7 +1685,7 @@ GameObject:
   - component: {fileID: 1842503561}
   - component: {fileID: 1842503560}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1644,7 +1698,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1842503559}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 2af9d4cdd087d054da8f7254a5f61bc0, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3034,6 +3088,7 @@ SceneRoots:
   - {fileID: 1547760159}
   - {fileID: 431331055}
   - {fileID: 7188755620241132255}
+  - {fileID: 508832462}
   - {fileID: 6230067210383075844}
   - {fileID: 38906605}
   - {fileID: 573254360}
