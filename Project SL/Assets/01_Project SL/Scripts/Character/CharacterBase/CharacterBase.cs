@@ -113,7 +113,6 @@ namespace KYM
             castState?.setCharacter(this);
         }
 
-
         private void Start()
         {
             animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent; // 애니메이션 이벤트 리스너 콜백 등록
@@ -149,6 +148,7 @@ namespace KYM
                 RecoverySp(characterStat.SpRecoveryRate * Time.deltaTime);
             }
         }
+
 
         private void InitializeLockOnPoint()
         {
