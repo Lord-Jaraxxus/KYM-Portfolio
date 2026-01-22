@@ -571,7 +571,7 @@ namespace KYM
 
         private IEnumerator LaunchProjectileRoutine(SkillDataSO skillDataSO, int skillLevel)
         {
-            ProjectileSkillData projectilelData = skillDataSO.ProjectileData;
+            ProjectileDataSO projectilelData = skillDataSO.SkillData as ProjectileDataSO;
 
             int count = projectilelData.baseProjectileCount + projectilelData.extraProjectilePerLevel * (skillLevel - 1); // 발사체 개수 계산
 

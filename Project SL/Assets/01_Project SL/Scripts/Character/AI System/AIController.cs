@@ -62,28 +62,28 @@ namespace KYM
             {
                 if (remainDistance <= (stoppingDistance + stopEpsilon)) // 목적지까지 남은 거리가 정지 거리 + 허용 오차 이하라면
                 {
-                    Debug.Log("케이스 1");
-
                     StopMovement();
                     InvokeArrivalOnce();
                     return;
+
+                    // Debug.Log("케이스 1");
                 }
             }
             else // isStopped가 true라면
             {
                 if (remainDistance > (stoppingDistance + resumeEpsilon)) // 목적지까지 남은 거리가 정지 거리 + 재개 오차 초과라면 (계속 움직여야 한다면)
                 {
-                    Debug.Log("케이스 2");
-
                     isStopped = false;
                     navAgent.isStopped = false;
+
+                    //  Debug.Log("케이스 2");
                 }
                 else // (정지 거리 + 허용 오차)와 (정지 거리 + 재개 오차) 사이에 있다면
                 {
-                    Debug.Log("케이스 3");
-
                     StopMovement();
                     return;
+
+                    //Debug.Log("케이스 3");
                 }
             }
 
@@ -128,7 +128,7 @@ namespace KYM
             arrivbalInvokedOnce = true;
             OnDestinationReachedEvent?.Invoke(); // 도착 이벤트 호출
 
-            Debug.Log("[AIController] Destination Reached");
+            // Debug.Log("[AIController] Destination Reached");
         }
     }
 }

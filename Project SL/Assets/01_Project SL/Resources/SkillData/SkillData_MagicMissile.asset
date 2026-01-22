@@ -14,17 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillID: 1
   SkillName: 'Magic Missile '
+  SkillIcon: {fileID: 0}
   SkillType: 0
   Cooldown: 3
   SkillCost: 10
   AnimationTriggerName: CastTrigger
-  ProjectileData:
-    projectilePrefab: {fileID: 2245804519561719387, guid: c57bc8a68fd6f2240a14a6a7a3c2c214, type: 3}
-    speed: 5
-    baseProjectileCount: 3
-    extraProjectilePerLevel: 1
-    baseDamage: 5
-    extraDamagePerLevel: 1
-    lifeTime: 5
-  HealData:
-    healAmount: 0
+  SkillData: {fileID: 11400000, guid: 43ff7efc43af00d46b92116f6844ad1a, type: 2}

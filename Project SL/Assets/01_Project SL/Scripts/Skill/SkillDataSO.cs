@@ -13,9 +13,29 @@ namespace KYM
         Heal, 
     }
 
-    [Serializable]
-    public struct ProjectileSkillData
+    //[Serializable]
+    //public struct ProjectileSkillData
+    //{
+    //    public Projectile projectilePrefab;
+    //    public float speed;
+    //    public int baseProjectileCount; // 기본 발사체 개수
+    //    public int extraProjectilePerLevel; // 레벨당 추가 발사체 개수
+    //    public float baseDamage; // 기본 데미지
+    //    public float extraDamagePerLevel; // 레벨당 추가 데미지
+    //    public float lifeTime; // 발사체 지속 시간
+    //}
+
+    //[Serializable]
+    //public struct HealSkillData
+    //{
+    //    public float healAmount;
+    //}
+
+    [CreateAssetMenu(fileName = "ProjectileData", menuName = "PROJECT KYM/SkillData_Sub/ProjectileData")]
+    public class ProjectileDataSO : ScriptableObject 
     {
+        public string projectileID;
+
         public Projectile projectilePrefab;
         public float speed;
         public int baseProjectileCount; // 기본 발사체 개수
@@ -25,15 +45,16 @@ namespace KYM
         public float lifeTime; // 발사체 지속 시간
     }
 
-    [Serializable]
-    public struct HealSkillData
+    [CreateAssetMenu(fileName = "HealData", menuName = "PROJECT KYM/SkillData_Sub/HealData")]
+    public class HealDataSO : ScriptableObject 
     {
+        public string healID;
+
         public float healAmount;
     }
 
 
     [CreateAssetMenu(fileName = "SkillData", menuName = "PROJECT KYM/SkillData")]
-
     public class SkillDataSO : ScriptableObject
     {
         [Header("Common")]
@@ -46,10 +67,13 @@ namespace KYM
         public float SkillCost; // 아마 SP cost
         public string AnimationTriggerName; // 스킬 애니메이션 트리거 이름, 나중에 혹시 필요해질지도?
 
-        [Header("Projectile")]
-        public ProjectileSkillData ProjectileData;
+        [Header("SubSkillDataSO")]
+        public ScriptableObject SkillData;
 
-        [Header("Heal")]
-        public HealSkillData HealData;
+        //[Header("Projectile")]
+        //public ProjectileSkillData ProjectileData;
+
+        //[Header("Heal")]
+        //public HealSkillData HealData;
     }
 }
