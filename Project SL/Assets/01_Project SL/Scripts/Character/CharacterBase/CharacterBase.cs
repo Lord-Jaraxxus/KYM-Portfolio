@@ -118,7 +118,7 @@ namespace KYM
         {
             animationEventListener.OnReceiveAnimationEvent += OnCallbackReceiveAnimationEvent; // 애니메이션 이벤트 리스너 콜백 등록
 
-            OnCharacterDeath += DeathEventHandler.Singleton.OnReceiveDeathEvent; // 사망 이벤트 핸들러 콜백 등록
+            OnCharacterDeath += DeathEventHandler.OnReceiveDeathEvent; // 사망 이벤트 핸들러 콜백 등록
 
             SetActiveRagdoll(false);
 
@@ -132,7 +132,22 @@ namespace KYM
 
         private void OnDestroy()
         {
-            OnCharacterDeath -= DeathEventHandler.Singleton.OnReceiveDeathEvent; // 사망 이벤트 핸들러 콜백 해제
+            OnCharacterDeath -= DeathEventHandler.OnReceiveDeathEvent; // 사망 이벤트 핸들러 콜백 해제
+        }
+
+        private void Update()
+        {
+            walkBlend = Mathf.Lerp(walkBlend, isSprinting ? 1f : 0f, Time.deltaTime * 2.0f);
+            animator.SetFloat("Running", walkBlend);
+
+            if (isSprinting) // 달리기 중일때 
+            {
+                ConsumeSp(characterStat.SpConsumeRate * Time.deltaTime);
+            }
+            else // 달리기 중이 아닐 때
+            {
+                RecoverySp(characterStat.SpRecoveryRate * Time.deltaTime);
+            }
         }
 
         private void InitializeLockOnPoint()
@@ -152,12 +167,6 @@ namespace KYM
         public Transform GetLockOnPoint(int index)
         {
             return lockOnPointContainer[index % lockOnPointContainer.Count];
-        }
-
-        private void Update()
-        {
-            walkBlend = Mathf.Lerp(walkBlend, isSprinting ? 1f : 0f, Time.deltaTime * 2.0f);
-            animator.SetFloat("Running", walkBlend);
         }
 
         private void SetActiveRagdoll(bool isActive)
@@ -259,15 +268,6 @@ namespace KYM
             moveSpeed = isSprinting ? characterStat.SprintSpeed : characterStat.MoveSpeed; // 달리기 중인지에 따라 속도 결정
             Vector3 displacement = moveDir * moveSpeed * dt;
             characterController.Move(displacement);
-
-            if (isSprinting) // 달리기 중일때 
-            {
-                ConsumeSp(characterStat.SpConsumeRate * dt);
-            }
-            else // 달리기 중이 아닐 때
-            {
-                RecoverySp(characterStat.SpRecoveryRate * dt);
-            }
 
             // 5) 애니메이터 파라미터 (Strafe 블렌딩/스틱 감 보정)
             smoothHorizontal = Mathf.Lerp(smoothHorizontal, input.x, dt * 10f);
@@ -390,8 +390,7 @@ namespace KYM
 
         public float TakeDamage(float damage)
         {
-            // 방어력 계산, 일단 방어력만큼 고정값으로 데미지 깎이도록, 나중에 퍼센트 계산으로 갈수도?
-            float finalDamage = Mathf.Max(0f, damage - Defense); // 0보다 작아지면 안되니까 방어력 뺀 값이 음수면 0으로 처리
+            float finalDamage = DamageCalculator.CalculateDamage(damage, defense); // 스태틱 클래스인 DamageCalculator에서 데미지 계산
 
             curHP -= finalDamage;
             curHP = Mathf.Clamp(curHP, 0f, MaxHP); // 체력 0 ~ 최대 체력 사이로 제한
@@ -568,12 +567,6 @@ namespace KYM
             // 같은 스킬을 연속으로 쓸 때 이전 연사 루틴을 끊고 싶으면 이렇게
             if (launchRoutine != null) StopCoroutine(launchRoutine);
             launchRoutine = StartCoroutine(LaunchProjectileRoutine(skillDataSO, skillLevel));
-
-            Projectile projectile = Instantiate(skillDataSO.ProjectileData.projectilePrefab); // 투사체 프리팹 인스턴스화
-            projectile.gameObject.SetActive(true); // 투사체 프리팹 활성화
-            projectile.transform.SetPositionAndRotation(projectileSpawnPoint.position, projectileSpawnPoint.rotation); // 투사체 초기 생성 위치 및 회전 설정
-            projectile.Initialize(this); // 투사체 초기화 (투사체의 소유자를 현재 캐릭터로 설정)
-            projectile.speed = skillDataSO.ProjectileData.speed; // 투사체 속도 설정 (나중에 스킬데이터SO로 퉁칠듯?)
         }
 
         private IEnumerator LaunchProjectileRoutine(SkillDataSO skillDataSO, int skillLevel)
