@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace KYM
 {
-    public class DeathEventHandler : SingletonBase<DeathEventHandler>
+    public static class DeathEventHandler
     {
-        public void OnReceiveDeathEvent(bool isPlayerCharacter, string characterID, Transform characterTransform)
+        public static void OnReceiveDeathEvent(bool isPlayerCharacter, string characterID, Transform characterTransform)
         {
             if (isPlayerCharacter) // 플레이어 캐릭터일 경우
             {
