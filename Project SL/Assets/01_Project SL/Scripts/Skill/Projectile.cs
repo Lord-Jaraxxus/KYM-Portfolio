@@ -22,26 +22,24 @@ namespace KYM
         {
             float moveDistance = speed * Time.deltaTime;
 
-            // Raycast로 충돌 체크
-            Ray ray = new Ray(transform.position, transform.forward);
-            if (Physics.Raycast(ray, out RaycastHit hit, moveDistance, hitMask))
-            {
-                // 충돌한 것이 투사체의 주인(오너)이면 무시
-                if (owner != null && hit.collider.transform.IsChildOf(owner.transform))
-                {
-                    // 그냥 이번 프레임은 이동만
-                    transform.Translate(Vector3.forward * moveDistance, Space.Self);
-                    return;
-                }
-
-                HandleHit(hit.collider);
-                Destroy(gameObject); // 충돌하면 투사체 제거
-                return;
-            }
-
             transform.Translate(Vector3.forward * moveDistance, Space.Self); // 투사체를 앞으로 이동시킵니다.
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            // 충돌한 것이 투사체의 주인(오너)이면 무시
+            if (owner != null && other.transform.IsChildOf(owner.transform))
+                return;
+
+            // 레이어 마스크 필터링 (적 캐릭터의 센서 등을 거르기 위함)
+            if (((1 << other.gameObject.layer) & hitMask.value) == 0)
+                return;
+
+
+            HandleHit(other);
+            Destroy(gameObject); // 충돌하면 투사체 제거
+            return;
+        }
 
         public void Initialize(CharacterBase owner)
         {
