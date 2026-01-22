@@ -33,8 +33,8 @@ namespace KYM
         private void Start()
         {
             // 아이템 버튼 클릭 이벤트 연결 초기화하고 연결, 근데 이거 Start에 있어도 되나? 잘 돌아가긴 하던데.. 밑에 UpdateData에 있는 게 정석인가?
-            itemButton.onClick.RemoveAllListeners();
-            itemButton.onClick.AddListener(OnClickItemButton);
+            //itemButton.onClick.RemoveAllListeners();
+            //itemButton.onClick.AddListener(OnClickItemButton);
 
             if (itemPriceText != null) // (인벤토리 or 상점 구분) 아이템 가격에 대한 GUI가 있다면, 즉 상점에 표시된 아이템이라면. 일단 이렇게 처리해놓긴 했는데;  
             {
@@ -78,7 +78,7 @@ namespace KYM
             }  
         }
 
-        private void OnClickItemButton()
+        public void OnClickItemButton()
         {
             onItemClicked?.Invoke(listData);
         }
