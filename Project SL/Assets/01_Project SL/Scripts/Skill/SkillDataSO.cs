@@ -13,24 +13,6 @@ namespace KYM
         Heal, 
     }
 
-    //[Serializable]
-    //public struct ProjectileSkillData
-    //{
-    //    public Projectile projectilePrefab;
-    //    public float speed;
-    //    public int baseProjectileCount; // 기본 발사체 개수
-    //    public int extraProjectilePerLevel; // 레벨당 추가 발사체 개수
-    //    public float baseDamage; // 기본 데미지
-    //    public float extraDamagePerLevel; // 레벨당 추가 데미지
-    //    public float lifeTime; // 발사체 지속 시간
-    //}
-
-    //[Serializable]
-    //public struct HealSkillData
-    //{
-    //    public float healAmount;
-    //}
-
     [CreateAssetMenu(fileName = "ProjectileData", menuName = "PROJECT KYM/SkillData_Sub/ProjectileData")]
     public class ProjectileDataSO : ScriptableObject 
     {
@@ -69,11 +51,5 @@ namespace KYM
 
         [Header("SubSkillDataSO")]
         public ScriptableObject SkillData;
-
-        //[Header("Projectile")]
-        //public ProjectileSkillData ProjectileData;
-
-        //[Header("Heal")]
-        //public HealSkillData HealData;
     }
 }

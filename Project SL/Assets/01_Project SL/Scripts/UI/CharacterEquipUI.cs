@@ -47,6 +47,14 @@ namespace KYM
         {
             panel.SetActive(false); // 버튼 패널 꺼두기
             modalButton.gameObject.SetActive(false); // 모달도 꺼두기
+
+            PlayerController.Instance.LinkedCharacter.OnEquipChanged += SetIcon; // 장비 변경시 아이콘 갱신되도록 이벤트 연결
+            Initialize(); // 초기 세팅
+        }
+
+        private void OnDisable()
+        {
+            PlayerController.Instance.LinkedCharacter.OnEquipChanged -= SetIcon; // 이벤트 해제
         }
 
         private void OnClickSlotButton(EquipSlotType type) => OnClickEquipSlotButton(type);
@@ -55,6 +63,18 @@ namespace KYM
         private void OnClickSlotButton_Legs() => OnClickEquipSlotButton(EquipSlotType.Legs);
         private void OnClickSlotButton_Weapon() => OnClickEquipSlotButton(EquipSlotType.Weapon);
         private void OnClickSlotButton_Shield() => OnClickEquipSlotButton(EquipSlotType.Shield);
+
+        private void Initialize() 
+        {
+            // 초기 아이콘 세팅
+            foreach(var slotData in UserDataModel.Singleton.PlayerEquipDto.PlayerEquipSlots) 
+            {
+                if (slotData.EquipedItemDataSO != null) 
+                {
+                    SetIcon(null, slotData.EquipedItemDataSO);
+                }
+            }
+        }
 
         public void SetIcon(ItemDataSO beforeEquipSO, ItemDataSO newEquipSO)
         {
@@ -111,13 +131,13 @@ namespace KYM
             }
         }
 
-        private void SetPopupActive(bool isActive) 
+        private void SetPopupActive(bool isActive)
         {
             panel.SetActive(isActive);
             modalButton.gameObject.SetActive(isActive);
-        } 
+        }
 
-        private void OnClickEquipSlotButton(EquipSlotType slotType) 
+        private void OnClickEquipSlotButton(EquipSlotType slotType)
         {
             PlayerEquipDto.PlayerEquipSlotData sameSlotEquip = UserDataModel.Singleton.GetSameSlotEquip(slotType);
             if (sameSlotEquip != null) // 해당 슬롯에 장비가 있을 경우에만
@@ -145,12 +165,12 @@ namespace KYM
             panelRect.anchoredPosition = localPos;
         }
 
-        private void OnClickModalButton() 
+        private void OnClickModalButton()
         {
             SetPopupActive(false);
         }
 
-        private void OnClickUnequipButton() 
+        private void OnClickUnequipButton()
         {
             // TODO : 장비를 해제하고 인벤토리에 돌려놓기.
             CharacterBase playerCharacter = PlayerCharacterContext.Singleton.CurrentPlayerCharacter; // 현재 플레이어 캐릭터 가져옴
@@ -159,7 +179,7 @@ namespace KYM
             SetPopupActive(false);
         }
 
-        private void OnClickDropButton() 
+        private void OnClickDropButton()
         {
             SetPopupActive(false);
         }

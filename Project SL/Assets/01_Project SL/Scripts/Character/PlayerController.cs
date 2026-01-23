@@ -69,7 +69,6 @@ namespace KYM
             linkedCharacter.OnSpChanged += playerHUD.RefreshSpUI;   // 플레이어 캐릭터 SP 변경시 HUD 갱신
             UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
             shopUI.OnShopClosed += linkedCharacter.SetCharacterState; // 상점 닫기 버튼 클릭시 (상점 닫힐시) 플레이어 상태 변경
-            linkedCharacter.OnEquipChanged += characterEquipUI.SetIcon; // 장착 아이템 변경시 장비창의 아이콘 갱신
             linkedCharacter.OnEquipChanged += OnEquipChanged; // 장착 아이템 변경시 콜백 추가
 
             // Input 이벤트 구독
