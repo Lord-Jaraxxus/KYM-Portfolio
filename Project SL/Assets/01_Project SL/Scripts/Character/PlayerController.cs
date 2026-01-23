@@ -51,6 +51,7 @@ namespace KYM
         {
             // 캐릭터 초기화
             linkedCharacter.Initialize(GameDataModel.Singleton.PlayerStatDto.playerCharacterStatSO, true);
+            linkedCharacter.SetQSkillID(UserDataModel.Singleton.PlayerSkillDto.QSkillID); // 플레이어 캐릭터의 Q스킬 ID 세팅
 
             // UI - PlayerHUD 초기화
             var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);

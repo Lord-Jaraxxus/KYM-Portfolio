@@ -89,10 +89,10 @@ namespace KYM
         // 스킬(투사체?) 관련 변수들
         [SerializeField] public Transform projectileSpawnPoint; // 투사체 생성 위치
         private float qNextReadyTime = 0f;
-        [SerializeField] private float burstInterval = 0.2f; // 연사 간격. 나중에 SkillDataSO에 넣고 싶으면 필드로 빼면 됨.
+        [SerializeField] private float burstInterval = 0.2f; // 연사 간격. 나중에 SkillDataSO에 넣고 싶으면 거기로 빼면 됨.
         private Coroutine launchRoutine;
-
-
+        private string currentQSkillID = string.Empty; // 캐릭터의 현재 Q스킬 ID
+        private string currentESkillID = string.Empty; // 캐릭터의 현재 E스킬 ID
 
         private void Awake()
         {
@@ -207,7 +207,7 @@ namespace KYM
                     break;
                 case "QSkillCast":
                     if (CurrentState != CharacterState.Cast) { return; } // 시전 상태가 아닐 때는 스킬 시전 안함, 중간에 피격 등으로 끊겼을 경우 등
-                    LaunchProjectile(UserDataModel.Singleton.PlayerSkillDto.QSkillID);
+                    LaunchProjectile(currentQSkillID);
                     break;
             }
         }
@@ -459,6 +459,7 @@ namespace KYM
             OnSpChanged?.Invoke(curSP, MaxSP); // 스태미너 변경 이벤트 호출
         }
 
+        // 장비템 관련 메소드들
         private void ApplyEquipStat(ItemDataSO beforeEqiupSO, ItemDataSO newEquipSO)
         {
             // TODO : 장비에 따른 스텟 변경 로직 구현
@@ -526,7 +527,21 @@ namespace KYM
             ApplyEquipStat(beforeEquipSO, null);
         }
 
-        // 밑으로는 스킬 관련 메소드들
+
+        // 스킬 관련 메소드들
+        public void SetQSkillID(string qSkillID)
+        {
+            if(qSkillID == null) return;
+
+            currentQSkillID = qSkillID;
+        }
+        public void SetEskillID(string eSkillID)
+        {
+            if(eSkillID == null) return;
+
+            currentESkillID = eSkillID;
+        }
+
         public bool TryUseQSkill()
         {
             if (castBlockedStates.Contains(CurrentState)) { return false; }  // 스킬 시전 불가 상태라면 false 반환
@@ -538,13 +553,11 @@ namespace KYM
                 return false;
             }
 
-            string qSkillID = UserDataModel.Singleton.PlayerSkillDto.QSkillID;
-            SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(qSkillID);
+            SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(currentQSkillID);
             qNextReadyTime = Time.time + skillDataSO.Cooldown;    // 다음 사용 가능 시간 갱신
 
-            // 밑에 얘들도 사실 지금은 좀 하드코딩이라 나중에 스킬 다양해지면 다시 손봐야 함
-            animator.SetTrigger("CastTrigger"); // 스킬 시전 애니메이션 재생 트리거 설정 
-            SetCharacterState(CharacterState.Cast); // 캐릭터 상태를 스킬 시전 상태로 변경
+            animator.SetTrigger(skillDataSO.AnimationTriggerName); // 스킬 시전 애니메이션 재생 트리거 설정 
+            SetCharacterState(CharacterState.Cast); // 캐릭터 상태를 스킬 시전 상태로 변경 <- 이부분은 좀 그 뭐냐 하드코딩? 이라 나중에 바꿔줄 필요가 있을지도?
 
             return true;
         }
