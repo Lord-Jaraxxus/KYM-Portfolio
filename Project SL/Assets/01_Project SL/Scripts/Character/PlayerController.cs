@@ -64,6 +64,7 @@ namespace KYM
             var characterEquipUI = UIManager.Singleton.GetUI<CharacterEquipUI>(UIList.CharacterEquipUI);
             // UI - 캐릭터 정보창 UI 초기화
             var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
+            characterInfoUI.Initialize(); // 캐릭터 정보창 UI 초기화
 
             // 이벤트 구독
             linkedCharacter.OnHpChanged += playerHUD.RefreshHpUI;   // 플레이어 캐릭터 HP 변경시 HUD 갱신

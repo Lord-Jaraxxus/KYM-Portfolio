@@ -84,6 +84,12 @@ namespace KYM
             FileManager.WriteFileFromString(savePath, jsonFormat);
         }
 
+        public int CalculateRequiredExp(int level)
+        {
+            int requiredExp = level * 100; // 요구 경험치 계산, 예시로 레벨 * 100으로 설정
+            return requiredExp;
+        }
+
         public void AddExp(int exp)
         {
             int currentExp = PlayerInfoDto.CurrentExp + exp;
@@ -96,14 +102,14 @@ namespace KYM
                 currentExp -= requiredExp;
                 level++;
                 levelUpCount++;
-                requiredExp = level * 100; // 요구 경험치 변경, 예시로 레벨 * 100으로 설정
+                requiredExp = CalculateRequiredExp(level); // 요구 경험치 변경
             }
-            PlayerInfoDto.SetLevelAndExp(level, currentExp, requiredExp);
-
             // 레벨업 및 경험치 변경 이벤트 호출
             PlayerSkillDto.AddSkillPoint(levelUpCount); // 레벨업 횟수만큼 스킬 포인트 추가, 서순때문에 OnLevelUpdated 호출 전에 실행해야함
             OnLevelUpdated?.Invoke(level, levelUpCount);
             OnExpUpdated?.Invoke(currentExp, requiredExp);
+
+            PlayerInfoDto.SetLevelAndExp(level, currentExp, requiredExp); // UserDataDto에 변경된 값 저장, UI에서 이전의 값들을 가져다 쓸 수 있도록 갱신은 이벤트 다 보낸 후 마지막에
 
             Debug.Log($"[UserDataModel] Added {exp} EXP. New Level: {level}, Current EXP: {currentExp}/{requiredExp}");
         }
