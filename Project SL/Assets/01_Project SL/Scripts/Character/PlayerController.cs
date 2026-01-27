@@ -140,10 +140,10 @@ namespace KYM
             linkedCharacter.SetMovementForward(camForwardFlat);
             linkedCharacter.Move(inputMove);
 
-            if (CameraSystem.Instance.IsActiveLockOn)
+            if (CameraSystem.Instance.IsActiveLockOn) // 락온 상태라면
             {
                 // 캐릭터 방향을 락온 타겟 방향으로 조정, Y값은 바꾸지 않음
-                Vector3 direction = (CameraSystem.Instance.AimingPoint - linkedCharacter.transform.position).normalized;
+                Vector3 direction = (CameraSystem.Instance.LockOnTarget.position - linkedCharacter.transform.position).normalized;
                 direction.y = 0f;
                 linkedCharacter.transform.forward = direction;
 

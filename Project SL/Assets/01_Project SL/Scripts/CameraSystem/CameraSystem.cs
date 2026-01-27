@@ -8,6 +8,7 @@ namespace KYM
     {
         public static CameraSystem Instance { get; private set; }
         public bool IsActiveLockOn => lockOnActived;
+        public Transform LockOnTarget => lockOnTargetPoint;
 
         [field: SerializeField] public Vector3 AimingPoint { get; private set; }
 
