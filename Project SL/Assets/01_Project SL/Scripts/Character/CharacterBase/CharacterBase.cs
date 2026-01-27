@@ -554,6 +554,15 @@ namespace KYM
             }
 
             SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(currentQSkillID);
+
+            // SP 체크, 충분한 SP가 없다면 false 반환
+            if (curSP < skillDataSO.SkillCost) 
+            {
+                Debug.Log("Not enough SP to use Q Skill.");
+                return false;
+            }
+
+            curSP -= skillDataSO.SkillCost; // SP 소모
             qNextReadyTime = Time.time + skillDataSO.Cooldown;    // 다음 사용 가능 시간 갱신
 
             animator.SetTrigger(skillDataSO.AnimationTriggerName); // 스킬 시전 애니메이션 재생 트리거 설정 
