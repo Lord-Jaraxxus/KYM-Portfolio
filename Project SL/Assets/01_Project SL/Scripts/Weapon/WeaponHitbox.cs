@@ -28,7 +28,11 @@ namespace KYM
             // if (other.gameObject.layer == weaponOwner.gameObject.layer) return; // 아군 피격 방지 <- 이건 레이어를 아끼기 위해서 빼는게 좋다 하심
 
             HitboxPart part = other.GetComponent<HitboxPart>();
-            if (part == null) return; 
+            if (part == null) return;
+
+            // 아군 피격 방지: '맞은 캐릭터'의 태그 vs '무기 소유자' 태그
+            if (part.Owner != null && part.Owner.CompareTag(weaponOwner.tag)) return;
+
 
             if (hittedCharacter == null || part.Owner != hittedCharacter ) // 일단 검증은 한번만, 나중엔 해쉬로 바꿔야할지도 (3개체 이상 동시에 때리면?)
             {
