@@ -1486,6 +1486,7 @@ Transform:
   m_Children:
   - {fileID: 8942946766334084308}
   - {fileID: 6763162114999645302}
+  - {fileID: 6201295662783014465}
   - {fileID: 1781990654517185736}
   - {fileID: 8122042428543063507}
   - {fileID: 1249507856980312980}
@@ -1528,13 +1529,17 @@ MonoBehaviour:
   characterController: {fileID: 0}
   weaponHitBox: {fileID: 0}
   characterEquipments: []
-  <CurrentState>k__BackingField: 0
   maxHP: 0
   curHP: 0
   maxSP: 0
   curSP: 0
   moveSpeed: 0
+  attack: 10
+  defense: 10
+  <CurrentState>k__BackingField: 0
   lockOnPointData: {fileID: 0}
+  projectileSpawnPoint: {fileID: 6201295662783014465}
+  burstInterval: 0.12
 --- !u!114 &3152640575629208564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3068,6 +3073,37 @@ Transform:
   - {fileID: 2212738389760964994}
   m_Father: {fileID: 406733486390328813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6139039360595007797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6201295662783014465}
+  m_Layer: 8
+  m_Name: ProjectileSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6201295662783014465
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6139039360595007797}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.3, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8566497838619086728}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6222933406007755782
 GameObject:
   m_ObjectHideFlags: 0
@@ -4433,7 +4469,7 @@ GameObject:
   - component: {fileID: 2657518403942283248}
   - component: {fileID: 175896544482226565}
   - component: {fileID: 354962113309754931}
-  m_Layer: 8
+  m_Layer: 11
   m_Name: InteractionSensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6127,7 +6163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 106878, guid: d9997adaf286f9b45a050f836bce2f10, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 402282, guid: d9997adaf286f9b45a050f836bce2f10, type: 3}
       propertyPath: m_LocalScale.x

@@ -11,7 +11,9 @@ namespace KYM
 
         private CharacterBase target;
         private float targetDistance; // 타겟과의 거리
-        [SerializeField] private float AttackRange = 2f; // 공격 범위 설정 (예: 1미터)
+        // [SerializeField] private float AttackRange = 2f; // 공격 범위 설정 (예: 1미터)
+
+        private AICombatBehaviour combatBehaviour;
 
         public override void OnEnterState(AIBrain brain)
         {
@@ -19,6 +21,7 @@ namespace KYM
             brain.AISensor.OnDetectedCharacterEvent += OnCallbackDetectedCharacter; // 캐릭터 감지 이벤트 등록
 
             target = brain.AISensor.DetectedTarget;
+            combatBehaviour = brain.GetComponent<AICombatBehaviour>();
         }
 
         public override void OnExitState(AIBrain brain)
@@ -34,16 +37,22 @@ namespace KYM
             if (target != null) // 타겟(플레이어)이 존재할 때
             {
                 targetDistance = Vector3.Distance(brain.transform.position, target.transform.position); // 타겟과의 거리 계산
-                if (targetDistance > AttackRange)
+
+                if (combatBehaviour != null)
                 {
-                    Chase(brain); // 타겟이 공격 범위를 벗어나면 추격
-                    // Debug.Log("Chasing Target. Distance: " + targetDistance);
+                    combatBehaviour.Tick(brain, target, targetDistance);
                 }
-                else
-                {
-                    Attack(brain); // 타겟이 공격 범위 내에 있으면 공격
-                    // Debug.Log("Attacking Target. Distance: " + targetDistance);
-                }
+
+                //if (targetDistance > AttackRange)
+                //{
+                //    Chase(brain); // 타겟이 공격 범위를 벗어나면 추격
+                //    // Debug.Log("Chasing Target. Distance: " + targetDistance);
+                //}
+                //else
+                //{
+                //    Attack(brain); // 타겟이 공격 범위 내에 있으면 공격
+                //    // Debug.Log("Attacking Target. Distance: " + targetDistance);
+                //}
             }
         }
 

@@ -584,7 +584,7 @@ namespace KYM
                 return;
             }
 
-            int skillLevel = UserDataModel.Singleton.GetSkillLevel(skillID); // 스킬 레벨 가져오기
+            int skillLevel = UserDataModel.Singleton.GetSkillLevel(skillID); // 스킬 레벨 가져오기 <- 아 여기도 UserDataModel니까 빼야하는데;
 
             // 같은 스킬을 연속으로 쓸 때 이전 연사 루틴을 끊고 싶으면 이렇게
             if (launchRoutine != null) StopCoroutine(launchRoutine);
