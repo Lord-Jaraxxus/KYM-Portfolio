@@ -10,6 +10,7 @@ namespace KYM
         private Transform popupRoot; // 팝업 UI를 담을 루트 트랜스폼
         private Dictionary<UIList, UIBase> panels = new Dictionary<UIList, UIBase>(); // 패널 UI들을 저장할 딕셔너리
         private Dictionary<UIList, UIBase> popups = new Dictionary<UIList, UIBase>(); // 팝업 UI들을 저장할 딕셔너리
+        private readonly List<UIBase> cursorVisibleUIs = new(); // 커서를 필요로 하는 활성화된 UI 목록
 
         public Camera UICamera { get; private set; } // UI 카메라 프로퍼티
 
@@ -72,6 +73,13 @@ namespace KYM
             if (newUI == null) return null; // UI가 없으면 null 반환
 
             newUI.Show(); // UI를 보여줌
+
+            if (newUI.IsNeedCursorVisible) 
+            {
+                InputManager.Singleton.IsForceCursorVisible = true; // 커서가 보이도록 설정
+                Singleton.cursorVisibleUIs.Add(newUI); // 커서를 필요로 하는 UI 목록에 추가
+            }
+
             return newUI; // 보여준 UI 반환
         }
 
@@ -81,6 +89,16 @@ namespace KYM
             if (!targetUI) return null; // UI가 없으면 null 반환
 
             targetUI.Hide(); // UI를 숨김
+
+            if (targetUI.IsNeedCursorVisible) 
+            {
+                Singleton.cursorVisibleUIs.Remove(targetUI); // 커서를 필요로 하는 UI 목록에서 제거
+                if (Singleton.cursorVisibleUIs.Count <= 0) // 커서를 필요로 하는 UI가 더 이상 없으면
+                {
+                    InputManager.Singleton.IsForceCursorVisible = false; // 커서를 숨김
+                }
+            }
+
             return targetUI;
         }
 

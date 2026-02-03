@@ -9,6 +9,8 @@ namespace KYM
 {
     public class CharacterSkillUI : UIBase
     {
+        public override bool IsNeedCursorVisible => true;
+
         // 스킬 포인트 텍스트
         [SerializeField] private TextMeshProUGUI skillPoint;
 

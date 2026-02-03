@@ -7,6 +7,8 @@ namespace KYM
 {
     public class TitleUI : UIBase
     {
+        public override bool IsNeedCursorVisible => true;
+
         [SerializeField] private Button startButton;
         [SerializeField] private Button quitButton;
 

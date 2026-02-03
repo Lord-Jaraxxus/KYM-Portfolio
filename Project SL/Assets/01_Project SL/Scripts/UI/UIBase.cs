@@ -7,7 +7,7 @@ namespace KYM
     public abstract class UIBase : MonoBehaviour    // 추상 클래스, 부모로만 동작
     {
         public virtual bool IsDepthUI { get; } = false; // UI가 Depth UI인지 여부 (기본값은 false)
-
+        public virtual bool IsNeedCursorVisible { get; } = false; // UI가 커서 표시가 필요한지 여부 (기본값은 false)
 
         public virtual void Show() // UI를 보여주는 메서드
         {

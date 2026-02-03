@@ -7,6 +7,8 @@ namespace KYM
 {
     public class CharacterEquipUI : UIBase
     {
+        public override bool IsNeedCursorVisible => true;
+
         // 콘텍스트 팝업 관련
         [SerializeField] private Button modalButton;
         [SerializeField] private GameObject panel;

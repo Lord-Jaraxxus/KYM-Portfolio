@@ -8,6 +8,8 @@ namespace KYM
 {
     public class ShopUI : UIBase
     {
+        public override bool IsNeedCursorVisible => true;
+
         // 상점 데이터 관련
         [SerializeField] public string shopID;    // 얘가 여기 있어도 되남;
         ShopDataSO shopDataSO; // 상점 데이터 (품목, 수량, 가격)

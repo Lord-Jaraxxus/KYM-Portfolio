@@ -9,6 +9,10 @@ namespace KYM
 {
     public class CharacterInfoUI : UIBase
     {
+        public override bool IsNeedCursorVisible => true;
+
+        private bool isInitialized = false;
+
         [SerializeField] Image expBar;
 
         [SerializeField] TextMeshProUGUI levelText;
@@ -79,7 +83,6 @@ namespace KYM
             UserDataModel.Singleton.OnExpUpdated -= RefreshExpUI;
             UserDataModel.Singleton.OnLevelUpdated -= RefreshLevelUI;
         }
-
 
         public void Initialize()
         {

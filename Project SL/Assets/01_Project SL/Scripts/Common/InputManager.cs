@@ -6,6 +6,8 @@ namespace KYM
 {
     public class InputManager : SingletonBase<InputManager>
     {
+        public bool IsCursorVisibleState => Cursor.visible; // 현재 커서 표시 상태 확인
+
         public Vector2 InputMove { get; private set; }  // 이동 입력 벡터 (수평, 수직)
         public Vector2 InputLook { get; private set; }  // 마우스 이동 입력 벡터 (수평, 수직)
         public float inputMouseScroll { get; private set; } // 마우스 스크롤 입력 값
@@ -13,7 +15,8 @@ namespace KYM
         public event System.Action OnInputLmc; // 좌클릭 입력 이벤트
         public event System.Action onInputRmc; // 우클릭 입력 이벤트 
         public event System.Action onInputSpace; // 스페이스바 입력 이벤트
-        public event System.Action onInputLShift; // 쉬프트키 입력 이벤트
+        public event System.Action onInputLShiftDown; // 쉬프트키 입력 key Down 이벤트
+        public event System.Action onInputLShiftUp;   // 쉬프트키 떼는 이벤트
         public event System.Action onInputCtrl; // 컨트롤키 입력 이벤트
         public event System.Action onInputTab; // 탭키 입력 이벤트
         public event System.Action onInputESC; // ESC키 입력 이벤트
@@ -28,11 +31,11 @@ namespace KYM
 
         public bool IsForceCursorVisible
         {
-            get => IsForceCursorVisible;
+            get => isForceCursorVisible;
             set
             {
-                IsForceCursorVisible = value; // 커서 강제 표시 여부 설정
-                if (IsForceCursorVisible)
+                isForceCursorVisible = value; // 커서 강제 표시 여부 설정
+                if (isForceCursorVisible)
                 {
                     SetCursorVisible(true); // 커서 강제 표시가 true면 커서 보이기
                 }
@@ -91,7 +94,11 @@ namespace KYM
             }
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                onInputLShift?.Invoke(); // 쉬프트키 입력 이벤트 발생
+                onInputLShiftDown?.Invoke(); // 쉬프트키 입력 key Down이벤트 발생
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                onInputLShiftUp?.Invoke();// 쉬프트키 떼는 이벤트 필요시 추가
             }
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
