@@ -41,7 +41,6 @@ namespace KYM
 
         // 런타임 초기화 : 씬 로드 전에 실행됨 (단, 에디터에서 실행 시에만 작동)
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-
         public static void SystemBoot()
         {
             // 현재 에디터에서 활성화된 씬을 가져옴
@@ -65,7 +64,6 @@ namespace KYM
             // 필요한 초기 UI 호출 (예 : HUD 표시)
              UIManager.Show<PlayerHUD>(UIList.PlayerHUD);
              UIManager.Show<GlobalUI>(UIList.GlobalUI);
-
 
             // 하고싶은 커스텀 로직을 추가하세요.
         }

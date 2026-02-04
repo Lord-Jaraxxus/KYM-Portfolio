@@ -51,7 +51,9 @@ namespace KYM
         {
             // 캐릭터 초기화
             linkedCharacter.Initialize(GameDataModel.Singleton.PlayerStatDto.playerCharacterStatSO, true);
-            linkedCharacter.SetQSkillID(UserDataModel.Singleton.PlayerSkillDto.QSkillID); // 플레이어 캐릭터의 Q스킬 ID 세팅
+            string qSkillID = UserDataModel.Singleton.PlayerSkillDto.QSkillID;
+            linkedCharacter.SetQSkill(qSkillID, UserDataModel.Singleton.GetSkillLevel(qSkillID)); // 플레이어 캐릭터의 Q스킬 ID 세팅
+            linkedCharacter.OnEquipChanged += OnEquipChanged; // 장착 아이템 변경시 콜백 추가
 
             // UI - PlayerHUD 초기화
             var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
@@ -59,24 +61,26 @@ namespace KYM
             playerHUD.RefreshSpUI(linkedCharacter.CurSP, linkedCharacter.MaxSP);
             playerHUD.RefreshGoldUI(UserDataModel.Singleton.PlayerEconomyDto.Gold);
             // UI - 상점 UI 초기화
-            var shopUI = UIManager.Singleton.GetUI<ShopUI> (UIList.ShopUI);
+            var shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
             // UI - 캐릭터 장비창 UI 초기화
             var characterEquipUI = UIManager.Singleton.GetUI<CharacterEquipUI>(UIList.CharacterEquipUI);
             // UI - 캐릭터 정보창 UI 초기화
             var characterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
             characterInfoUI.Initialize(); // 캐릭터 정보창 UI 초기화
 
-            // 이벤트 구독
+            // UI 이벤트 구독
             linkedCharacter.OnHpChanged += playerHUD.RefreshHpUI;   // 플레이어 캐릭터 HP 변경시 HUD 갱신
             linkedCharacter.OnSpChanged += playerHUD.RefreshSpUI;   // 플레이어 캐릭터 SP 변경시 HUD 갱신
             UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
             shopUI.OnShopClosed += linkedCharacter.SetCharacterState; // 상점 닫기 버튼 클릭시 (상점 닫힐시) 플레이어 상태 변경
-            linkedCharacter.OnEquipChanged += OnEquipChanged; // 장착 아이템 변경시 콜백 추가
+
 
             // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
             InputManager.Singleton.onInputTab += OnReceiveInputTab;
             InputManager.Singleton.onInputESC += OnReceiveInputESC;
+            InputManager.Singleton.onInputLShiftDown += OnReceiveInputLeftShiftDown;
+            InputManager.Singleton.onInputLShiftUp += OnReceiveInputLeftShiftUp;
             InputManager.Singleton.onInputF += OnReceiveInputF;
             InputManager.Singleton.onInputI += OnReceiveInputI;
             InputManager.Singleton.onInputK += OnReceiveInputK;
@@ -97,26 +101,25 @@ namespace KYM
             {
                 var playerHUD = UIManager.Singleton.GetUI<PlayerHUD>(UIList.PlayerHUD);
                 var shopUI = UIManager.Singleton.GetUI<ShopUI>(UIList.ShopUI);
-                var characterEquipUI = UIManager.Singleton.GetUI<CharacterEquipUI>(UIList.CharacterEquipUI);
 
-                // UI 이벤트 구독 해제
-                linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;
-                linkedCharacter.OnSpChanged -= playerHUD.RefreshSpUI;
-                UserDataModel.Singleton.OnEconomyUpdated -= playerHUD.RefreshGoldUI;
+                linkedCharacter.OnHpChanged -= playerHUD.RefreshHpUI;   
+                linkedCharacter.OnSpChanged -= playerHUD.RefreshSpUI;   
+                UserDataModel.Singleton.OnEconomyUpdated -= playerHUD.RefreshGoldUI; 
                 shopUI.OnShopClosed -= linkedCharacter.SetCharacterState;
-                linkedCharacter.OnEquipChanged -= characterEquipUI.SetIcon;
             }
 
             // Input 이벤트 구독 해제
-            InputManager.Singleton.OnInputLmc   -= OnReceiveInputLmc;
-            InputManager.Singleton.onInputTab   -= OnReceiveInputTab;
-            InputManager.Singleton.onInputESC   -= OnReceiveInputESC;
-            InputManager.Singleton.onInputF     -= OnReceiveInputF;
-            InputManager.Singleton.onInputI     -= OnReceiveInputI;
-            InputManager.Singleton.onInputK     -= OnReceiveInputK;
-            InputManager.Singleton.onInputP     -= OnReceiveInputP;
-            InputManager.Singleton.onInputQ     -= OnReceiveInputQ;
-            InputManager.Singleton.onInputU     -= OnReceiveInputU;
+            InputManager.Singleton.OnInputLmc -= OnReceiveInputLmc;
+            InputManager.Singleton.onInputTab -= OnReceiveInputTab;
+            InputManager.Singleton.onInputESC -= OnReceiveInputESC;
+            InputManager.Singleton.onInputLShiftDown -= OnReceiveInputLeftShiftDown;
+            InputManager.Singleton.onInputLShiftUp -= OnReceiveInputLeftShiftUp;
+            InputManager.Singleton.onInputF -= OnReceiveInputF;
+            InputManager.Singleton.onInputI -= OnReceiveInputI;
+            InputManager.Singleton.onInputK -= OnReceiveInputK;
+            InputManager.Singleton.onInputP -= OnReceiveInputP;
+            InputManager.Singleton.onInputQ -= OnReceiveInputQ;
+            InputManager.Singleton.onInputU -= OnReceiveInputU;
 
             PlayerCharacterContext.Singleton.Unregister(); // 등록된 캐릭터 해제
         }
@@ -125,9 +128,15 @@ namespace KYM
         {
             if (linkedCharacter == null) return;
 
+            if (InputManager.Singleton.IsCursorVisibleState) // 커서가 보이는 상태라면 모든 인풋을 막음
+            {
+                linkedCharacter.Move(Vector2.zero); // 이동 멈춤
+                return;
+            }
+
             // 입력
-            Vector2 inputMove = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            bool wantsSprint = Input.GetKey(KeyCode.LeftShift);
+            Vector2 inputMove = InputManager.Singleton.InputMove;
+            // bool wantsSprint = Input.GetKey(KeyCode.LeftShift);
 
             // 이동 기준 전방: 시네머신 타깃의 수평 투영 forward 사용
             Vector3 camForwardFlat = Vector3.ProjectOnPlane(
@@ -136,7 +145,7 @@ namespace KYM
             ).normalized;
 
             // 상태 전달
-            linkedCharacter.wantsSprint = wantsSprint;
+            // linkedCharacter.wantsSprint = wantsSprint;
             linkedCharacter.SetMovementForward(camForwardFlat);
             linkedCharacter.Move(inputMove);
 
@@ -202,6 +211,17 @@ namespace KYM
             }
         }
 
+        private void OnReceiveInputLeftShiftDown()
+        {
+            if (!linkedCharacter) return;
+            linkedCharacter.wantsSprint = true;
+        }
+        private void OnReceiveInputLeftShiftUp()
+        {
+            if (!linkedCharacter) return;
+            linkedCharacter.wantsSprint = false;
+        }
+
         void OnReceiveInputF()
         {
             if (linkedCharacter.CanInteract() == false) { return; } // 플레이어 캐릭터가 상호작용 불가 상태시 종료
@@ -261,6 +281,10 @@ namespace KYM
 
         private void OnReceiveInputQ() // Q키로 캐릭터 스킬 사용 (아마 첫번째 스킬?)
         {
+            // 스킬 정보 갱신.. 여기서 이렇게 하는 게 맞나;;;
+            string qSkillID = UserDataModel.Singleton.PlayerSkillDto.QSkillID;
+            linkedCharacter.SetQSkill(qSkillID, UserDataModel.Singleton.GetSkillLevel(qSkillID)); 
+            
             linkedCharacter.TryUseQSkill();
         }
 
@@ -268,7 +292,7 @@ namespace KYM
         {
             var CharacterInfoUI = UIManager.Singleton.GetUI<CharacterInfoUI>(UIList.CharacterInfoUI);
 
-            if(CharacterInfoUI.gameObject.activeSelf)
+            if (CharacterInfoUI.gameObject.activeSelf)
             {
                 UIManager.Hide<CharacterInfoUI>(UIList.CharacterInfoUI);
             }
@@ -280,7 +304,11 @@ namespace KYM
 
         private void CameraRotation()
         {
-            Vector2 inputLook = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            //if (InputManager.Singleton.IsCursorVisibleState) // 커서가 보이는 상태라면 카메라 회전 안함
+            //    return;
+
+            // 커서가 보이는 상태라면 카메라 회전 안함
+            Vector2 inputLook = InputManager.Singleton.IsCursorVisibleState ? Vector2.zero : InputManager.Singleton.InputLook; 
 
             if (inputLook.sqrMagnitude >= cameraThreshold * cameraThreshold)
             {
@@ -309,7 +337,7 @@ namespace KYM
         }
 
         // 플레이어 캐릭터의 장착 아이템 변경시 호출되는 콜백
-        private void OnEquipChanged(ItemDataSO beforeEquipSO, ItemDataSO newEquipSO) 
+        private void OnEquipChanged(ItemDataSO beforeEquipSO, ItemDataSO newEquipSO)
         {
             if (newEquipSO != null) // 장비 해제가 아니라면 (새로 장착 or 교체)
             {

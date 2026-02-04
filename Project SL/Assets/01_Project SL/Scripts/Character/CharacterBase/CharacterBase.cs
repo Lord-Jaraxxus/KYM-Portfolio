@@ -93,6 +93,8 @@ namespace KYM
         private Coroutine launchRoutine;
         private string currentQSkillID = string.Empty; // 캐릭터의 현재 Q스킬 ID
         private string currentESkillID = string.Empty; // 캐릭터의 현재 E스킬 ID
+        private int currentQSkillLevel = 0; // 캐릭터의 현재 Q스킬 레벨
+        private int currentESkillLevel = 0; // 캐릭터의 현재 E스킬 레벨
 
         private void Awake()
         {
@@ -207,7 +209,7 @@ namespace KYM
                     break;
                 case "QSkillCast":
                     if (CurrentState != CharacterState.Cast) { return; } // 시전 상태가 아닐 때는 스킬 시전 안함, 중간에 피격 등으로 끊겼을 경우 등
-                    LaunchProjectile(currentQSkillID);
+                    LaunchProjectile(currentQSkillID, currentQSkillLevel);
                     break;
             }
         }
@@ -529,17 +531,19 @@ namespace KYM
 
 
         // 스킬 관련 메소드들
-        public void SetQSkillID(string qSkillID)
+        public void SetQSkill(string qSkillID, int qSkillLevel)
         {
             if(qSkillID == null) return;
 
             currentQSkillID = qSkillID;
+            currentQSkillLevel = qSkillLevel;
         }
-        public void SetEskillID(string eSkillID)
+        public void SetESkill(string eSkillID, int eSkillLevel)
         {
             if(eSkillID == null) return;
 
             currentESkillID = eSkillID;
+            currentESkillLevel = eSkillLevel;
         }
 
         public bool TryUseQSkill()
@@ -571,7 +575,7 @@ namespace KYM
             return true;
         }
 
-        public void LaunchProjectile(string skillID)
+        public void LaunchProjectile(string skillID, int skillLevel)
         {
             // TODO : 투사체 발사 로직 구현 
 
@@ -584,7 +588,7 @@ namespace KYM
                 return;
             }
 
-            int skillLevel = UserDataModel.Singleton.GetSkillLevel(skillID); // 스킬 레벨 가져오기 <- 아 여기도 UserDataModel니까 빼야하는데;
+            // int skillLevel = UserDataModel.Singleton.GetSkillLevel(skillID); // 스킬 레벨 가져오기 <- 아 여기도 UserDataModel니까 빼야하는데;
 
             // 같은 스킬을 연속으로 쓸 때 이전 연사 루틴을 끊고 싶으면 이렇게
             if (launchRoutine != null) StopCoroutine(launchRoutine);

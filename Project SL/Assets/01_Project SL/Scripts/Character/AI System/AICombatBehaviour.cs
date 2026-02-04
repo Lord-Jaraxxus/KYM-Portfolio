@@ -156,7 +156,7 @@ namespace KYM
             }
 
             // 일단 임시로 이렇게 하드코딩;
-            brain.AIController.LinkedCharacter.SetQSkillID("1");
+            brain.AIController.LinkedCharacter.SetQSkill("1", 1); // skillId, skillLevel
             brain.AIController.LinkedCharacter.TryUseQSkill();
         }
 
