@@ -139,10 +139,8 @@ namespace KYM
 
             if (UserDataModel.Singleton.PlayerSkillDto.SkillPoints > 0)
             {
-                // 스킬 포인트 차감
-                UserDataModel.Singleton.PlayerSkillDto.TrySpendSkillPoint(1);
-                // 스킬 레벨업
-                UserDataModel.Singleton.PlayerSkillDto.PlayerSkills[skillIndex].SkillLevel += 1;
+                UserDataModel.Singleton.SkillLevelUp(playerSkillData.SkillID);
+
                 // UI 갱신
                 RefreshSkillSlot(skillIndex);
                 RefreshSkillPoints();

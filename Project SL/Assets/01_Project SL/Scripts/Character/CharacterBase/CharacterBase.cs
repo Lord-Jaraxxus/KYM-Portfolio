@@ -91,6 +91,8 @@ namespace KYM
         private float qNextReadyTime = 0f;
         [SerializeField] private float burstInterval = 0.2f; // 연사 간격. 나중에 SkillDataSO에 넣고 싶으면 거기로 빼면 됨.
         private Coroutine launchRoutine;
+        public string CurrentQSkillID => currentQSkillID;
+        public string CurrentESkillID => currentESkillID;
         private string currentQSkillID = string.Empty; // 캐릭터의 현재 Q스킬 ID
         private string currentESkillID = string.Empty; // 캐릭터의 현재 E스킬 ID
         private int currentQSkillLevel = 0; // 캐릭터의 현재 Q스킬 레벨

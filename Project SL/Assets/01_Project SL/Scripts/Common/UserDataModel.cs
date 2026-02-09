@@ -23,6 +23,7 @@ namespace KYM
         public event Action<int /*CurExp*/, int /*ReqExp*/> OnExpUpdated; // 경험치 정보 변경시 이벤트
         public event Action<int /*level*/, int /*levelUpCount*/> OnLevelUpdated; // 레벨 변경(레벨업)시 이벤트
         public event Action<int> OnEconomyUpdated; // 골드 등 재화 정보 변경시 이벤트
+        public event Action<string /*skillID*/, int /*newSkillLevel*/> OnSkillLevelUp; // 스킬 레벨업시 이벤트
 
         public void Initialize()
         {
@@ -185,6 +186,33 @@ namespace KYM
             PlayerEquipSlotData sameEquipSlotData = GetSameSlotEquip(itemDataSO.EquipSlotType);
             
             PlayerEquipDto.PlayerEquipSlots.Remove(sameEquipSlotData); // 해당 장비 슬롯의 데이터를 리스트에서 삭제
+        }
+
+        public int SkillLevelUp(string skillID)
+        {
+            PlayerSkillDto.PlayerSkillData playerSkillData = PlayerSkillDto.PlayerSkills.FirstOrDefault(i => i.SkillID == skillID);
+            
+            if(playerSkillData != null) 
+            {
+                if (PlayerSkillDto.SkillPoints > 0) 
+                {
+                    playerSkillData.SkillLevel += 1; // 스킬 레벨 1 증가
+                    UserDataModel.Singleton.PlayerSkillDto.TrySpendSkillPoint(1); // 스킬 포인트 1 차감
+                    Debug.Log($"[UserDataModel] Skill ID {skillID} leveled up to {playerSkillData.SkillLevel}. Remaining Skill Points: {PlayerSkillDto.SkillPoints}");
+                    OnSkillLevelUp?.Invoke(skillID, playerSkillData.SkillLevel); // 스킬 레벨업 이벤트 호출
+                    return playerSkillData.SkillLevel;
+                }
+                else 
+                {
+                    Debug.LogWarning($"[UserDataModel] Not enough skill points to level up Skill ID {skillID}.");
+                    return playerSkillData.SkillLevel; // 스킬 포인트가 부족하면 레벨 변화 없음
+                }
+            }
+            else 
+            {
+                Debug.LogWarning($"[UserDataModel] Skill ID {skillID} not found in PlayerSkillDto.");
+                return 0; // 스킬을 가지고 있지 않다면 레벨 0 반환
+            }
         }
 
         public int GetSkillLevel(string skillID) 

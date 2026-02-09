@@ -74,6 +74,8 @@ namespace KYM
             UserDataModel.Singleton.OnEconomyUpdated += playerHUD.RefreshGoldUI; // 골드 변경시 HUD 갱신
             shopUI.OnShopClosed += linkedCharacter.SetCharacterState; // 상점 닫기 버튼 클릭시 (상점 닫힐시) 플레이어 상태 변경
 
+            // UserDataModel 이벤트 구독
+            UserDataModel.Singleton.OnSkillLevelUp += OnReceiveSkillLevelUp;
 
             // Input 이벤트 구독
             InputManager.Singleton.OnInputLmc += OnReceiveInputLmc;
@@ -107,6 +109,9 @@ namespace KYM
                 UserDataModel.Singleton.OnEconomyUpdated -= playerHUD.RefreshGoldUI; 
                 shopUI.OnShopClosed -= linkedCharacter.SetCharacterState;
             }
+
+            // UserDataModel 이벤트 구독 해제
+            UserDataModel.Singleton.OnSkillLevelUp -= OnReceiveSkillLevelUp;
 
             // Input 이벤트 구독 해제
             InputManager.Singleton.OnInputLmc -= OnReceiveInputLmc;
@@ -281,10 +286,6 @@ namespace KYM
 
         private void OnReceiveInputQ() // Q키로 캐릭터 스킬 사용 (아마 첫번째 스킬?)
         {
-            // 스킬 정보 갱신.. 여기서 이렇게 하는 게 맞나;;;
-            string qSkillID = UserDataModel.Singleton.PlayerSkillDto.QSkillID;
-            linkedCharacter.SetQSkill(qSkillID, UserDataModel.Singleton.GetSkillLevel(qSkillID)); 
-            
             linkedCharacter.TryUseQSkill();
         }
 
@@ -365,6 +366,19 @@ namespace KYM
 
                 UserDataModel.Singleton.AddItem(sameSlotEquip.EquippedItemID, 1); // 지금 장착한 장비를 다시 인벤토리로 보냄
                 UserDataModel.Singleton.UneqiupItem(beforeEquipSO); // 그 다음에 UDM의 장비 슬롯 데이터를 갱신(삭제)
+            }
+        }
+
+        private void OnReceiveSkillLevelUp(string skillID, int newLevel)
+        {
+            // 만약 레벨업한 스킬이 현재 플레이어 캐릭터의 Q스킬 혹은 E스킬이라면, 캐릭터에 반영 
+            if (linkedCharacter.CurrentQSkillID != null && linkedCharacter.CurrentQSkillID == skillID)
+            {
+                linkedCharacter.SetQSkill(skillID, newLevel);
+            }
+            else if (linkedCharacter.CurrentESkillID != null && linkedCharacter.CurrentESkillID == skillID)
+            {
+                linkedCharacter.SetESkill(skillID, newLevel);
             }
         }
     }
