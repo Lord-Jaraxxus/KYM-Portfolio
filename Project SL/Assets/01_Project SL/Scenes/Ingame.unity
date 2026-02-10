@@ -562,7 +562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3437139843532372157, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8217771547254333680, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2883,6 +2883,10 @@ PrefabInstance:
     - target: {fileID: 3437139843532372157, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_Name
       value: KYM.Character [AI_SkeletonWarrior]
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437139843532372157, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8217771547254333680, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_LocalPosition.x

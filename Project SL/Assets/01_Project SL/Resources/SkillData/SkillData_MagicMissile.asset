@@ -19,4 +19,4 @@ MonoBehaviour:
   Cooldown: 3
   SkillCost: 10
   AnimationTriggerName: CastTrigger
-  SkillData: {fileID: 11400000, guid: 43ff7efc43af00d46b92116f6844ad1a, type: 2}
+  SkillData: {fileID: 11400000, guid: aab74700fde3e684caa77d9b34d5f9e2, type: 2}

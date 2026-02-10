@@ -432,6 +432,8 @@ namespace KYM
             weaponHitBox?.DisableHitbox(); // 피격 시 무기 히트박스 비활성화
 
             TakeDamage(damage);
+
+            Debug.Log($"OnHit!{gameObject.name} took {damage} damage!");
         }
 
         private void ConsumeSp(float amount)
@@ -600,6 +602,11 @@ namespace KYM
         private IEnumerator LaunchProjectileRoutine(SkillDataSO skillDataSO, int skillLevel)
         {
             ProjectileDataSO projectilelData = skillDataSO.SkillData as ProjectileDataSO;
+            if(projectilelData == null)
+            {
+                Debug.LogWarning($"[CharacterBase] Skill ID {skillDataSO.SkillID} does not have valid ProjectileDataSO.");
+                yield break;
+            }
 
             int count = projectilelData.baseProjectileCount + projectilelData.extraProjectilePerLevel * (skillLevel - 1); // 발사체 개수 계산
 

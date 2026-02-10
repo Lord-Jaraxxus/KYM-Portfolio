@@ -12,6 +12,7 @@ namespace KYM
     public class AICombatBehaviour : MonoBehaviour
     {
         [SerializeField] private AICombatProfileSO profile;
+        [SerializeField] private float keepDistanceDeadZone = 0.2f; // KeepDistance 행동 시, desiredDistance 근처에서 멈추기 위한 여유 구간 (버벅거림 방지용)
 
         // 액션별 쿨타임 관리(마지막 사용 시각)
         private readonly Dictionary<int, float> lastUsedTimeByIndex = new();
@@ -91,6 +92,7 @@ namespace KYM
                 case CombatSelectionMode.HighestPriority:
                 default:
                     {
+                        // 우선순위가 가장 높은 것 선택
                         int best = candidates[0];
                         int bestPri = profile.actions[best].priority;
 
@@ -176,6 +178,8 @@ namespace KYM
 
             Vector3 destination = brain.transform.position + away.normalized * retreatStep;
             brain.AIController.SetDestination(destination);
+
+            Debug.Log($"KeepDistance 하는중!");
         }
 
         private void FallbackChase(AIBrain brain, CharacterBase target, float distance)

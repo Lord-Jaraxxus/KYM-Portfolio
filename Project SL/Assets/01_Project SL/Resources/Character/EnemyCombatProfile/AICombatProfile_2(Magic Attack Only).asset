@@ -15,11 +15,11 @@ MonoBehaviour:
   selectionMode: 0
   actions:
   - actionName: Magic Attack
-    type: 2
-    minRange: 3
+    type: 1
+    minRange: 5
     maxRange: 10
-    cooldown: 1
-    priority: 0
+    cooldown: 3
+    priority: 2
     weight: 2
     meleeAttackIndex: 0
     skillId: 1
@@ -27,13 +27,13 @@ MonoBehaviour:
     retreatStep: 0
   - actionName: Keep Distance
     type: 2
-    minRange: 3
-    maxRange: 10
-    cooldown: 1
-    priority: 0
+    minRange: 0
+    maxRange: 5
+    cooldown: 0
+    priority: 1
     weight: 1
     meleeAttackIndex: 0
-    skillId: 1
-    desiredDistance: 3
+    skillId: 0
+    desiredDistance: 5
     retreatStep: 2
   chaseStopDistance: 2.2
