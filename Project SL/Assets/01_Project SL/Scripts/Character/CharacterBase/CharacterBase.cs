@@ -50,7 +50,7 @@ namespace KYM
         [SerializeField] private float curHP; // 현재 체력
         [SerializeField] private float maxSP; // 최대 스태미나
         [SerializeField] private float curSP; // 현재 스태미나
-        [SerializeField] private float moveSpeed; // 이동 속도
+        [SerializeField] private float moveSpeed = 2.0f; // 이동 속도
 
         // 장비와 관련되는 스텟 관련 변수들
         public float Attack => attack;
@@ -142,6 +142,8 @@ namespace KYM
         {
             walkBlend = Mathf.Lerp(walkBlend, isSprinting ? 1f : 0f, Time.deltaTime * 2.0f);
             animator.SetFloat("Running", walkBlend);
+
+            if(characterStat == null) { return; } // 캐릭터 스탯 데이터가 없으면 종료
 
             if (isSprinting) // 달리기 중일때 
             {

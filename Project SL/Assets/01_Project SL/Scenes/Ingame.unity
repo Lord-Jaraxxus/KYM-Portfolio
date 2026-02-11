@@ -342,6 +342,14 @@ PrefabInstance:
       propertyPath: sensorRadius
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4338720552078348871, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
+      propertyPath: <NpcID>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4338720552078348871, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
+      propertyPath: <CharacterType>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8217771547254333680, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8
@@ -563,6 +571,14 @@ PrefabInstance:
     - target: {fileID: 3437139843532372157, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4338720552078348871, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
+      propertyPath: <NpcID>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4338720552078348871, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
+      propertyPath: <CharacterType>k__BackingField
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8217771547254333680, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2536,6 +2552,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 257394377888881014, guid: 9f992d72ce8889c4d8ee0d2266a8014c, type: 3}
+      propertyPath: <NpcID>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 257394377888881014, guid: 9f992d72ce8889c4d8ee0d2266a8014c, type: 3}
+      propertyPath: <CharacterType>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4619458865482738561, guid: 9f992d72ce8889c4d8ee0d2266a8014c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.38
@@ -2887,6 +2911,14 @@ PrefabInstance:
     - target: {fileID: 3437139843532372157, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4338720552078348871, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
+      propertyPath: <NpcID>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4338720552078348871, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
+      propertyPath: <CharacterType>k__BackingField
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8217771547254333680, guid: a788b6827ba81d94ca3570308cb495d9, type: 3}
       propertyPath: m_LocalPosition.x

@@ -36,4 +36,4 @@ MonoBehaviour:
     skillId: 0
     desiredDistance: 5
     retreatStep: 2
-  chaseStopDistance: 2.2
+  chaseStopDistance: 8
