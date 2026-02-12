@@ -7,7 +7,7 @@ namespace KYM
     public class Portal : MonoBehaviour, IInteractable
     {
         [SerializeField] private SceneType targetScene;
-        public InteractableType Type { get; } = InteractableType.Portal;
+        public InteractableType type { get; } = InteractableType.Portal;
 
         public void Interact()
         {

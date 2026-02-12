@@ -10,13 +10,14 @@ public enum InteractableType
     NPC_Merchant,
     NPC_Dialogue,
     NPC_QuestGiver,
+    NPC_Entrance,
 }
 
 namespace KYM
 {
     public interface IInteractable
     {
-        [SerializeField] InteractableType Type { get; }
+        InteractableType type { get; }
 
         void Interact();    // 상호작용 메서드
         Transform GetTransform();   // Transform 반환 메서드

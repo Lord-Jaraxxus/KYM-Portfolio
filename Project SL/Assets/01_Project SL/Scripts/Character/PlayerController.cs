@@ -234,7 +234,7 @@ namespace KYM
             if (sensor != null && sensor.CurrentTarget != null) // 가까이에 상호작용 가능한 뭔가가 있을 때
             {
                 sensor.CurrentTarget.Interact();    // 일단 상호작용 물체의 Interact 메소드 실행
-                linkedCharacter.TryInteract(sensor.CurrentTarget.Type); // 상호작용 타입에 따라서 CharacterBase에서 처리
+                linkedCharacter.TryInteract(sensor.CurrentTarget.type); // 상호작용 타입에 따라서 CharacterBase에서 처리
             }
             else // 가까이에 상호작용 할 대상이 없을 때
             {

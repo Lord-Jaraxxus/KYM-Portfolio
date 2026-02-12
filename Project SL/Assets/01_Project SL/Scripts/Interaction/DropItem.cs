@@ -9,7 +9,7 @@ namespace KYM
         [SerializeField] public ItemDataSO itemData; // 획득 가능한 아이템 데이터
         public int Quantity => quantity;
         [SerializeField] private int quantity = 1; // 획득 가능한 아이템 수량
-        public InteractableType Type { get; } = InteractableType.DropItem;
+        public InteractableType type { get; } = InteractableType.DropItem;
 
         public void Interact()
         {
