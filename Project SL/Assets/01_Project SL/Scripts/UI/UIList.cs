@@ -20,6 +20,7 @@ namespace KYM
         DialogueUI,
         InventoryUI,
         ShopUI,
+        ConfirmUI,
 
         POPUP_END, 
         PANEL_START,

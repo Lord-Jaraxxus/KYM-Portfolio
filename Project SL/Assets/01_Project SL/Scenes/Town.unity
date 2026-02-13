@@ -2147,6 +2147,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI.ConfirmUI
       objectReference: {fileID: 0}
+    - target: {fileID: 1471845120634798795, guid: 8527f261e8cea7541b9e109a174a510c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6080841019891018078, guid: 8527f261e8cea7541b9e109a174a510c, type: 3}
       propertyPath: m_Pivot.x
       value: 0

@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 7093721868508213995}
   - component: {fileID: 4905363222865815705}
   - component: {fileID: 7242119835614058127}
+  - component: {fileID: 8467730921827653941}
   m_Layer: 5
   m_Name: UI.ConfirmUI
   m_TagString: Untagged
@@ -311,6 +312,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &8467730921827653941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471845120634798795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc90f0c6c3684d24cb5f12f0f0932e6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text_Title: {fileID: 1289103337595671691}
+  text_Message: {fileID: 549853762631302939}
+  button_OK: {fileID: 8591046050733419823}
+  button_Cancel: {fileID: 1540823341152997784}
 --- !u!1 &1487482175257256109
 GameObject:
   m_ObjectHideFlags: 0
