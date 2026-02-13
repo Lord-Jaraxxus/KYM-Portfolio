@@ -7,7 +7,7 @@ namespace KYM
     public class NPCBase : MonoBehaviour, IInteractable
     {
         [field:SerializeField] public InteractableType type { get; private set; }
-        [SerializeField] public InteractableType Type => type;
+        public InteractableType Type => type;
 
         // 얘들은 좀 쪼개고싶은데 일단 귀찮으니까..
         [SerializeField] private string shopID;
