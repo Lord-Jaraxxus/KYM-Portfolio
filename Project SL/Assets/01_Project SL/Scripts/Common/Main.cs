@@ -13,7 +13,9 @@ namespace KYM
         Ingame, // 인게임 씬
 
         Town,   // 마을 씬
-        Dungeon // 던전 씬
+        Dungeon, // 던전 씬
+
+        Cathedral, // 대성당 씬
     }
 
     public class Main : SingletonBase<Main>

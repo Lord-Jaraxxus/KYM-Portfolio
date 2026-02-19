@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01_Project SL/Scenes/Town.unity
     guid: 24c3fba15d26e7f4d896867e174c39be
+  - enabled: 1
+    path: Assets/01_Project SL/Scenes/Cathedral.unity
+    guid: 5bf9d06185bb3524c8b8202748315de8
   m_configObjects: {}

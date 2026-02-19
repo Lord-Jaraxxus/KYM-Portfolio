@@ -11,7 +11,7 @@ namespace KYM
 
         public override IEnumerator OnStart()
         {
-            var asyncSceneLoad = SceneManager.LoadSceneAsync(SceneType.Town.ToString(), this.LoadSceneMode);
+            var asyncSceneLoad = SceneManager.LoadSceneAsync(SceneType.Cathedral.ToString(), this.LoadSceneMode);
             while (!asyncSceneLoad.isDone)
             {
                 yield return null; // 씬 로딩이 완료될 때까지 대기

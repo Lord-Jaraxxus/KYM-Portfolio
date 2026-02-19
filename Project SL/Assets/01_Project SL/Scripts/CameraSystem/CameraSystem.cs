@@ -15,6 +15,7 @@ namespace KYM
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Cinemachine.CinemachineVirtualCamera tpsCamera;
         [SerializeField] private Cinemachine.CinemachineVirtualCamera lockOnCamera;
+        [SerializeField] private Cinemachine.CinemachineVirtualCamera titleCamera;
         private int characterLayerMask;
 
         private List<CharacterBase> detectedCharacter = new();
@@ -53,6 +54,11 @@ namespace KYM
             {
                 lockOnCamera.Follow.LookAt(lockOnTargetPoint); 
             }
+        }
+
+        public void SetActiveTitleCamera(bool isActive)
+        {
+            titleCamera.gameObject.SetActive(isActive);
         }
 
         public void RegisterCharacter(CharacterBase character) 

@@ -59,11 +59,9 @@ namespace KYM
             // Main 싱글톤 초기화 (예: 게임 전체 컨텍스트 초기화)
             Main.Singleton.Initialize();
 
-            // Main.Singleton.ReloadScene(SceneType.Ingame); // 이렇게 하면 자동으로 IngameScene 스크립트의 OnStart 부를 수 있지 않나? 굳이 밑에서 UI 일일히 안켜줘도 
-
             // 필요한 초기 UI 호출 (예 : HUD 표시)
-             UIManager.Show<PlayerHUD>(UIList.PlayerHUD);
-             UIManager.Show<GlobalUI>(UIList.GlobalUI);
+            UIManager.Show<PlayerHUD>(UIList.PlayerHUD);
+            UIManager.Show<GlobalUI>(UIList.GlobalUI);
 
             // 하고싶은 커스텀 로직을 추가하세요.
         }
