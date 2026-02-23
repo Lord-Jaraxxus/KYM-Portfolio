@@ -52,19 +52,20 @@ namespace KYM
                 popups.Add((UIList)index, null); // 팝업 딕셔너리에 UI 추가
             }
 
-            if (!UICamera) // UI 카메라가 없으면 생성
-            {
-                GameObject newUICameraGo = new GameObject("UI Camera"); // UI 카메라 게임 오브젝트 생성
-                newUICameraGo.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); // 위치와 회전 초기화
-                UICamera = newUICameraGo.AddComponent<Camera>(); // 카메라 컴포넌트 추가
-                UICamera.clearFlags = CameraClearFlags.Depth; // 카메라 설정
-                UICamera.cullingMask = LayerMask.GetMask("UI"); // UI 레이어만 렌더링
-                UICamera.fieldOfView = 60f;
-                UICamera.nearClipPlane = 0.3f;
-                UICamera.farClipPlane = 1000f;
-                UICamera.orthographic = false;
-                UICamera.depth = 10; // 다른 카메라보다 위에 렌더링 되도록 설정
-            }
+            // 일단 Depth UI 없으니까 주석처리.. 자꾸 이상하게 얘가 덮어버림;
+            //if (!UICamera) // UI 카메라가 없으면 생성
+            //{
+            //    GameObject newUICameraGo = new GameObject("UI Camera"); // UI 카메라 게임 오브젝트 생성
+            //    newUICameraGo.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity); // 위치와 회전 초기화
+            //    UICamera = newUICameraGo.AddComponent<Camera>(); // 카메라 컴포넌트 추가
+            //    UICamera.clearFlags = CameraClearFlags.Depth; // 카메라 설정
+            //    UICamera.cullingMask = LayerMask.GetMask("UI"); // UI 레이어만 렌더링
+            //    UICamera.fieldOfView = 60f;
+            //    UICamera.nearClipPlane = 0.3f;
+            //    UICamera.farClipPlane = 1000f;
+            //    UICamera.orthographic = false;
+            //    UICamera.depth = 10; // 다른 카메라보다 위에 렌더링 되도록 설정
+            //}
         }
 
         public static T Show<T>(UIList uiName) where T : UIBase 
