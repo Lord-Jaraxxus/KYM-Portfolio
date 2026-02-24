@@ -1859,7 +1859,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d6a29208d5d964598a8da0813ea5e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackRange: 2
 --- !u!1 &2656395026887842206
 GameObject:
   m_ObjectHideFlags: 0
@@ -2819,13 +2818,14 @@ GameObject:
   - component: {fileID: 2506504647884202936}
   - component: {fileID: 226155118691531179}
   - component: {fileID: 4338720552078348871}
+  - component: {fileID: 2757694643685077642}
   m_Layer: 9
   m_Name: KYM.Character [AI_SkeletonWarrior]
   m_TagString: NPC_Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8217771547254333680
 Transform:
   m_ObjectHideFlags: 0
@@ -3007,10 +3007,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8072ae2932e06c44285ace9aab5964ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <EnemyID>k__BackingField: 1
+  <CharacterType>k__BackingField: 1
+  <NpcID>k__BackingField: 1
   stoppingDistance: 0.1
   stopEpsilon: 0.03
   resumeEpsilon: 0.12
+--- !u!114 &2757694643685077642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3437139843532372157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b862e4e5067cfc64882cd29dabbc6114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 2c3cb6fca58a7ce44872644d32602e33, type: 2}
 --- !u!1 &3922828996051463935
 GameObject:
   m_ObjectHideFlags: 0

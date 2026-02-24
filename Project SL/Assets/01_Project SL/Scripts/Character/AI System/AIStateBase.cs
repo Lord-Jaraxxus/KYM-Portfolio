@@ -10,6 +10,7 @@ namespace KYM
         Patrol = 1,
         Combat = 2,
         Chase = 3,
+        Wait = 4,
     }
 
     public abstract class AIStateBase : MonoBehaviour

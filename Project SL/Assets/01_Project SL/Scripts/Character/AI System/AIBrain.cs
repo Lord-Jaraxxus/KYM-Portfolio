@@ -15,6 +15,7 @@ namespace KYM
 
         [Header("AI State")]
         [SerializeField] private AIStateBase currentState;
+        private AIStateBase beforeState;
 
         [Header("Third Party")]
         [SerializeField] private AISensor sensor; // AI 센서 컴포넌트
@@ -52,6 +53,8 @@ namespace KYM
             if(currentState == newState)
                 return;
             
+            beforeState = currentState;
+
             currentState?.OnExitState(this);
             currentState = newState;
             currentState?.OnEnterState(this);
@@ -74,10 +77,15 @@ namespace KYM
         {
             if (character.gameObject.CompareTag("Player")) // AI가 플레이어를 놓쳤을 때 
             {
-                // TODO : ChangeState => To PatrolState
-                if(stateMap.TryGetValue(AIStateType.Patrol, out AIStateBase patrolState))
+                // 이전 상태가 Patrol 상태였다면 Patrol 상태로 돌아가기
+                if (stateMap.TryGetValue(AIStateType.Patrol, out AIStateBase patrolState) && beforeState.StateType == AIStateType.Patrol)
                 {
                     ChangeState(patrolState);
+                }
+                // 이전 상태가 Wait 상태였다면 Wait 상태로 돌아가기
+                else if (stateMap.TryGetValue(AIStateType.Wait, out AIStateBase waitState) && beforeState.StateType == AIStateType.Wait) 
+                {
+                    ChangeState(waitState);
                 }
             }
         }

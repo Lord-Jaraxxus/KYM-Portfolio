@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d6a29208d5d964598a8da0813ea5e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackRange: 2
 --- !u!1 &66715173716028199
 GameObject:
   m_ObjectHideFlags: 0
@@ -2508,7 +2507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4619458865482738561
 Transform:
   m_ObjectHideFlags: 0
@@ -2567,13 +2566,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   characterController: {fileID: 8118594358926219522}
-  weapon: {fileID: 2758989510269039306}
+  weaponHitBox: {fileID: 0}
+  characterEquipments: []
   maxHP: 200
   curHP: 10
   maxSP: 100
   curSP: 100
   moveSpeed: 3
+  attack: 0
+  defense: 0
+  <CurrentState>k__BackingField: 0
   lockOnPointData: {fileID: 11400000, guid: 5841bedda11d29c4ebfaac6ab5926551, type: 2}
+  projectileSpawnPoint: {fileID: 0}
+  burstInterval: 0.2
 --- !u!114 &8719560762521625110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2688,7 +2693,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8072ae2932e06c44285ace9aab5964ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <EnemyID>k__BackingField: 1
+  <CharacterType>k__BackingField: 1
+  <NpcID>k__BackingField: 1
   stoppingDistance: 0.1
   stopEpsilon: 0.03
   resumeEpsilon: 0.12
@@ -4239,7 +4245,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2209431503117795808}
   - component: {fileID: 1376411474601723125}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: AI Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4714,17 +4720,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e474a1af93704d4586a8c1c50124cf8, type: 3}
---- !u!114 &2758989510269039306 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5736500730833364742, guid: 2e474a1af93704d4586a8c1c50124cf8, type: 3}
-  m_PrefabInstance: {fileID: 7626216305163113932}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be1ef3039b8a5fb468d404b6152d6251, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &6525772594561813663 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3694623826116352339, guid: 2e474a1af93704d4586a8c1c50124cf8, type: 3}
