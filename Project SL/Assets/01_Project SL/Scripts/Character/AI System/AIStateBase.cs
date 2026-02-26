@@ -11,6 +11,7 @@ namespace KYM
         Combat = 2,
         Chase = 3,
         Wait = 4,
+        Stroll = 5,
     }
 
     public abstract class AIStateBase : MonoBehaviour
