@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: ItemData_PotionBox
   m_EditorClassIdentifier: 
   ItemID: potionBox
-  ItemCount: 5
   ItemName: PotionBox
   ItemCategory: 3
   Icon: {fileID: 0}
@@ -24,4 +23,4 @@ MonoBehaviour:
   EquipmentStat:
     Attack: 0
     Defense: 0
-  ItemVisualPrefab: {fileID: 1829930459921960931, guid: 0eb3e0176a4c3364ca666c0aa6895d7e, type: 3}
+  ItemVisualPrefab: {fileID: 5842602310674541721, guid: dfb0febd72a19cc459933f10a3f3ca6d, type: 3}

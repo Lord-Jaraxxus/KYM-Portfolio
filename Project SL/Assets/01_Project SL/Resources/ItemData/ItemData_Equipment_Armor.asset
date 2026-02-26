@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: ItemData_Equipment_Armor
   m_EditorClassIdentifier: 
   ItemID: armor
-  ItemCount: 1
   ItemName: Armor
   ItemCategory: 1
   Icon: {fileID: 21300000, guid: af7430a5cbfe77f41aec89d64a7247a9, type: 3}
@@ -24,4 +23,4 @@ MonoBehaviour:
   EquipmentStat:
     Attack: 0
     Defense: 10
-  ItemVisualPrefab: {fileID: 1829930459921960931, guid: 0eb3e0176a4c3364ca666c0aa6895d7e, type: 3}
+  ItemVisualPrefab: {fileID: 5842602310674541721, guid: dfb0febd72a19cc459933f10a3f3ca6d, type: 3}
