@@ -37,24 +37,17 @@ namespace KYM
                     break;
                 case InteractableType.NPC_Entrance: // 말걸면 던전으로 보내주는 NPC일 경우
                     ConfirmUI confirmUI = UIManager.Show<ConfirmUI>(UIList.ConfirmUI);
-                    confirmUI.SetConfirmUI(ConfirmType.Entrance);
-                    confirmUI.OnClickButton += OnReceiveConfirmResult;   // 확인 버튼 클릭 이벤트 연결
+                    ConfirmUI.SetConfirmUI("Dungeon Entrance", "Do you want to enter the dungeon?", OnReceiveOK);
                     break;
                 default:
                     break;
             }
         }
 
-        public void OnReceiveConfirmResult(bool isOKClicked)
+        public void OnReceiveOK()
         {
-            if(isOKClicked)
-            {
-                Main.Singleton.ChangeScene(targetScene);
-            }
-
-            ConfirmUI confirmUI = UIManager.Singleton.GetUI<ConfirmUI>(UIList.ConfirmUI);
-            confirmUI.OnClickButton -= OnReceiveConfirmResult;   // 확인 버튼 클릭 이벤트 연결 해제 
-            UIManager.Hide<ConfirmUI>(UIList.ConfirmUI); // UI 숨기기
+            Main.Singleton.ChangeScene(targetScene);
+            Debug.Log("Dungeon Entrance Confirmed!"); // 던전 입장 확인 로그 (테스트용)
         }
     }
 }
