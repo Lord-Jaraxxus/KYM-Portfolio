@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using Cysharp.Threading.Tasks;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
-using UnityEngine.Rendering;
+
 
 namespace KYM
 {
@@ -82,6 +84,21 @@ namespace KYM
         private float smoothVertical;
 
         private bool isStrafe = false;
+
+        [Header("Ground Check (Physics Cast)")]
+        [SerializeField] private LayerMask groundMask = ~0;
+        [SerializeField] private float groundCheckDistance = 0.08f;
+        [SerializeField] private float groundSkin = 0.02f;
+        [SerializeField] private float groundedStickForce = -2f;
+
+        [Header("Gravity")]
+        [SerializeField] private float gravity = -25f;
+        [SerializeField] private float maxFallSpeed = -50f;
+
+        // 상태 캐시
+        private bool _isGroundedByCast;
+        private RaycastHit _groundHit;
+
         [SerializeField] private LockOnPointSO lockOnPointData;
         private List<Transform> lockOnPointContainer = new();
 
@@ -90,7 +107,6 @@ namespace KYM
         [SerializeField] public Transform projectileSpawnPoint; // 투사체 생성 위치
         private float qNextReadyTime = 0f;
         [SerializeField] private float burstInterval = 0.2f; // 연사 간격. 나중에 SkillDataSO에 넣고 싶으면 거기로 빼면 됨.
-        private Coroutine launchRoutine;
         public string CurrentQSkillID => currentQSkillID;
         public string CurrentESkillID => currentESkillID;
         private string currentQSkillID = string.Empty; // 캐릭터의 현재 Q스킬 ID
@@ -143,7 +159,7 @@ namespace KYM
             walkBlend = Mathf.Lerp(walkBlend, isSprinting ? 1f : 0f, Time.deltaTime * 2.0f);
             animator.SetFloat("Running", walkBlend);
 
-            if(characterStat == null) { return; } // 캐릭터 스탯 데이터가 없으면 종료
+            if (characterStat == null) { return; } // 캐릭터 스탯 데이터가 없으면 종료
 
             if (isSprinting) // 달리기 중일때 
             {
@@ -269,11 +285,29 @@ namespace KYM
                 transform.rotation = Quaternion.Euler(0f, yaw, 0f);
             }
 
-            // 4) 이동 (중력 없음) — 입력 크기에 따라 속도 보간을 원하면 곱해도 됨
-            isSprinting = wantsSprint && hasInput && !isSprintLocked && CurSP > 0f; // 달리기 상태 결정
-            moveSpeed = isSprinting ? characterStat.SprintSpeed : characterStat.MoveSpeed; // 달리기 중인지에 따라 속도 결정
-            Vector3 displacement = moveDir * moveSpeed * dt;
-            characterController.Move(displacement);
+            // 4) 이동 (Cast 기반 접지 + 중력)
+            isSprinting = wantsSprint && hasInput && !isSprintLocked && CurSP > 0f;
+            moveSpeed = isSprinting ? characterStat.SprintSpeed : characterStat.MoveSpeed;
+
+            // ---- Ground Check (Physics Cast)
+            _isGroundedByCast = CheckGroundByCapsuleCast(out _groundHit);
+
+            if (_isGroundedByCast)
+            {
+                if (verticalVelocity < 0f)
+                    verticalVelocity = groundedStickForce;
+            }
+            else
+            {
+                verticalVelocity += gravity * dt;
+                if (verticalVelocity < maxFallSpeed)
+                    verticalVelocity = maxFallSpeed;
+            }
+
+            // ---- Move (수평 + 수직)
+            Vector3 horizontal = moveDir * moveSpeed;
+            Vector3 velocity = horizontal + (Vector3.up * verticalVelocity);
+            characterController.Move(velocity * dt);
 
             // 5) 애니메이터 파라미터 (Strafe 블렌딩/스틱 감 보정)
             smoothHorizontal = Mathf.Lerp(smoothHorizontal, input.x, dt * 10f);
@@ -282,6 +316,30 @@ namespace KYM
             animator.SetFloat("Magnitude", input.magnitude);
             animator.SetFloat("Horizontal", smoothHorizontal);
             animator.SetFloat("Vertical", smoothVertical);
+        }
+
+        private bool CheckGroundByCapsuleCast(out RaycastHit hit)
+        {
+            hit = default;
+            if (characterController == null) return false;
+
+            float radius = Mathf.Max(0.01f, characterController.radius - groundSkin);
+            float height = Mathf.Max(characterController.height, radius * 2f);
+
+            Vector3 center = transform.TransformPoint(characterController.center);
+            float half = Mathf.Max(0f, (height * 0.5f) - radius);
+
+            Vector3 top = center + Vector3.up * half;
+            Vector3 bottom = center - Vector3.up * half;
+
+            return Physics.CapsuleCast(
+                top, bottom, radius,
+                Vector3.down,
+                out hit,
+                groundCheckDistance,
+                groundMask,
+                QueryTriggerInteraction.Ignore
+            );
         }
 
         public void MoveAI(Vector3 worldDir)
@@ -539,14 +597,14 @@ namespace KYM
         // 스킬 관련 메소드들
         public void SetQSkill(string qSkillID, int qSkillLevel)
         {
-            if(qSkillID == null) return;
+            if (qSkillID == null) return;
 
             currentQSkillID = qSkillID;
             currentQSkillLevel = qSkillLevel;
         }
         public void SetESkill(string eSkillID, int eSkillLevel)
         {
-            if(eSkillID == null) return;
+            if (eSkillID == null) return;
 
             currentESkillID = eSkillID;
             currentESkillLevel = eSkillLevel;
@@ -566,7 +624,7 @@ namespace KYM
             SkillDataSO skillDataSO = GameDataModel.Singleton.GetSkillDataSO(currentQSkillID);
 
             // SP 체크, 충분한 SP가 없다면 false 반환
-            if (curSP < skillDataSO.SkillCost) 
+            if (curSP < skillDataSO.SkillCost)
             {
                 Debug.Log("Not enough SP to use Q Skill.");
                 return false;
@@ -594,20 +652,17 @@ namespace KYM
                 return;
             }
 
-            // int skillLevel = UserDataModel.Singleton.GetSkillLevel(skillID); // 스킬 레벨 가져오기 <- 아 여기도 UserDataModel니까 빼야하는데;
-
-            // 같은 스킬을 연속으로 쓸 때 이전 연사 루틴을 끊고 싶으면 이렇게
-            if (launchRoutine != null) StopCoroutine(launchRoutine);
-            launchRoutine = StartCoroutine(LaunchProjectileRoutine(skillDataSO, skillLevel));
+            LaunchProjectileAsync(skillDataSO, skillLevel).Forget();
         }
 
-        private IEnumerator LaunchProjectileRoutine(SkillDataSO skillDataSO, int skillLevel)
+        private async UniTaskVoid LaunchProjectileAsync(SkillDataSO skillDataSO, int skillLevel)
         {
+
             ProjectileDataSO projectilelData = skillDataSO.SkillData as ProjectileDataSO;
-            if(projectilelData == null)
+            if (projectilelData == null)
             {
                 Debug.LogWarning($"[CharacterBase] Skill ID {skillDataSO.SkillID} does not have valid ProjectileDataSO.");
-                yield break;
+                return;
             }
 
             int count = projectilelData.baseProjectileCount + projectilelData.extraProjectilePerLevel * (skillLevel - 1); // 발사체 개수 계산
@@ -622,9 +677,8 @@ namespace KYM
 
                 // 마지막 발 뒤엔 대기할 필요 없으니
                 if (i < count - 1)
-                    yield return new WaitForSeconds(burstInterval);
+                    await UniTask.Delay(TimeSpan.FromSeconds(burstInterval));
             }
-            launchRoutine = null;
         }
         private void SpawnOneProjectile(Projectile prefab, float speed, float damage, float lifeTime)
         {
