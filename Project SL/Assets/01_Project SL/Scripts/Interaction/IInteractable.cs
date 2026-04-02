@@ -6,6 +6,7 @@ public enum InteractableType
     DropItem,
     Portal,
     Lever,
+    Door,
 
     NPC_Merchant,
     NPC_Dialogue,
